@@ -2,6 +2,19 @@ import { ref } from 'vue';
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue';
 import { BookmarkAltIcon, FireIcon, HomeIcon, InboxIcon, MenuIcon, UserIcon, XIcon } from '@heroicons/vue/outline';
 export default {
+    components: {
+        Dialog,
+        DialogPanel,
+        TransitionChild,
+        TransitionRoot,
+        BookmarkAltIcon,
+        FireIcon,
+        HomeIcon,
+        InboxIcon,
+        MenuIcon,
+        UserIcon,
+        XIcon
+    },
     setup() {
         const user = {
             name: 'Emily Selman',
