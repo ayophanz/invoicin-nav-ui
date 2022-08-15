@@ -1,8 +1,10 @@
 import { createApp, h } from 'vue';
-import './style.css'
-import App from './App.vue'
+import './style.css';
+import App from './App.vue';
 import router from './router';
 import singleSpaVue from 'single-spa-vue';
+import 'floating-vue/dist/style.css';
+import floatingVue from 'floating-vue';
 
 const vueLifecycles = singleSpaVue({
     createApp,
@@ -21,6 +23,7 @@ const vueLifecycles = singleSpaVue({
     },
     handleInstance: (app) => {
         app.use(router);
+        app.use(floatingVue);
     },
 });
 

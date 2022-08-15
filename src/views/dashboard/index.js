@@ -1,6 +1,15 @@
 import { ref } from 'vue';
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue';
-import { BookmarkAltIcon, FireIcon, HomeIcon, InboxIcon, MenuIcon, UserIcon, XIcon } from '@heroicons/vue/outline';
+import { 
+    BookmarkAltIcon,
+    FireIcon,
+    MenuIcon,
+    UserIcon,
+    UsersIcon,
+    XIcon,
+    ClipboardCheckIcon,
+    AdjustmentsIcon,
+    PlusIcon } from '@heroicons/vue/outline';
 export default {
     components: {
         Dialog,
@@ -9,11 +18,13 @@ export default {
         TransitionRoot,
         BookmarkAltIcon,
         FireIcon,
-        HomeIcon,
-        InboxIcon,
         MenuIcon,
         UserIcon,
-        XIcon
+        UsersIcon,
+        XIcon,
+        ClipboardCheckIcon,
+        AdjustmentsIcon,
+        PlusIcon
     },
     setup() {
         const user = {
@@ -24,10 +35,10 @@ export default {
             };
             
             const navigation = [
-                { name: 'Home', href: '#', icon: HomeIcon },
-                { name: 'Trending', href: '#', icon: FireIcon },
-                { name: 'Bookmarks', href: '#', icon: BookmarkAltIcon },
-                { name: 'Messages', href: '#', icon: InboxIcon },
+                { name: 'Customer', href: '#', icon: UsersIcon },
+                { name: 'Invoice', href: '#', icon: ClipboardCheckIcon },
+                { name: 'More', href: '#', icon: PlusIcon },
+                { name: 'Setting', href: '#', icon: AdjustmentsIcon },
                 { name: 'Profile', href: '#', icon: UserIcon },
             ];
             const mobileMenuOpen = ref(false);
