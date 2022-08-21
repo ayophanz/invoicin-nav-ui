@@ -15,7 +15,7 @@
       <ul role="list" class="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <li v-for="service in services" :key="service.name" class="col-span-1 flex shadow-sm rounded-md">
           <div :class="[service.bgColor, 'flex-shrink-0 flex items-center justify-center w-16 text-white text-sm font-medium rounded-l-md']">
-            {{ service.initials }}
+            <component :is="service.icon" class="h-6 w-6" aria-hidden="true" />
           </div>
           <div class="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
             <div class="flex-1 px-4 py-2 text-sm truncate">
@@ -46,11 +46,19 @@
 <script lang="ts">
 
   /** Imports */
-  import { toRef, ref, watch, onMounted } from 'vue';
+  import { toRef, ref, watch, onMounted, defineComponent } from 'vue';
   import { Switch } from '@headlessui/vue';
+  import { 
+    UsersIcon,
+    ClipboardCheckIcon,
+    ArchiveIcon,
+    FolderOpenIcon,
+    ShoppingCartIcon,
+    DocumentReportIcon,
+ } from '@heroicons/vue/outline';
 
   /** Process */
-  export default {
+  export default defineComponent({
     name: 'service',
     props: {
       enabledServices: {
@@ -60,38 +68,67 @@
     },
     components: {
         Switch,
+        UsersIcon,
+        ClipboardCheckIcon,
+        ArchiveIcon,
+        FolderOpenIcon,
+        ShoppingCartIcon,
+        DocumentReportIcon,
     },
     setup(props) {
+      /** Variables */
       const services = ref([
-          { name: 'Customer', initials: 'Cust', href: '#', description: 'Free', bgColor: 'bg-pink-600', enabled: true },
-          { name: 'Product', initials: 'Prod', href: '#', description: 'Free', bgColor: 'bg-purple-600', enabled: false },
-          { name: 'Order', initials: 'Ord', href: '#', description: 'Upgrade', bgColor: 'bg-yellow-500', enabled: false },
-          { name: 'Invoice', initials: 'Invo', href: '#', description: 'Free', bgColor: 'bg-green-500', enabled: true },
-          { name: 'Inventory', initials: 'Inve', href: '#', description: 'Upgrade', bgColor: 'bg-indigo-500', enabled: false },
+          { name: 'Customer', href: '#', description: 'Free', bgColor: 'bg-pink-600', icon: UsersIcon, enabled: true },
+          { name: 'Product', href: '#', description: 'Free', bgColor: 'bg-purple-600', icon: ArchiveIcon, enabled: false },
+          { name: 'Order', href: '#', description: 'Upgrade', bgColor: 'bg-yellow-500', icon: ShoppingCartIcon, enabled: false },
+          { name: 'Invoice', href: '#', description: 'Free', bgColor: 'bg-green-500', icon: ClipboardCheckIcon, enabled: true },
+          { name: 'Inventory', href: '#', description: 'Upgrade', bgColor: 'bg-indigo-500', icon: FolderOpenIcon, enabled: false },
+          { name: 'Report', href: '#', description: 'Upgrade', bgColor: 'bg-gray-700', icon: DocumentReportIcon, enabled: false },
       ]);
 
       const enabledServices = toRef(props, 'enabledServices');
 
+      /** Functions */
+      const enabledService = (item, service) => {
+        if (item.enabled && item.name == service) {
+          enabledServices.value.filter((item) => {
+            if (Object(item).name == service) Object(item).enabled = true;
+          });
+        }
+        if (!item.enabled && item.name == service) {
+          enabledServices.value.filter((item) => {
+            if (Object(item).name == service) Object(item).enabled = false;
+          });
+        }
+      }
+
+      const initServices = () => {
+        enabledServices.value.filter((item) => {
+          services.value.filter((item2) => {
+            if (Object(item).name == Object(item2).name) Object(item2).enabled  = Object(item).enabled;
+          });
+        });
+      }
+
+      /** Built-in functions */
       watch(
         services.value,
         (newVal) => {
           return newVal.forEach(item => {
-            if (item.enabled && item.name == 'Product') {
-              console.log(`${item.name} - enabled`);
-            }
-            if (!item.enabled && item.name == 'Product') {
-              console.log(`${item.name} - disabled`);
-            }
+            const services = ['Customer', 'Product', 'Order', 'Invoice', 'Inventory', 'Report'];
+            services.forEach(item2 => {
+                enabledService(item, item2);
+            });
           });
         },
       );
 
       onMounted(() => {
-        console.log(enabledServices.value);
+        initServices();
       });
 
       return { services };
     } 
-  }
+  });
 
 </script>
