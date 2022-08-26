@@ -31,6 +31,7 @@
                   >
                     <button 
                       @click="closeModal"
+                      v-show="showClose"
                       type="button" 
                       class="flex px-1 py-1 right-2 top-2 absolute focus:outline-none">
                       <XIcon class="h-6 w-6 hover:text-red-500 text-red-300" aria-hidden="true" />&nbsp;
@@ -66,6 +67,11 @@
                 type: Function,
                 required: true,
             },
+            showClose: {
+              type: Boolean,
+              required: false,
+              default: true,
+            }
         },
         components: {
             Dialog,  
@@ -76,12 +82,13 @@
         },
         setup(props) {
             const state = toRef(props, 'state');
+            const showClose = toRef(props, 'showClose');
 
             const closeModal = () => {
                 props.onClose();
             };
             
-            return { state, closeModal };
+            return { state, showClose, closeModal };
         },
     }
 </script>

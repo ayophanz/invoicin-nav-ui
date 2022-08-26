@@ -23,10 +23,10 @@
                     </div>
                     <nav aria-label="Sidebar" class="mt-5">
                     <div v-for="item in navigation" :key="item.name" class="px-2 space-y-1" :class="item.name == 'More' ? '!mt-20 border-b border-gray-200 pb-3' : ''">
-                        <a v-if="item.enabled" :href="item.href" @click="navAction(item)" class="group p-2 rounded-md flex items-center text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900">
-                        <component :is="item.icon" :class="item.classes" class="mr-4 h-6 w-6" aria-hidden="true" />
-                        {{ item.name }}
-                        </a>
+                        <router-link v-if="item.enabled" :to="item.href" @click="navAction(item)" class="group p-2 rounded-md flex items-center text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+                            <component :is="item.icon" :class="item.classes" class="mr-4 h-6 w-6" aria-hidden="true" />
+                            {{ item.name }}
+                        </router-link>
                     </div>
                     </nav>
                 </div>
@@ -56,7 +56,7 @@
 
         <!-- All Services -->
         <ModalComponent :state="isOpen" :onClose="closeModal">
-        <ServiceComponent :enabledServices="services"></ServiceComponent>
+            <ServiceComponent :enabledServices="services"></ServiceComponent>
         </ModalComponent>
     
         <!-- Static sidebar for desktop -->
@@ -141,6 +141,7 @@
         FolderOpenIcon,
         ShoppingCartIcon,
         DocumentReportIcon,
+        LoginIcon,
     } from '@heroicons/vue/outline';
     import ServiceComponent from '../components/service.vue';
     import ModalComponent from '../components/modal.vue';
@@ -169,6 +170,7 @@
             FolderOpenIcon,
             ShoppingCartIcon,
             DocumentReportIcon,
+            LoginIcon,
         },
         setup() {
             const user = {
@@ -191,6 +193,7 @@
                 { name: 'More', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: PlusIcon, enabled: true  },
                 { name: 'Setting', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: AdjustmentsIcon, enabled: true },
                 { name: 'Profile', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: UserIcon, enabled: true  },
+                { name: 'Logout', href: '/login', classes: 'text-gray-400 hover:bg-gray-400', icon: LoginIcon, enabled: true },
             ];
 
             const navigation = ref([...servicesTemp, ...navigationTemp]);
