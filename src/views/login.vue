@@ -98,5 +98,9 @@ export default defineComponent({
     components: {
         ModalComponent
     },
+    setup() {
+        let email = '';
+        let password = '';
+    }
 })
 </script>

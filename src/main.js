@@ -2,6 +2,7 @@ import { createApp, h } from 'vue';
 import './style.css';
 import App from './App.vue';
 import router from './router';
+import axios from './plugins/axios';
 import singleSpaVue from 'single-spa-vue';
 import 'floating-vue/dist/style.css';
 import floatingVue from 'floating-vue';
@@ -24,6 +25,9 @@ const vueLifecycles = singleSpaVue({
     handleInstance: (app) => {
         app.use(router);
         app.use(floatingVue);
+        axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+        axios.defaults.headers.common.Accept = 'application/json';
+        window.axios = axios;
     },
 });
 
