@@ -1,12 +1,14 @@
 import { createApp, h } from 'vue';
 import './style.css';
 import App from './App.vue';
+import { createPinia } from 'pinia';
 import router from './router';
 import axios from './plugins/axios';
 import singleSpaVue from 'single-spa-vue';
 import 'floating-vue/dist/style.css';
 import floatingVue from 'floating-vue';
 
+const pinia = createPinia();
 const vueLifecycles = singleSpaVue({
     createApp,
     appOptions: {
@@ -23,6 +25,7 @@ const vueLifecycles = singleSpaVue({
       },
     },
     handleInstance: (app) => {
+        app.use(pinia);
         app.use(router);
         app.use(floatingVue);
         axios.defaults.baseURL = import.meta.env.VITE_API_URL;

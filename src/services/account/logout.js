@@ -1,24 +1,24 @@
 import axios from '../../plugins/axios';
 import { useAccountStore } from '../../stores/account';
 
-const success = (response, resolve) => {
+const success = (resolve) => {
     const accountStore = useAccountStore();
-    accountStore.login(response.token);
+    accountStore.logout();
+
+    window.location.href = '/login';
+
     return resolve();
 };
 
 const failed = (error, reject) => {
-    if (error.response.status === 401) {
-        return reject({ error: { message: 'Invalid credentials', code: 401 } });
-    }
     return reject(error.response.data);
 };
 
-export default data => {
+export default () => {
     return new Promise((resolve, reject) => {
-        axios.post('api/login', data)
-        .then((response) => {
-            success(response.data, resolve);
+        axios.post('api/logout')
+        .then(() => {
+            success(resolve);
         })
         .catch((error) => {
             failed(error, reject);

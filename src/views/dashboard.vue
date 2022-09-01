@@ -53,11 +53,6 @@
             </div>
         </Dialog>
         </TransitionRoot>
-
-        <!-- All Services -->
-        <ModalComponent :state="isOpen" :onClose="closeModal">
-            <ServiceComponent :enabledServices="services"></ServiceComponent>
-        </ModalComponent>
     
         <!-- Static sidebar for desktop -->
         <div class="hidden lg:flex lg:flex-shrink-0">
@@ -116,6 +111,12 @@
             </div>
         </div>
         </div>
+
+        <!-- All Modal -->
+        <ModalComponent :state="isOpen" :onClose="closeModal">
+            <ServiceComponent v-show="modalFor === 'services'" :enabledServices="services"></ServiceComponent> <!-- All Services -->
+        </ModalComponent>
+
     </div>
 </template>
 <script lang="ts">
@@ -143,8 +144,11 @@
         DocumentReportIcon,
         LoginIcon,
     } from '@heroicons/vue/outline';
+    import SessionExpiredComponent from './sessionExpired.vue';
     import ServiceComponent from '../components/service.vue';
     import ModalComponent from '../components/modal.vue';
+    import accountService from '../services/account';
+    import { useAccountStore } from '../stores/account';
 
     export default defineComponent({
         name: 'dashboard',
@@ -154,6 +158,7 @@
             DialogPanel,
             TransitionChild,
             TransitionRoot,
+            SessionExpiredComponent,
             ServiceComponent,
             ModalComponent,
             BookmarkAltIcon,
@@ -173,9 +178,12 @@
             LoginIcon,
         },
         setup() {
+            const accountStore = useAccountStore();
+            const me = accountStore.getMe;
+
             const user = {
-                name: 'Emily Selman',
-                email: 'emily.selman@example.com',
+                name: `${me.first_name} ${me.last_name}`,
+                email: me.email,
                 imageUrl:
                     'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
                 };
@@ -193,24 +201,41 @@
                 { name: 'More', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: PlusIcon, enabled: true  },
                 { name: 'Setting', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: AdjustmentsIcon, enabled: true },
                 { name: 'Profile', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: UserIcon, enabled: true  },
-                { name: 'Logout', href: '/login', classes: 'text-gray-400 hover:bg-gray-400', icon: LoginIcon, enabled: true },
+                { name: 'Logout', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: LoginIcon, enabled: true },
             ];
 
-            const navigation = ref([...servicesTemp, ...navigationTemp]);
-            const services = ref(servicesTemp);
+            const navigation   = ref([...servicesTemp, ...navigationTemp]);
+            const services     = ref(servicesTemp);
 
-            const mobileMenuOpen = ref(false);
-            let   isOpen         = ref(false);
+            const mobileMenuOpen    = ref(false);
+            let   isOpen            = ref(false);
+            let   modalFor          = ref('');
 
-            const navAction = (item) => {
-                if (item.name == 'More') {
-                    isOpen.value         = true;
-                    mobileMenuOpen.value = false
+            const navAction = (item: { name: string; }) => {
+                if (item.name === 'More') {
+                    openModal('services');
+                } else if (item.name === 'Logout') {
+                    onLogout();
                 }
             }
 
+            const openModal = (type: string) => {
+                isOpen.value         = true;
+                modalFor.value       = type;
+                mobileMenuOpen.value = false;
+            }
+            
             const closeModal = () => {
                 isOpen.value = false;
+            }
+
+            const onLogout = () => {
+                accountService.logout()
+                .then((response) => {
+                    //
+                }).catch((error) => {
+                    console.log(error);
+                });
             }
         
             return { 
@@ -219,6 +244,7 @@
                 navigation,
                 services,
                 isOpen,
+                modalFor,
                 SaveIcon,
                 XIcon,
                 navAction,

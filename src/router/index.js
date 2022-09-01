@@ -1,7 +1,9 @@
 
+import { createRouter, createWebHistory } from 'vue-router';
+import middleware from './middleware';
 import dashboard from '../views/dashboard.vue';
 import login from '../views/login.vue';
-import { createRouter, createWebHistory } from 'vue-router';
+import sessionExpired from '../views/sessionExpired.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -11,7 +13,7 @@ const router = createRouter({
         name: 'dashboard',
         component: dashboard,
         meta: { 
-          requiresAuth: true 
+          auth: true 
         }
       },
       {
@@ -19,12 +21,20 @@ const router = createRouter({
         name: 'login',
         component: login,
         meta: { 
-          requiresAuth: false 
+          auth: false 
+        }
+      },
+      {
+        path: '/session-expired',
+        name: 'sessionExpired',
+        component: sessionExpired,
+        meta: { 
+          auth: false 
         }
       },
     ],
   });
   
- // router.beforeEach(RouteMiddleware.beforeEach);
+router.beforeEach(middleware.beforeEach);
   
   export default router;
