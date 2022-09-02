@@ -120,7 +120,7 @@
     </div>
 </template>
 <script lang="ts">
-    import { ref, defineComponent } from 'vue';
+    import { ref, defineComponent, onMounted } from 'vue';
     import { 
         Dialog, 
         DialogTitle, 
@@ -149,6 +149,7 @@
     import ModalComponent from '../components/modal.vue';
     import accountService from '../services/account';
     import { useAccountStore } from '../stores/account';
+import Echo from 'laravel-echo';
 
     export default defineComponent({
         name: 'dashboard',
@@ -178,6 +179,11 @@
             LoginIcon,
         },
         setup() {
+            
+            onMounted(() => {
+               //
+            });
+
             const accountStore = useAccountStore();
             const me = accountStore.getMe;
 

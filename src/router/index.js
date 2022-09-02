@@ -29,7 +29,7 @@ const router = createRouter({
         name: 'sessionExpired',
         component: sessionExpired,
         meta: { 
-          auth: false 
+          auth: false
         }
       },
     ],
@@ -37,4 +37,4 @@ const router = createRouter({
   
 router.beforeEach(middleware.beforeEach);
   
-  export default router;
+export default router;

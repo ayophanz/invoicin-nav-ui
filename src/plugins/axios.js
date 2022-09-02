@@ -1,6 +1,7 @@
 import axios from 'axios';
 import accountService from '../services/account';
 import router from '../router';
+import { useAccountStore } from './../stores/account';
 
 const logoutErrors = [
     40102, // No token provided
@@ -31,11 +32,12 @@ axios.interceptors.response.use(
              */
             if (errorCode === 40104) {
                 if (router.currentRoute.value.meta.auth == true || Object.keys(router.currentRoute.value.meta).length == 0) {
-                    console.log('session expired');
+                    const accountStore = useAccountStore();
+                    accountStore.sessionExpired();
+                    
+                    router.push({ name: 'sessionExpired' });
+                    
                     // return accountService.refreshToken();
-                    router.push({
-                        name: 'sessionExpired',
-                    }); 
                 }
                 return;
             }

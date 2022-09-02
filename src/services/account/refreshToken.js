@@ -1,9 +1,11 @@
 import axios from '../../plugins/axios';
 import { useAccountStore } from '../../stores/account';
+import router from '../../router';
 
 const success = (response, resolve) => {
     const accountStore = useAccountStore();
     accountStore.refreshToken(response.token);
+    router.push({ name: 'dashboard' });
     return resolve();
 };
 

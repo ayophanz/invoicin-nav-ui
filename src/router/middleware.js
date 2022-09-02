@@ -3,22 +3,29 @@ import accountService from '../services/account';
 
 const beforeEach = async (to, from, next) => {
     // const accountStore = useAccountStore();
-    const hasToken = !!localStorage.getItem('id_token');  // accountStore.getIsAuthenticated;
+    // const hastToken = accountStore.getIsAuthenticated;
+    const hasToken     = !!localStorage.getItem('id_token');
+    const expiredToken = !!localStorage.getItem('expired_at');
 
-    if (to.meta.auth) { // Routes that requires authentication
-        if (!hasToken) {
+    if (to.meta.auth) {
+        if (!hasToken && !expiredToken) {
             return next({ name: 'login' });
-        } else {
-            await accountService.me(); // Run every request
+        }    
+        if (expiredToken) {
         }
-    } else { // Guest routes
-        if (hasToken && to.name === 'login') {
-            return next({ name: 'dashboard' });
-        } else {
-            //
-        }
-    }
+        await accountService.me();
+        return next();
+    } 
 
+    if (hasToken && !expiredToken && (to.name === 'login' || to.name === 'sessionExpired')) {
+        return next({ name: 'dashboard' });
+    } 
+    if (hasToken && expiredToken && (to.name === 'login' || to.name === 'dashboard')) {
+        return next({ name: 'sessionExpired' });
+    }
+    if (!hasToken && (to.name === 'sessionExpired')) {
+        return next({ name: 'login' });
+    }
     return next();
 }
 
