@@ -149,7 +149,6 @@
     import ModalComponent from '../components/modal.vue';
     import accountService from '../services/account';
     import { useAccountStore } from '../stores/account';
-import Echo from 'laravel-echo';
 
     export default defineComponent({
         name: 'dashboard',

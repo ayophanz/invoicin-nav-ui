@@ -4,6 +4,7 @@ import middleware from './middleware';
 import dashboard from '../views/dashboard.vue';
 import login from '../views/login.vue';
 import sessionExpired from '../views/sessionExpired.vue';
+import twofa from '../views/2fa.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -30,6 +31,14 @@ const router = createRouter({
         component: sessionExpired,
         meta: { 
           auth: false
+        }
+      },
+      {
+        path: '/2fa',
+        name: '2fa',
+        component: twofa,
+        meta: { 
+          auth: true
         }
       },
     ],
