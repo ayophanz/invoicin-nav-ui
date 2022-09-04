@@ -34,10 +34,7 @@ axios.interceptors.response.use(
                 if (router.currentRoute.value.meta.auth == true || Object.keys(router.currentRoute.value.meta).length == 0) {
                     const accountStore = useAccountStore();
                     accountStore.sessionExpired();
-                    
                     router.push({ name: 'sessionExpired' });
-                    
-                    // return accountService.refreshToken();
                 }
                 return;
             }

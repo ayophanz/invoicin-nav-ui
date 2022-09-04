@@ -3,7 +3,10 @@ import { useAccountStore } from '../../stores/account';
 
 const success = (response, resolve) => {
     const accountStore = useAccountStore();
-    accountStore.me(response);
+    accountStore.me(response.me);
+    if (!response.is_two_fa) {
+        console.log('redirect');
+    }
     return resolve();
 };
 
