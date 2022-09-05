@@ -1,19 +1,16 @@
 import axios from '../../plugins/axios';
-import { useAccountStore } from '../../stores/account';
 
 const success = (response, resolve) => {
-    const accountStore = useAccountStore();
-    accountStore.me(response.me);
     return resolve(response);
 };
 
 const failed = (error, reject) => {
-    return reject(error);
+    return reject(error.response.data);
 };
 
 export default () => {
     return new Promise((resolve, reject) => {
-        axios.get('api/me')
+        axios.get('api/account/generate-2fa-qr-code')
         .then((response) => {
             success(response.data, resolve);
         })
