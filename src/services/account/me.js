@@ -1,11 +1,12 @@
 import axios from '../../plugins/axios';
 import { useAccountStore } from '../../stores/account';
+import router from '../../router';
 
 const success = (response, resolve) => {
     const accountStore = useAccountStore();
     accountStore.me(response.me);
-    if (!response.is_two_fa) {
-        console.log('redirect');
+    if (!response.is_two_fa && router.options.history.state.back === '/login') {
+        // router.push({ name: 'twofa' });
     }
     return resolve();
 };

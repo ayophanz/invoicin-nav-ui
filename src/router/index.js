@@ -35,7 +35,7 @@ const router = createRouter({
       },
       {
         path: '/2fa',
-        name: '2fa',
+        name: 'twofa',
         component: twofa,
         meta: { 
           auth: true

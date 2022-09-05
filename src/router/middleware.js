@@ -10,9 +10,8 @@ const beforeEach = async (to, from, next) => {
     if (to.meta.auth) {
         if (!hasToken && !expiredToken) {
             return next({ name: 'login' });
-        }    
-        if (expiredToken && hasToken && (to.name !== '2fa')) {
         }
+
         await accountService.me();
         return next();
     } 
