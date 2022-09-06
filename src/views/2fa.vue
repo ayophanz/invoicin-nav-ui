@@ -1,12 +1,17 @@
 <template>
     <ModalComponent :state="true" :onClose="false" :showClose="false">
-        <form @submit.prevent="onVerify">
-            <div>
-                <div v-html="qrImage"></div>
-                <input v-model="otp" type="text">
-                <button type="submit">Authenticate</button>
+        <h4 class="text-center my-5 text-2xl">Set up Google Authenticator</h4>
+        <div>
+            <p>Set up your two factor authentication by scanning the barcode below. Alternatively, you can use the code <strong>{{ secret }}</strong></p>
+            <div v-cloak v-html="qrImage" class="flex justify-center">
             </div>
-        </form>
+            <p>You must set up your Google Authenticator app before continuing. You will be unable to login otherwise</p>
+        </div>
+        <div class="text-center my-5">
+            <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                Complete Registration
+            </button>
+        </div>
     </ModalComponent>
 </template>
 <script lang="ts">
@@ -21,21 +26,14 @@ export default defineComponent({
     },
     setup() {
         const otp     = ref('');
-        let   qrImage = '';
-
-        const onVerify = () => {
-            const data = { 'one_time_password': otp.value };
-            accountService.twofa(data)
-            .catch((error) => {
-                console.log(error);
-            });
-        }
+        let   qrImage = ref('');
+        let   secret  = ref('');
 
         const onLoadQRcode = () => {
             accountService.genTwofaQRcode()
             .then((response) => {
-                console.log(response);
-                qrImage = response.qr_image_url;
+                qrImage.value = response.qr_image_url;
+                secret.value = response.secret;
             })
             .catch((error) => {
                 console.log(error);
@@ -48,8 +46,8 @@ export default defineComponent({
 
         return {
             otp,
+            secret,
             qrImage,
-            onVerify
         }
     }
 });
