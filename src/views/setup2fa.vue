@@ -2,23 +2,17 @@
     <ModalComponent :state="true" :onClose="false" :showClose="false">
         <h4 class="text-center my-5 text-2xl">Set up Google Authenticator</h4>
         <div>
-            <p>Set up your two factor authentication by scanning the barcode below. Alternatively, you can use the code <strong>{{ secret }}</strong></p>
+            <p class="text-center">Set up your two factor authentication by scanning the barcode below. Alternatively, you can use the code <strong>{{ secret }}</strong></p>
             <div v-cloak v-html="qrImage" class="flex justify-center">
             </div>
-            <p>You must set up your Google Authenticator app before continuing. You will be unable to login otherwise</p>
+            <p class="text-center">You must set up your Google Authenticator app before continuing. You will be unable to login otherwise, to download the Google Authenticator app go to playstore (android) or  appstore (ios). </p>
         </div>
         <div class="text-center my-5">
-            <div>
-                <input type="text" class="border-1 border-gray-400 rounded-md">
+            <div class="mt-3">
+                <button @click="onTwoFaComplete" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    Complete 2fa
+                </button>
             </div>
-            <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                Enable 2FA
-            </button>
-            <p>
-                <a href="#" @click.stop="onSkip" class="text-sm hover:text-blue-400">
-                    Reminder later
-                </a>
-            </p>
         </div>
     </ModalComponent>
 </template>
@@ -26,7 +20,6 @@
 import { ref, defineComponent, onMounted } from 'vue';
 import accountService from '../services/account';
 import ModalComponent from '../components/modal.vue';
-import router from '../router';
 
 export default defineComponent({
     name: 'setupTwofa',
@@ -34,7 +27,6 @@ export default defineComponent({
         ModalComponent,
     },
     setup() {
-        const otp     = ref('');
         let   qrImage = ref('');
         let   secret  = ref('');
 
@@ -49,8 +41,14 @@ export default defineComponent({
             });
         }
 
-        const onSkip = () => {
-            router.push({ name: 'dashboard' });
+        const onTwoFaComplete = () => {
+            accountService.store2faSecret({ twofa_secret: secret.value })
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error.error);
+            });
         }
 
         onMounted(() => {
@@ -58,10 +56,9 @@ export default defineComponent({
         });
 
         return {
-            otp,
             secret,
             qrImage,
-            onSkip
+            onTwoFaComplete
         }
     }
 });

@@ -2,7 +2,7 @@ import login from './login';
 import logout from './logout';
 import me from './me';
 import refreshToken from './refreshToken';
-import twofa from './2fa';
+import store2faSecret from './store2faSecret';
 import genTwofaQRcode from './genTwofaQRcode';
 
 export default {
@@ -10,6 +10,6 @@ export default {
     logout,
     me,
     refreshToken,
-    twofa,
+    store2faSecret,
     genTwofaQRcode,
 }

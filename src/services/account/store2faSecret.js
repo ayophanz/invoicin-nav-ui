@@ -1,7 +1,7 @@
 import axios from '../../plugins/axios';
 
 const success = (response, resolve) => {
-    return resolve();
+    return resolve(response);
 };
 
 const failed = (error, reject) => {
@@ -10,7 +10,7 @@ const failed = (error, reject) => {
 
 export default data => {
     return new Promise((resolve, reject) => {
-        axios.post('api/2fa', data)
+        axios.post('api/account/store-2fa-secret', data)
         .then((response) => {
             success(response.data, resolve);
         })
