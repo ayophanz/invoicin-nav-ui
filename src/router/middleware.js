@@ -12,15 +12,15 @@ const beforeEach = async (to, from, next) => {
             return next({ name: 'login' });
         }
 
-        await accountService.me()
-        .then((response) => {
-            if (!response.is_twofa && to.name !== 'twofa') {
-                return next({ name: 'twofa' });
-            }
-            if (response.is_twofa && to.name === 'twofa') {
-                return next({ name: 'dashboard' });
-            }
-        });
+        await accountService.me();
+        // .then((response) => {
+        //     if (!response.is_twofa && to.name !== 'twofa') {
+        //         return next({ name: 'twofa' });
+        //     }
+        //     if (response.is_twofa && to.name === 'twofa') {
+        //         return next({ name: 'dashboard' });
+        //     }
+        // });
 
         return next();
     } 
