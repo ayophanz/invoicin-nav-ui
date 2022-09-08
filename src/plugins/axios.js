@@ -18,7 +18,6 @@ axios.interceptors.response.use(
          */
         if (error.response.status === 401 /*&& error.response.request.responseURL.index('retry=1' === -1)*/) {
             const errorCode = error.response.data.error.code;
-            console.log(errorCode);
             /**
              * Logout error
              */

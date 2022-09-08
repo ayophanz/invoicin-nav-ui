@@ -14,10 +14,10 @@ const beforeEach = async (to, from, next) => {
 
         await accountService.me()
         .then((response) => {
-            if (!response.is_twofa && to.name !== 'setupTwofa') {
-                return next({ name: 'setupTwofa' });
+            if (!response.is_twofa && to.name !== 'twofa') {
+                return next({ name: 'twofa' });
             }
-            if (response.is_twofa && to.name === 'setupTwofa') {
+            if (response.is_twofa && to.name === 'twofa') {
                 return next({ name: 'dashboard' });
             }
         });

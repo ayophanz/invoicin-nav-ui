@@ -4,7 +4,7 @@ import middleware from './middleware';
 import dashboard from '../views/dashboard.vue';
 import login from '../views/login.vue';
 import sessionExpired from '../views/sessionExpired.vue';
-import setupTwofa from '../views/setup2fa.vue';
+import twofa from '../views/2fa.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -34,9 +34,9 @@ const router = createRouter({
         }
       },
       {
-        path: '/setup-2fa',
-        name: 'setupTwofa',
-        component: setupTwofa,
+        path: '/2fa',
+        name: 'twofa',
+        component: twofa,
         meta: { 
           auth: true
         }
