@@ -18,12 +18,24 @@ axios.interceptors.response.use(
          */
         if (error.response.status === 401 /*&& error.response.request.responseURL.index('retry=1' === -1)*/) {
             const errorCode = error.response.data.error.code;
+            console.log(errorCode);
             /**
              * Logout error
              */
             if (logoutErrors.indexOf(errorCode) >= 0) {
                 accountService.logout();
                 return Promise.reject(error);
+            }
+
+            /**
+             * 2fa nmot authenticated
+             */
+             if (errorCode === 40105) {
+                if (router.currentRoute.value.meta.auth == true || Object.keys(router.currentRoute.value.meta).length == 0) {
+                    // router.push({ name: 'sessionExpired' });
+                    console.log('2fa not authenticated');
+                }
+                return;
             }
 
             /**

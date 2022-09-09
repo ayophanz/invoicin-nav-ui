@@ -52,7 +52,7 @@ export default defineComponent({
         let qrImage = ref('');
         let secret  = ref('');
         let step2fa = ref('generate-secret');
-        let optCode  = ref('');
+        let optCode = ref('');
 
         const onGenerateSecret = async () => {
             await accountService.generate2faSecret()
