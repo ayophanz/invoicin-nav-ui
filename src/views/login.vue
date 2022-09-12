@@ -111,6 +111,7 @@ import { ref, defineComponent } from 'vue';
 import ModalComponent from '../components/modal.vue';
 import accountService from '../services/account';
 import { useRouter } from 'vue-router';
+import { useAccountStore } from '../stores/account';
 
 export default defineComponent({
     name: 'login',
@@ -123,10 +124,20 @@ export default defineComponent({
         let errors   = ref([]);
         const router = useRouter();
 
-        const onLogin = () => {
-            accountService.login({ email: email.value, password: password.value })
+        const onLogin = async () => {
+            await accountService.login({ email: email.value, password: password.value })
             .then((response) => {
-                router.push({ name: 'dashboard' });
+                const accountStore = useAccountStore();
+                if (response.otp_required === true) {
+                    accountStore.otpRequired(response.user_id);
+                    router.push({ name: 'twofa' });
+                } else if (response.otp_setup_required === true) {
+                    accountStore.otpSetupRequired(response.user_id);
+                    router.push({ name: 'twofa' });
+                } else {
+                    accountStore.login(response.token);
+                    router.push({ name: 'dashboard' });
+                }
             }).catch((error) => {
                 errors.value = error;
             });

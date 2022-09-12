@@ -13,12 +13,13 @@ axios.defaults.headers.common.Accept = 'application/json';
 axios.interceptors.response.use(
     (response) => response,
     (error) => {
+        const accountStore = useAccountStore();
+        
         /**
          * Unauthorized
          */
-        if (error.response.status === 401 /*&& error.response.request.responseURL.index('retry=1' === -1)*/) {
+        if (error.response.status === 401) {
             const errorCode = error.response.data.error.code;
-            console.log(errorCode);
             /**
              * Logout error
              */
@@ -28,38 +29,21 @@ axios.interceptors.response.use(
             }
 
             /**
-             * 2fa nmot authenticated
-             */
-             if (errorCode === 40105) {
-                if (router.currentRoute.value.meta.auth == true || Object.keys(router.currentRoute.value.meta).length == 0) {
-                    // router.push({ name: 'sessionExpired' });
-                    console.log('2fa not authenticated');
-                }
-                return;
-            }
-
-            /**
              * Token expired
              */
             if (errorCode === 40104) {
                 if (router.currentRoute.value.meta.auth == true || Object.keys(router.currentRoute.value.meta).length == 0) {
-                    const accountStore = useAccountStore();
                     accountStore.sessionExpired();
                     router.push({ name: 'sessionExpired' });
                 }
-                return;
+                return Promise.reject(error);
             }
 
             /**
-             * Email not verified
+             * Login required
              */
-            if (errorCode === 40113 && Vue.router.history.current.matched.some(
-                (record) => record.meta.emailVerificationRequired
-            )) {
-                console.log('Email not verified');
-                router.push({
-                    name: 'dashboard',
-                }); 
+            if (errorCode === 40105) {
+                return Promise.reject(error);
             }
         }
 

@@ -3,6 +3,8 @@ import { defineStore } from 'pinia';
 export const useAccountStore = defineStore('account', {
     state: () => ({ 
         _me: [],
+        _otpRequired: false,
+        _otpSetupRequired: false,
     }),
     actions: {
         login(token) {
@@ -22,6 +24,17 @@ export const useAccountStore = defineStore('account', {
         sessionExpired() {
             localStorage.setItem('expired_at', new Date().toString());
         },
+        otpSetupRequired(user_id) {
+            localStorage.setItem('2fa:user:id', user_id);
+            this._otpSetupRequired = true;
+        },
+        otpRequired(user_id) {
+            localStorage.setItem('2fa:user:id', user_id);
+            this._otpRequired = true;
+        },
+        removeOtpUserId() {
+            localStorage.removeItem('2fa:user:id');
+        },
         me(data) {
             this._me = data;
         },
@@ -29,6 +42,15 @@ export const useAccountStore = defineStore('account', {
     getters: {
         getIsAuthenticated() {
             return !!localStorage.getItem('id_token');
+        },
+        getIsOtpSetupRequired() {
+            return this._otpSetupRequired;
+        },
+        getIsOtpRequired() {
+            return this._otpRequired;
+        },
+        getOtpUserId() {
+            return localStorage.getItem('2fa:user:id');
         },
         getMe() {
             return this._me;

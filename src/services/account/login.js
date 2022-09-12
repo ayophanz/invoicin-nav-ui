@@ -1,10 +1,7 @@
 import axios from '../../plugins/axios';
-import { useAccountStore } from '../../stores/account';
 
 const success = (response, resolve) => {
-    const accountStore = useAccountStore();
-    accountStore.login(response.token);
-    return resolve();
+    return resolve(response);
 };
 
 const failed = (error, reject) => {

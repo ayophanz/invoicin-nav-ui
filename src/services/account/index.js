@@ -5,6 +5,7 @@ import refreshToken from './refreshToken';
 import generate2faSecret from './generate2faSecret';
 import genTwofaQRcode from './genTwofaQRcode';
 import enable2fa from './enable2fa';
+import verifyOtp from './verifyOtp';
 
 export default {
     login,
@@ -14,4 +15,5 @@ export default {
     generate2faSecret,
     genTwofaQRcode,
     enable2fa,
+    verifyOtp,
 }

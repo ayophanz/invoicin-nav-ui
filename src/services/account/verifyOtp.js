@@ -8,9 +8,9 @@ const failed = (error, reject) => {
     return reject(error.response.data);
 };
 
-export default data => {
+export default (data) => {
     return new Promise((resolve, reject) => {
-        axios.post('api/generate-2fa-qr-code', data)
+        axios.post('api/verify-otp', data)
         .then((response) => {
             success(response.data, resolve);
         })

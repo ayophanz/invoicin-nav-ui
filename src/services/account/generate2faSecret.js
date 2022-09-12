@@ -8,9 +8,9 @@ const failed = (error, reject) => {
     return reject(error.response.data);
 };
 
-export default () => {
+export default data => {
     return new Promise((resolve, reject) => {
-        axios.post('api/generate-secret')
+        axios.post('api/generate-secret', data)
         .then((response) => {
             success(response.data, resolve);
         })
