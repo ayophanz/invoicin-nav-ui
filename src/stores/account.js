@@ -24,16 +24,20 @@ export const useAccountStore = defineStore('account', {
         sessionExpired() {
             localStorage.setItem('expired_at', new Date().toString());
         },
-        otpSetupRequired(user_id) {
-            localStorage.setItem('2fa:user:id', user_id);
+        otpSetupRequired() {
             this._otpSetupRequired = true;
         },
-        otpRequired(user_id) {
-            localStorage.setItem('2fa:user:id', user_id);
+        otpRequired() {
             this._otpRequired = true;
+        },
+        otpUserId(user_id) {
+            localStorage.setItem('2fa:user:id', user_id);
         },
         removeOtpUserId() {
             localStorage.removeItem('2fa:user:id');
+        },
+        otpStep(value) {
+            localStorage.setItem('otp_step', value);
         },
         me(data) {
             this._me = data;
@@ -51,6 +55,9 @@ export const useAccountStore = defineStore('account', {
         },
         getOtpUserId() {
             return localStorage.getItem('2fa:user:id');
+        },
+        getOtpStep() {
+            return localStorage.getItem('otp_step');
         },
         getMe() {
             return this._me;

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import accountService from '../services/account';
 import router from '../router';
 import { useAccountStore } from './../stores/account';
 
@@ -20,18 +19,11 @@ axios.interceptors.response.use(
          */
         if (error.response.status === 401) {
             const errorCode = error.response.data.error.code;
-            /**
-             * Logout error
-             */
-            if (logoutErrors.indexOf(errorCode) >= 0) {
-                accountService.logout();
-                return Promise.reject(error);
-            }
 
             /**
              * Token expired
              */
-            if (errorCode === 40104) {
+            if (errorCode === 40101) {
                 if (router.currentRoute.value.meta.auth == true || Object.keys(router.currentRoute.value.meta).length == 0) {
                     accountStore.sessionExpired();
                     router.push({ name: 'sessionExpired' });
@@ -42,7 +34,8 @@ axios.interceptors.response.use(
             /**
              * Login required
              */
-            if (errorCode === 40105) {
+            if (errorCode === 40102) {
+                router.push({ name: 'login' });
                 return Promise.reject(error);
             }
         }

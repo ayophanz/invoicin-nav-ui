@@ -5,14 +5,14 @@ const success = (response, resolve) => {
 };
 
 const failed = (error, reject) => {
-    return reject(error.response.data);
+    return reject(error);
 };
 
 export default () => {
     return new Promise((resolve, reject) => {
-        axios.post('api/generate-secret')
+        axios.get('api/auth-check')
         .then((response) => {
-            success(response.data, resolve);
+            success(response, resolve);
         })
         .catch((error) => {
             failed(error, reject);

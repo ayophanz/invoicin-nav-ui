@@ -6,19 +6,20 @@
                     <div class="mt-2 max-w-xl text-sm text-gray-500">
                         <p>Enter the pin code from Google Authenticator app:</p>
                     </div>
-                    <div class="mt-5 flex gap-x-5 items-end">
-                        <div class="w-full sm:max-w-xs">
-                            <input type="text" v-model="oneTimePassword" name="otpCode" id="otpCode" class="pl-2 block h-[36px] w-full border rounded-md border-gray-400 shadow-sm sm:text-sm" />
+                    <div class="mt-5 flex gap-x-5 items-end flex-wrap w-[400px]">
+                        <div class="w-[300px] sm:max-w-xs">
+                            <input type="text" v-model="oneTimePassword" name="otpCode" id="otpCode" :class="errorMessage.length > 0 ? 'border-red-400' : ''" class="pl-2 block h-[36px] w-full border rounded-md border-gray-400 shadow-sm sm:text-sm" />
                         </div>
                         <button @click="onVerifyOTP" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                             Verify
                         </button>
+                        <span v-if="errorMessage.length > 0" class="text-red-400 text-sm font-semibold text-left">{{ errorMessage[0] }}</span>
                     </div>
                 </div>
             </div>
             
             <div v-if="step2fa === 'generate-secret'">
-                <h4 class="text-center my-5 text-2xl">Two Factor Authentication</h4>
+                <h4 class="text-center my-5 text-2xl">Set up Google Authenticator</h4>
                 <div>
                     <p class="text-left">Two-Factor Authentication (2FA) works by adding an additional layer of security to your account. It requires an additional login credential - beyond just the username and password - to gain account access, and getting that second credential requires access to something that belongs to you.</p>
                 </div>
@@ -27,6 +28,7 @@
                         <button @click="onGenerateSecret" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                             Generate Secret Key to Enable 2FA
                         </button>
+                        <a href="#" @click.prevent="onOtpSetupSkip" class="hover:underline ml-5">Skip</a>
                     </div>
                 </div>
             </div>
@@ -39,15 +41,17 @@
                     </div>
                     <p class="text-left">2. Enter the pin code from Google Authenticator app:</p>
                 </div>
-                <div class="text-center my-5">
+                <div class="my-5">
                     <div class="mt-5 flex gap-x-5 items-end">
                         <div class="w-full sm:max-w-xs text-left">
-                            <input type="text" v-model="optCode" name="otpCode" id="otpCode" class="pl-2 block h-[36px] w-full border rounded-md border-gray-400 shadow-sm sm:text-sm" />
+                            <input type="text" v-model="optCode" name="otpCode" id="otpCode" :class="errorMessage.length > 0 ? 'border-red-400' : ''" class="pl-2 block h-[36px] w-full border rounded-md border-gray-400 shadow-sm sm:text-sm" />
                         </div>
                         <button @click="on2faEnable" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                             Enable 2fa
                         </button>
+                        <a href="#" @click.prevent="onOtpSetupSkip" class="hover:underline">Skip</a>
                     </div>
+                    <span v-if="errorMessage.length > 0" class="text-red-400 text-sm font-semibold text-left">{{ errorMessage[0] }}</span>
                 </div>
             </div>
 
@@ -66,29 +70,26 @@ export default defineComponent({
         ModalComponent,
     },
     setup() {
-        let   qrImage         = ref('');
-        let   secret          = ref('');
-        let   step2fa         = ref('');
-        let   optCode         = ref('');
-        let   oneTimePassword = ref('');
+        let qrImage         = ref('');
+        let secret          = ref('');
+        let step2fa         = ref('');
+        let optCode         = ref('');
+        let oneTimePassword = ref('');
+        let errorMessage    = ref('');
        
         const accountStore     = useAccountStore();
         const otpSetupRequired = ref(accountStore.getIsOtpSetupRequired);
         const otpRequired      = ref(accountStore.getIsOtpRequired);
-        const tempUserId       = ref(accountStore. getOtpUserId);
-
-        if (otpSetupRequired.value) {
-            step2fa.value = 'generate-secret';
-        } 
-        
-        if (otpRequired.value) {
-            step2fa.value = '2fa-required'; 
-        }
+        const tempUserId       = ref(accountStore.getOtpUserId);
+        const otpStep          = ref(accountStore.getOtpStep);
 
         const onGenerateSecret = async () => {
-            await accountService.generate2faSecret({ user_id: tempUserId.value })
-            .then(() => {
-                step2fa.value = 'generate-qrcode';
+            await accountService.generate2faSecret()
+            .then((response) => {
+                accountStore.otpUserId(response.user_id);
+                tempUserId.value = response.user_id;
+                step2fa.value    = 'generate-qrcode';
+                accountStore.otpStep('generate-qrcode');
                 onLoadQRcode();
             });
         }
@@ -111,11 +112,10 @@ export default defineComponent({
                     accountStore.login(response.token);
                     accountStore.removeOtpUserId();
                     router.push({ name: 'dashboard' });
-                } else {
-                    console.log(response);
                 }
             })
             .catch((error) => {
+                errorMessage.value = error.error.otp_code;
                 console.log(error);
             });
         }
@@ -132,8 +132,27 @@ export default defineComponent({
                 }
             })
             .catch((error) => {
+                errorMessage.value = error.error.otp_code;
                 console.log(error);
             });
+        }
+
+        const onOtpSetupSkip = () => {
+            accountStore.removeOtpUserId();
+            router.push({ name: 'dashboard' });
+        }
+
+        if (otpSetupRequired.value) {
+            step2fa.value = 'generate-secret';
+            accountStore.otpStep('generate-secret');
+        } else if (otpRequired.value) {
+            step2fa.value = '2fa-required'; 
+            accountStore.otpStep('2fa-required');
+        } else {
+            step2fa.value = otpStep.value ? otpStep.value : ''; 
+            if (step2fa.value === 'generate-qrcode') {
+                onLoadQRcode();
+            }
         }
 
         return {
@@ -142,9 +161,11 @@ export default defineComponent({
             qrImage,
             optCode,
             oneTimePassword,
+            errorMessage,
             onGenerateSecret,
             on2faEnable,
             onVerifyOTP,
+            onOtpSetupSkip,
         }
     }
 });

@@ -16,7 +16,7 @@
                 <div class="my-2 mx-3 text-center">
                     <span class="text-red-500">{{ errors['message'] }}</span>
                 </div>
-                <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+                <div class="bg-white py-8 px-4 m:rounded-lg sm:px-10">
                     <form class="space-y-6" @submit.prevent="onLogin">
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700"> Email address </label>
@@ -129,10 +129,12 @@ export default defineComponent({
             .then((response) => {
                 const accountStore = useAccountStore();
                 if (response.otp_required === true) {
-                    accountStore.otpRequired(response.user_id);
+                    accountStore.otpUserId(response.user_id)
+                    accountStore.otpRequired();
                     router.push({ name: 'twofa' });
                 } else if (response.otp_setup_required === true) {
-                    accountStore.otpSetupRequired(response.user_id);
+                    accountStore.login(response.token);
+                    accountStore.otpSetupRequired();
                     router.push({ name: 'twofa' });
                 } else {
                     accountStore.login(response.token);

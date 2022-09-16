@@ -180,14 +180,14 @@
         },
         setup() {
             
-            onMounted( async () => {
-                await accountService.me()
-                .then((response) => {
-                    if (!response.data.has_2fa) {
-                        router.push({ name: 'twofa' });
-                    }
-                });
-            });
+            // onMounted( async () => {
+            //     await accountService.me()
+            //     .then((response) => {
+            //         if (!response.data.has_2fa) {
+            //             router.push({ name: 'twofa' });
+            //         }
+            //     });
+            // });
 
             const accountStore = useAccountStore();
             const me = accountStore.getMe;
