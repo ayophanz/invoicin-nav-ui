@@ -10,7 +10,7 @@ const failed = (error, reject) => {
 
 export default data => {
     return new Promise((resolve, reject) => {
-        axios.post('api/login', data)
+        axios.post('api/forgot-password', data)
         .then((response) => {
             success(response.data, resolve);
         })

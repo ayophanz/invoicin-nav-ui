@@ -149,7 +149,6 @@
     import ModalComponent from '../components/modal.vue';
     import accountService from '../services/account';
     import { useAccountStore } from '../stores/account';
-    import router from '../router';
 
     export default defineComponent({
         name: 'dashboard',
@@ -180,15 +179,6 @@
         },
         setup() {
             
-            // onMounted( async () => {
-            //     await accountService.me()
-            //     .then((response) => {
-            //         if (!response.data.has_2fa) {
-            //             router.push({ name: 'twofa' });
-            //         }
-            //     });
-            // });
-
             const accountStore = useAccountStore();
             const me = accountStore.getMe;
 

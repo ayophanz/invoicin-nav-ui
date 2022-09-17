@@ -8,12 +8,12 @@
                     </div>
                     <div class="mt-5 flex gap-x-5 items-end flex-wrap w-[400px]">
                         <div class="w-[300px] sm:max-w-xs">
-                            <input type="text" v-model="oneTimePassword" name="otpCode" id="otpCode" :class="errorMessage.length > 0 ? 'border-red-400' : ''" class="pl-2 block h-[36px] w-full border rounded-md border-gray-400 shadow-sm sm:text-sm" />
+                            <input type="text" v-model="oneTimePassword" name="otpCode" id="otpCode" :class="Object.keys(errors).length > 0 ? '!border-red-400' : ''" class="pl-2 block h-[36px] w-full border rounded-md border-gray-400 shadow-sm sm:text-sm" />
                         </div>
                         <button @click="onVerifyOTP" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                             Verify
                         </button>
-                        <span v-if="errorMessage.length > 0" class="text-red-400 text-sm font-semibold text-left">{{ errorMessage[0] }}</span>
+                        <span v-if="Object.keys(errors).length > 0" class="text-red-400 text-sm font-semibold text-left">{{ errors[0] }}</span>
                     </div>
                 </div>
             </div>
@@ -44,14 +44,14 @@
                 <div class="my-5">
                     <div class="mt-5 flex gap-x-5 items-end">
                         <div class="w-full sm:max-w-xs text-left">
-                            <input type="text" v-model="optCode" name="otpCode" id="otpCode" :class="errorMessage.length > 0 ? 'border-red-400' : ''" class="pl-2 block h-[36px] w-full border rounded-md border-gray-400 shadow-sm sm:text-sm" />
+                            <input type="text" v-model="optCode" name="otpCode" id="otpCode" :class="Object.keys(errors).length > 0 ? '!border-red-400' : ''" class="pl-2 block h-[36px] w-full border rounded-md border-gray-400 shadow-sm sm:text-sm" />
                         </div>
                         <button @click="on2faEnable" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                             Enable 2fa
                         </button>
                         <a href="#" @click.prevent="onOtpSetupSkip" class="hover:underline">Skip</a>
                     </div>
-                    <span v-if="errorMessage.length > 0" class="text-red-400 text-sm font-semibold text-left">{{ errorMessage[0] }}</span>
+                    <span v-if="Object.keys(errors).length > 0" class="text-red-400 text-sm font-semibold text-left">{{ errors[0] }}</span>
                 </div>
             </div>
 
@@ -62,7 +62,7 @@ import { ref, defineComponent } from 'vue';
 import accountService from '../services/account';
 import ModalComponent from '../components/modal.vue';
 import { useAccountStore } from '../stores/account';
-import router from '../router';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
     name: 'setupTwofa',
@@ -70,12 +70,13 @@ export default defineComponent({
         ModalComponent,
     },
     setup() {
-        let qrImage         = ref('');
-        let secret          = ref('');
-        let step2fa         = ref('');
-        let optCode         = ref('');
-        let oneTimePassword = ref('');
-        let errorMessage    = ref('');
+        let   qrImage         = ref('');
+        let   secret          = ref('');
+        let   step2fa         = ref('');
+        let   optCode         = ref('');
+        let   oneTimePassword = ref('');
+        let   errors          = ref([]);
+        const router          = useRouter();
        
         const accountStore     = useAccountStore();
         const otpSetupRequired = ref(accountStore.getIsOtpSetupRequired);
@@ -115,8 +116,7 @@ export default defineComponent({
                 }
             })
             .catch((error) => {
-                errorMessage.value = error.error.otp_code;
-                console.log(error);
+                errors.value = error.error.otp_code;
             });
         }
 
@@ -132,8 +132,7 @@ export default defineComponent({
                 }
             })
             .catch((error) => {
-                errorMessage.value = error.error.otp_code;
-                console.log(error);
+                errors.value = error.error.otp_code;
             });
         }
 
@@ -161,7 +160,7 @@ export default defineComponent({
             qrImage,
             optCode,
             oneTimePassword,
-            errorMessage,
+            errors,
             onGenerateSecret,
             on2faEnable,
             onVerifyOTP,

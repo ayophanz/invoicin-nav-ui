@@ -5,7 +5,7 @@ const success = (resolve) => {
     const accountStore = useAccountStore();
     accountStore.logout();
 
-    window.location.href = '/login';
+    window.location.replace('/login');
 
     return resolve();
 };

@@ -7,6 +7,7 @@ import genTwofaQRcode from './genTwofaQRcode';
 import enable2fa from './enable2fa';
 import verifyOtp from './verifyOtp';
 import authCheck from './authCheck';
+import forgotPassword from './forgotPassword';
 
 export default {
     login,
@@ -18,4 +19,5 @@ export default {
     enable2fa,
     verifyOtp,
     authCheck,
+    forgotPassword,
 }

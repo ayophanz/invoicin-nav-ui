@@ -5,6 +5,7 @@ import dashboard from '../views/dashboard.vue';
 import login from '../views/login.vue';
 import sessionExpired from '../views/sessionExpired.vue';
 import twofa from '../views/2fa.vue';
+import forgotPassword from '../views/forgotPassword.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -37,6 +38,14 @@ const router = createRouter({
         path: '/2fa',
         name: 'twofa',
         component: twofa,
+        meta: { 
+          auth: true
+        }
+      },
+      {
+        path: '/forgot-password',
+        name: 'forgotPassword',
+        component: forgotPassword,
         meta: { 
           auth: true
         }
