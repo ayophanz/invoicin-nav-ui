@@ -1,6 +1,6 @@
 <template>
   <ModalComponent :state="true" :onClose="false" :showClose="false">
-    <div class="rounded-md p-4">
+    <div v-if="!isSent" class="rounded-md p-4">
       <h2 class="text-center text-4xl">Forgot your password?</h2>
       <div class="grid justify-items-center my-10 w-1/2 mx-auto">
         <label class="text-left justify-self-start">Email</label>
@@ -20,6 +20,10 @@
         </button>
         <a @click.prevent="backToSignIn" href="#" class="hover:underline">back to sign in</a>
       </div>
+    </div>
+    <div v-else class="flex flex-col gap-y-4">
+      <h2 class="text-center text-4xl">Check your email to reset your password</h2>
+      <a @click.prevent="backToSignIn" href="#" class="hover:underline text-center">back to sign in</a>
     </div>
   </ModalComponent>
   </template>
@@ -43,11 +47,15 @@
           const email  = ref('');
           const router = useRouter();
           let   errors = ref([]);
+          let   isSent = ref(false);
 
           const reset = async () => {
+              isSent.value = false;
+              errors.value = [];
               await accountService.forgotPassword({ email: email.value })
               .then((response) => {
                 console.log(response);
+                isSent.value = true;
               }).catch((error) => {
                 errors.value = error.error.email;
               });
@@ -60,6 +68,7 @@
           return {
             email,
             errors,
+            isSent,
             reset,
             backToSignIn,
           }
