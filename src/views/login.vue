@@ -65,9 +65,9 @@
                         </div>
                     </div>
 
-                    <div class="mt-6 grid grid-cols-1 gap-3">
+                    <div class="mt-6 grid grid-cols-1 gap-3 justify-items-center">
                         <div>
-                            <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Sign up</button>
+                            <a href="#" class="text-center hover:underline hover:text-blue-400">Sign up</a>
                         </div>
                     </div>
                     </div>
