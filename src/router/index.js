@@ -6,6 +6,7 @@ import login from '../views/login.vue';
 import sessionExpired from '../views/sessionExpired.vue';
 import twofa from '../views/2fa.vue';
 import forgotPassword from '../views/forgotPassword.vue';
+import register from '../views/register.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -48,6 +49,14 @@ const router = createRouter({
         component: forgotPassword,
         meta: { 
           auth: true
+        }
+      },
+      {
+        path: '/register',
+        name: 'register', 
+        component: register,
+        meta: { 
+          auth: false
         }
       },
     ],

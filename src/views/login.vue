@@ -1,10 +1,10 @@
 
 <template>
     <ModalComponent :state="true" :onClose="false" :showClose="false">
-        <div class="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div class="min-h-full flex flex-col justify-center py-12">
             <div class="sm:mx-auto sm:w-full sm:max-w-md">
-            <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=600" alt="Workflow" />
-            <h2 class="mt-6 text-center text-3xl tracking-tight font-bold text-gray-900">Sign in to your account</h2>
+                <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=600" alt="Workflow" />
+                <h2 class="mt-6 text-center text-3xl tracking-tight font-bold text-gray-900">Sign in to your account</h2>
             </div>
 
             <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -67,7 +67,7 @@
 
                     <div class="mt-6 grid grid-cols-1 gap-3 justify-items-center">
                         <div>
-                            <a href="#" class="text-center hover:underline hover:text-blue-400">Sign up</a>
+                            <a @click.prevent="onRegister" href="#" class="text-center hover:underline hover:text-blue-400">Sign up</a>
                         </div>
                     </div>
                     </div>
@@ -89,10 +89,10 @@ export default defineComponent({
         ModalComponent
     },
     setup() {
+        const router = useRouter();
         let email    = ref('');
         let password = ref('');
         let errors   = ref([]);
-        const router = useRouter();
 
         const onLogin = async () => {
             await accountService.login({ email: email.value, password: password.value })
@@ -120,12 +120,17 @@ export default defineComponent({
             router.push({ name: 'forgotPassword' });
         }
 
+        const onRegister = () => {
+            router.push({ name: 'register' });
+        }
+
         return {
             email,
             password,
             errors,
             forgotPassword,
             onLogin,
+            onRegister,
         }
     }
 })
