@@ -17,7 +17,7 @@
                                     <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                                 </svg>
                                 </span>
-                                <button type="button" class="ml-5 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Add</button>
+                                <button type="button" class="ml-5 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none">Add</button>
                             </div>
                         </div>
 
@@ -38,7 +38,7 @@
                         <div class="sm:col-span-6">
                             <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
                             <div class="mt-1">
-                                <input id="email" name="email" type="email" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <input type="email" name="email" id="email" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             </div>
                         </div>
 
@@ -85,13 +85,13 @@
                                     <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                                 </svg>
                                 </span>
-                                <button type="button" class="ml-5 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Add</button>
+                                <button type="button" class="ml-5 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none">Add</button>
                             </div>
                         </div>
 
                         <div class="sm:col-span-6">
                             <label for="orgType" class="block text-sm font-medium text-gray-700">Type</label>
-                            <select id="orgType" name="orgType" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <select id="orgType" name="orgType" class="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 <option>Company</option>
                                 <option selected>Individual</option>
                             </select>
@@ -107,7 +107,7 @@
                         <div class="sm:col-span-6">
                             <label for="orgEmail" class="block text-sm font-medium text-gray-700">Email address</label>
                             <div class="mt-1">
-                                <input id="email" name="orgEmail" type="orgEmail" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <input type="email" name="orgEmail" id="email" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             </div>
                         </div>
 
@@ -121,37 +121,32 @@
 
                     <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                         <div class="sm:col-span-6">
-                            <label for="photo" class="block text-sm font-medium text-gray-700">Logo</label>
-                            <div class="mt-1 flex items-center">
-                                <span class="h-12 w-12 overflow-hidden rounded-full bg-gray-100">
-                                <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                </svg>
-                                </span>
-                                <button type="button" class="ml-5 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Add</button>
+                            <label for="orgAddress" class="block text-sm font-medium text-gray-700">Address</label>
+                            <div class="mt-1 flex rounded-md shadow-sm">
+                                <input type="text" name="orgAddress" id="orgAddress" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             </div>
                         </div>
 
                         <div class="sm:col-span-6">
-                            <label for="orgType" class="block text-sm font-medium text-gray-700">Type</label>
-                            <select id="orgType" name="orgType" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <label for="orgCity" class="block text-sm font-medium text-gray-700">City</label>
+                            <div class="mt-1">
+                                <input type="text" id="orgCity" name="orgCity" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                        </div>
+
+                        <div class="sm:col-span-6">
+                            <label for="orgZipCode" class="block text-sm font-medium text-gray-700">Zip code</label>
+                            <div class="mt-1">
+                                <input type="text" id="orgZipCode" name="orgZipCode" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                        </div>
+
+                        <div class="sm:col-span-6">
+                            <label for="orgCountry" class="block text-sm font-medium text-gray-700">Country</label>
+                            <select id="orgCountry" name="orgCountry" class="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 <option>Company</option>
                                 <option selected>Individual</option>
                             </select>
-                        </div>
-
-                        <div class="sm:col-span-6">
-                            <label for="orgName" class="block text-sm font-medium text-gray-700">Name</label>
-                            <div class="mt-1 flex rounded-md shadow-sm">
-                                <input type="text" name="orgName" id="orgName" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            </div>
-                        </div>
-
-                        <div class="sm:col-span-6">
-                            <label for="orgEmail" class="block text-sm font-medium text-gray-700">Email address</label>
-                            <div class="mt-1">
-                                <input id="email" name="orgEmail" type="orgEmail" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            </div>
                         </div>
 
                     </div>
@@ -166,21 +161,44 @@
             </div>
         </form>
 
+        <div v-if="registrationStep === 'complete'" class="space-y-8 divide-y divide-gray-200 w-3/4 mx-auto py-5">
+            <div class="flex flex-col justify-center items-center">
+                <button type="button" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-5 text-md font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Save & Complete</button>
+                <div class="text-base mt-3">
+                    <a href="#" @click="onBack('organization')" class="font-normal text-center hover:underline hover:text-blue-400"> back </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="form">
+            <Form :form="form"></Form>
+        </div>
+
     </ModalComponent>
 </template>
 
 <script lang="ts">
     import { ref, defineComponent } from 'vue';
     import ModalComponent from '../components/modal.vue';
+    import Form from '../components/form/form.vue';
+    import FormUtil from '../utils/form.js';
     import { useRouter } from 'vue-router';
 
     export default defineComponent({
         name: 'register',
         components: {
+            Form,
             ModalComponent
         },
         setup() {
             const router = useRouter();
+            const form = new FormUtil({
+                name: {
+                    value: '',
+                    type: 'text',
+                },
+            });
+
             let registrationStep = ref('user');
 
             const onValidateUser = () => {
@@ -192,11 +210,13 @@
             }
 
             let onBack = (type: string) => {
+                if (type === 'organization') registrationStep.value = 'organization';
                 if (type === 'user') registrationStep.value = 'user';
                 if (type === 'sign_in') router.push({ name: 'login' });
             }
 
             return {
+                form,
                 registrationStep,
                 onValidateUser,
                 onValidateOrganization,

@@ -47,7 +47,7 @@
                         </div> -->
 
                         <div class="text-sm">
-                        <a href="#" @click.prevent="forgotPassword" class="font-medium text-indigo-600 hover:text-indigo-500"> Forgot your password? </a>
+                            <a href="#" @click.prevent="forgotPassword" class="font-medium text-indigo-600 hover:text-indigo-500"> Forgot your password? </a>
                         </div>
                     </div>
 
