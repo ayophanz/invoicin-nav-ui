@@ -57,7 +57,7 @@
 
     /** Process */
     export default {
-        name: 'modal',
+        name: 'ModalComponent',
         props: {
             state: {
                 type: Boolean,
@@ -65,7 +65,7 @@
             },
             onClose: {
                 type: Function,
-                required: true,
+                required: false,
             },
             showClose: {
               type: Boolean,

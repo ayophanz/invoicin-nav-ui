@@ -59,7 +59,7 @@
 
   /** Process */
   export default defineComponent({
-    name: 'service',
+    name: 'ServiceComponent',
     props: {
       enabledServices: {
         type: Array,

@@ -1,72 +1,18 @@
 <template>
-    <ModalComponent :state="true" :onClose="false" :showClose="false">
-        <form v-if="registrationStep === 'user'" @submit.prevent="onValidateUser" class="space-y-8 divide-y divide-gray-200 w-3/4 mx-auto py-5">
-            <div class="space-y-8 divide-y divide-gray-200">
-                <div>
-                    <div>
-                        <h1 class="text-2xl font-medium leading-6 text-gray-900">User Information</h1>
-                        <p class="mt-1 text-sm text-gray-500">Please fill the required fields.</p>
-                    </div>
-
-                    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-                        <div class="sm:col-span-6">
-                            <label for="photo" class="block text-sm font-medium text-gray-700">Photo</label>
-                            <div class="mt-1 flex items-center">
-                                <span class="h-12 w-12 overflow-hidden rounded-full bg-gray-100">
-                                <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                </svg>
-                                </span>
-                                <button type="button" class="ml-5 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none">Add</button>
-                            </div>
-                        </div>
-
-                        <div class="sm:col-span-6">
-                            <label for="firstname" class="block text-sm font-medium text-gray-700">First name</label>
-                            <div class="mt-1 flex rounded-md shadow-sm">
-                                <input type="text" name="firstname" id="firstname" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            </div>
-                        </div>
-
-                        <div class="sm:col-span-6">
-                            <label for="lastname" class="block text-sm font-medium text-gray-700">Last name</label>
-                            <div class="mt-1 flex rounded-md shadow-sm">
-                                <input type="text" name="lastname" id="lastname" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            </div>
-                        </div>
-
-                        <div class="sm:col-span-6">
-                            <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
-                            <div class="mt-1">
-                                <input type="email" name="email" id="email" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            </div>
-                        </div>
-
-                        <div class="sm:col-span-6">
-                            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                            <div class="mt-1 flex rounded-md shadow-sm">
-                                <input type="password" name="password" id="password" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            </div>
-                        </div>
-
-                        <div class="sm:col-span-6">
-                            <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
-                            <div class="mt-1 flex rounded-md shadow-sm">
-                                <input type="password" name="password_confirmation" id="password_confirmation" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
+    <Modal :state="true" :showClose="false">
+        <div v-if="registrationStep === 'user'" class="form w-3/4 mx-auto py-5">
+            <div class="mb-5">
+                <h1 class="text-2xl font-medium leading-6 text-gray-900">User Information</h1>
+                <p class="mt-1 text-sm text-gray-500">Please fill the required fields.</p>
             </div>
-
+            <Form :form="userForm"></Form>
             <div class="pt-5">
                 <div class="flex justify-end">
                     <button @click="onBack('sign_in')" type="button" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Cancel</button>
-                    <button type="submit" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Next</button>
+                    <button @click="onValidateUser" type="button" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Next</button>
                 </div>
             </div>
-        </form>
+        </div>
 
         <form v-if="registrationStep === 'organization'" @submit.prevent="onValidateOrganization" class="space-y-8 divide-y divide-gray-200 w-3/4 mx-auto py-5">
             <div class="space-y-8 divide-y divide-gray-200">
@@ -170,16 +116,12 @@
             </div>
         </div>
 
-        <div class="form">
-            <Form :form="form"></Form>
-        </div>
-
-    </ModalComponent>
+    </Modal>
 </template>
 
 <script lang="ts">
-    import { ref, defineComponent } from 'vue';
-    import ModalComponent from '../components/modal.vue';
+    import { ref, defineComponent, watch } from 'vue';
+    import Modal from '../components/modal.vue';
     import Form from '../components/form/form.vue';
     import FormUtil from '../utils/form.js';
     import { useRouter } from 'vue-router';
@@ -188,16 +130,42 @@
         name: 'register',
         components: {
             Form,
-            ModalComponent
+            Modal
         },
         setup() {
             const router = useRouter();
-            const form = new FormUtil({
-                name: {
+            const userForm = ref(new FormUtil({
+                image: {
+                    label: 'Image',
+                    value: null,
+                    type: 'file',
+                },
+                firstname: {
+                    label: 'First Name',
                     value: '',
                     type: 'text',
                 },
-            });
+                lastname: {
+                    label: 'Last Name',
+                    value: '',
+                    type: 'text',
+                },
+                emailAddress: {
+                    label: 'Email address',
+                    value: '',
+                    type: 'email',
+                },
+                password: {
+                    label: 'Password',
+                    value: '',
+                    type: 'password',
+                },
+                confirmPassword: {
+                    label: 'Confirm password',
+                    value: '',
+                    type: 'password',
+                },
+            }));
 
             let registrationStep = ref('user');
 
@@ -215,8 +183,12 @@
                 if (type === 'sign_in') router.push({ name: 'login' });
             }
 
+            watch(userForm.value, (newVal, oldVal) => {
+                console.log(newVal);
+            });
+
             return {
-                form,
+                userForm,
                 registrationStep,
                 onValidateUser,
                 onValidateOrganization,

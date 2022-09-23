@@ -1,6 +1,6 @@
 
 <template>
-    <ModalComponent :state="true" :onClose="false" :showClose="false">
+    <ModalComponent :state="true" :showClose="false">
         <div class="min-h-full flex flex-col justify-center py-12">
             <div class="sm:mx-auto sm:w-full sm:max-w-md">
                 <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=600" alt="Workflow" />

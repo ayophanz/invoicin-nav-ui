@@ -1,19 +1,22 @@
 <template>
     <div>
-        <div v-for="(field, key) in fields" :key="key">
-            <Text :type="field.type" :name="'test'"></Text>
+        <div v-for="(item, key) in form.items" :key="key">
+            <Input v-if="item.type === 'text' || item.type === 'email' || item.type === 'password'" :type="item.type" :value="item.props.value" :label="item.props.label" :name="item.props.name"></Input>
+            <File v-else-if="item.type === 'file'" :value="item.props.value" :label="item.props.label" :name="item.props.name"></File>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-    import { ref, toRef, defineComponent } from 'vue';
-    import Text from './text.vue';
+    import { toRef, defineComponent } from 'vue';
+    import Input from './input.vue';
+    import File from './file.vue';
 
     export default defineComponent({
-        name: 'form',
+        name: 'FormComponent',
         components: {
-            Text,
+            Input,
+            File,
         },
         props: {
             form: {
@@ -22,25 +25,23 @@
             }, 
         },
         setup(props) {
-            //const inputs = ['text', 'textarea', 'email', 'password'];
-            let fields = ref({});
-            const form = toRef(props, 'form');
-            fields.value = Object.keys(form.value.fields).map((field) => {
+            let form = toRef(props, 'form');
+        
+            form.value.items = Object.keys(form.value.fields).map((field) => {
                 let props = {
-                    value: form.value[field],
+                    label: form.value.labels[field],
+                    value: form.value.initData[field],
                     name: field,
                 };
 
                 return {
-                    props: Object.assign(props, form.value.getExtraAttr(field)),
-                    type: field,
+                    props: props, // Object.assign(props, form.value.getExtraAttr(field)),
+                    type: form.value.fields[field],
                 };
             });
-
-            console.log(fields.value);
-            
+        
             return {
-                fields,
+                form,
             };
         },
     })
