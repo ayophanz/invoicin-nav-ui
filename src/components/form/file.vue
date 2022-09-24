@@ -6,17 +6,19 @@
                 name="test"
                 ref="pond"
                 label-idle="Drop files here..."
-                v-bind:allow-multiple="false"
+                :allow-multiple="false"
                 accepted-file-types="image/jpeg, image/png"
-                v-bind:files="value"
-                v-on:init="handleFilePondInit"
+                v-model="value"
+                @init="handleFilePondInit"
+                @onupdatefiles="onUpdated($event)"
+                credits="false"
             ></Filepond>
         </div>
     </div>
   </template>
 
 <script lang="ts">
-    import { toRef, defineComponent, Component } from 'vue';
+    import { ref, toRef, defineComponent, Component, watch } from 'vue';
     import vueFilePond from 'vue-filepond';
     import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
     import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
@@ -47,20 +49,21 @@
         components: {
             Filepond,
         },
-        setup(props) {
-            const value = toRef(props, 'value');
-            const name  = toRef(props, 'name');
-            const label = toRef(props, 'label');
+        setup(props: any) {
+            let value = ref('');
 
             const handleFilePondInit = () => {
                 console.log("FilePond has initialized");
             };
 
+            let onUpdated = (value: any) => {
+                console.log(value);
+            };
+
             return {
                 value,
-                name,
-                label,
                 handleFilePondInit,
+                onUpdated,
             };
         },
     });

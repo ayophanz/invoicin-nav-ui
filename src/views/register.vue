@@ -5,7 +5,7 @@
                 <h1 class="text-2xl font-medium leading-6 text-gray-900">User Information</h1>
                 <p class="mt-1 text-sm text-gray-500">Please fill the required fields.</p>
             </div>
-            <Form :form="userForm"></Form>
+            <Form :form="userForm" @onchange-form="updateForm"></Form>
             <div class="pt-5">
                 <div class="flex justify-end">
                     <button @click="onBack('sign_in')" type="button" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Cancel</button>
@@ -134,7 +134,7 @@
         },
         setup() {
             const router = useRouter();
-            const userForm = ref(new FormUtil({
+            let userForm = ref({
                 image: {
                     label: 'Image',
                     value: null,
@@ -165,7 +165,7 @@
                     value: '',
                     type: 'password',
                 },
-            }));
+            });
 
             let registrationStep = ref('user');
 
@@ -183,9 +183,9 @@
                 if (type === 'sign_in') router.push({ name: 'login' });
             }
 
-            watch(userForm.value, (newVal, oldVal) => {
-                console.log(newVal);
-            });
+            let updateForm = (value: any) => {
+                userForm.value[value.name].value = value.value;
+            };
 
             return {
                 userForm,
@@ -193,6 +193,7 @@
                 onValidateUser,
                 onValidateOrganization,
                 onBack,
+                updateForm,
             };
         },
     })

@@ -2,13 +2,17 @@
     <div class="mb-2">
         <label v-if="label !== ''" :for="name" class="block text-sm font-medium text-gray-700">{{ label }}</label>
         <div class="mt-1 flex rounded-md shadow-sm">
-            <input v-model="value" :type="type" :name="name" :id="name" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            <input v-model="input" 
+                :type="type" 
+                :name="name" 
+                :id="name"
+                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
         </div>
     </div>
 </template>
 
 <script lang="ts">
-    import { toRef, defineComponent } from 'vue';
+    import { ref, toRef, defineComponent, onMounted, watch } from 'vue';
 
     export default defineComponent({
         name: 'InputComponent',
@@ -30,17 +34,20 @@
                 default: 'text',
             },
         },
-        setup(props) {
-            const value = toRef(props, 'value');
-            const name  = toRef(props, 'name');
-            const label = toRef(props, 'label');
-            const type  = toRef(props, 'type');
+        setup(props, { emit }) {
+            let input = ref();
+            let value = toRef(props, 'value');
 
+            onMounted(() => {
+                input.value = value.value;
+            });
+
+            watch(input, (value) => {
+                emit("onchangeData", {name: props.name, value: value});
+            });
+            
             return {
-                value,
-                name,
-                label,
-                type,
+                input,
             };
         },
     })

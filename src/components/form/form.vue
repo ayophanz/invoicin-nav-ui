@@ -1,14 +1,23 @@
 <template>
     <div>
-        <div v-for="(item, key) in form.items" :key="key">
-            <Input v-if="item.type === 'text' || item.type === 'email' || item.type === 'password'" :type="item.type" :value="item.props.value" :label="item.props.label" :name="item.props.name"></Input>
-            <File v-else-if="item.type === 'file'" :value="item.props.value" :label="item.props.label" :name="item.props.name"></File>
+        <div v-for="(field, key) in fields" :key="key">
+            <Input v-if="field.type === 'text' || field.type === 'email' || field.type === 'password'" 
+                :type="field.type" 
+                :value="field.value" 
+                :label="field.label" 
+                :name="`${key}`"
+                @onchange-data="updateValue"></Input>
+            
+            <File v-else-if="field.type === 'file'" 
+                :value="field.value" 
+                :label="field.label" 
+                :name="`${key}`"></File>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-    import { toRef, defineComponent } from 'vue';
+    import { ref, toRef, defineComponent, onMounted } from 'vue';
     import Input from './input.vue';
     import File from './file.vue';
 
@@ -24,24 +33,21 @@
                 required: true,
             }, 
         },
-        setup(props) {
-            let form = toRef(props, 'form');
-        
-            form.value.items = Object.keys(form.value.fields).map((field) => {
-                let props = {
-                    label: form.value.labels[field],
-                    value: form.value.initData[field],
-                    name: field,
-                };
+        setup(props, { emit }) {
+            let fields = ref();
+            const form = toRef(props, 'form');
 
-                return {
-                    props: props, // Object.assign(props, form.value.getExtraAttr(field)),
-                    type: form.value.fields[field],
-                };
+            onMounted(() => {
+                fields.value = form.value;
             });
-        
+
+            let updateValue = (value: string) => {
+                emit("onchangeForm", value);
+            };
+
             return {
-                form,
+                fields,
+                updateValue,
             };
         },
     })
