@@ -5,12 +5,12 @@
             <Filepond
                 name="test"
                 ref="pond"
-                label-idle="Drop files here..."
+                label-idle="Drop image here..."
                 :allow-multiple="false"
                 accepted-file-types="image/jpeg, image/png"
-                v-model="value"
+                :files="value"
                 @init="handleFilePondInit"
-                @onupdatefiles="onUpdated($event)"
+                @addfile="onAdd"
                 credits="false"
             ></Filepond>
         </div>
@@ -18,7 +18,7 @@
   </template>
 
 <script lang="ts">
-    import { ref, toRef, defineComponent, Component, watch } from 'vue';
+    import { ref, toRef, defineComponent, Component, onMounted } from 'vue';
     import vueFilePond from 'vue-filepond';
     import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
     import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
@@ -49,21 +49,27 @@
         components: {
             Filepond,
         },
-        setup(props: any) {
-            let value = ref('');
+        setup(props, { emit }) {
+            let value = toRef(props, 'value');
+            let pond = ref();
 
             const handleFilePondInit = () => {
-                console.log("FilePond has initialized");
+                if (value.value != null) {
+                    pond.value = value.value
+                }
             };
 
-            let onUpdated = (value: any) => {
-                console.log(value);
+            let onAdd = () => {
+                if (typeof pond.value.getFiles === "function") {
+                    emit('onchangeData', {name: props.name, value: pond.value.getFiles()});
+                }
             };
 
             return {
                 value,
+                pond,
                 handleFilePondInit,
-                onUpdated,
+                onAdd,
             };
         },
     });

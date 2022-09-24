@@ -11,7 +11,8 @@
             <File v-else-if="field.type === 'file'" 
                 :value="field.value" 
                 :label="field.label" 
-                :name="`${key}`"></File>
+                :name="`${key}`"
+                @onchange-data="updateValue"></File>
         </div>
     </div>
 </template>
