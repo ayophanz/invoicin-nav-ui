@@ -11,6 +11,7 @@
                 :files="value"
                 @init="handleFilePondInit"
                 @addfile="onAdd"
+                @removefile="onRemove"
                 credits="false"
             ></Filepond>
         </div>
@@ -50,7 +51,7 @@
             Filepond,
         },
         setup(props, { emit }) {
-            let value = toRef(props, 'value');
+            const value = toRef(props, 'value');
             let pond = ref();
 
             const handleFilePondInit = () => {
@@ -65,11 +66,18 @@
                 }
             };
 
+            let onRemove = () => {
+                // if (typeof pond.value.getFiles !== "function") {
+                //     emit('onchangeData', {name: props.name, value: []});
+                // }
+            };
+
             return {
                 value,
                 pond,
                 handleFilePondInit,
                 onAdd,
+                onRemove,
             };
         },
     });

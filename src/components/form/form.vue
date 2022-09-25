@@ -13,6 +13,12 @@
                 :label="field.label" 
                 :name="`${key}`"
                 @onchange-data="updateValue"></File>
+            
+            <Select v-else-if="field.type === 'select'"
+                :value="field.value"
+                :options="field.options"
+                :label="field.label"
+                :name="`${key}`"></Select>
         </div>
     </div>
 </template>
@@ -21,12 +27,14 @@
     import { ref, toRef, defineComponent, onMounted } from 'vue';
     import Input from './input.vue';
     import File from './file.vue';
+    import Select from './select.vue';
 
     export default defineComponent({
         name: 'FormComponent',
         components: {
             Input,
             File,
+            Select,
         },
         props: {
             form: {

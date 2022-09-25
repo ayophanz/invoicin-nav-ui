@@ -35,8 +35,8 @@
             },
         },
         setup(props, { emit }) {
+            const value = toRef(props, 'value');
             let input = ref();
-            let value = toRef(props, 'value');
 
             onMounted(() => {
                 input.value = value.value;

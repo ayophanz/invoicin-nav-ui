@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts">
-    import { ref, defineComponent, watch } from 'vue';
+    import { ref, defineComponent, watch, onMounted } from 'vue';
     import Modal from '../components/modal.vue';
     import Form from '../components/form/form.vue';
     import FormUtil from '../utils/form.js';
@@ -99,10 +99,11 @@
                     value: null,
                     type: 'file',
                 },
-                Type: {
+                type: {
                     label: 'Type',
                     value: '',
                     type: 'select',
+                    options: [{}],
                 },
                 name: {
                     label: 'Name',
@@ -136,6 +137,13 @@
                     value: '',
                     type: 'select',
                 }
+            });
+
+            onMounted(() => {
+                orgForm.value.type.options = [
+                    {name: 'individual', value: 'Individual'},
+                    {name: 'company', value: 'Company'}
+                ];
             });
 
             let registrationStep = ref('user');
