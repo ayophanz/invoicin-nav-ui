@@ -27,7 +27,7 @@ export default defineComponent({
         },
         options: {
             type: Array as () => Array<any>,
-            default: [{}],
+            default: [],
         }
     },
     setup(props, { emit }) {
@@ -39,7 +39,6 @@ export default defineComponent({
         });
 
         let onChange = (value: string) => {
-            console.log(value);
             emit('onchangeData', {name: props.name, value: value});
         };
 

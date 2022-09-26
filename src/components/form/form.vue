@@ -18,7 +18,8 @@
                 :value="field.value"
                 :options="field.options"
                 :label="field.label"
-                :name="`${key}`"></Select>
+                :name="`${key}`"
+                @onchange-data="updateValue"></Select>
         </div>
     </div>
 </template>
@@ -40,7 +41,11 @@
             form: {
                 type: Object,
                 required: true,
-            }, 
+            },
+            errors: {
+                type: Array as () => Array<any>,
+                default: [],
+            }
         },
         setup(props, { emit }) {
             let fields = ref();
@@ -48,9 +53,21 @@
 
             onMounted(() => {
                 fields.value = form.value;
+                initErrors(fields);
             });
 
-            let updateValue = (value: string) => {
+            const initErrors = (fields: any) => {
+                if (fields.value.errors) {
+                    Object.keys(fields.value).forEach(function(key) {
+                        if (key !== 'errors' && typeof fields.value.errors[key] !== 'undefined') {
+                            fields.value[key].errorMessage = fields.value.errors[key];
+                        }
+                    });
+                    console.log(fields.value);
+                }
+            };
+
+            let updateValue = (value: any) => {
                 emit("onchangeForm", value);
             };
 

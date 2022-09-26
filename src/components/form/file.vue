@@ -55,9 +55,7 @@
             let pond = ref();
 
             const handleFilePondInit = () => {
-                if (value.value != null) {
-                    pond.value = value.value
-                }
+                //console.log('file init.');
             };
 
             let onAdd = () => {
@@ -67,9 +65,7 @@
             };
 
             let onRemove = () => {
-                // if (typeof pond.value.getFiles !== "function") {
-                //     emit('onchangeData', {name: props.name, value: []});
-                // }
+                emit('onchangeData', {name: props.name, value: []});
             };
 
             return {

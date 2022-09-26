@@ -5,7 +5,7 @@
                 <h1 class="text-2xl font-medium leading-6 text-gray-900">User Information</h1>
                 <p class="mt-1 text-sm text-gray-500">Please fill the required fields.</p>
             </div>
-            <Form :form="userForm" @onchange-form="updateUserForm"></Form>
+            <Form :form="compUserForm" @onchange-form="updateUserForm"></Form>
             <div class="pt-5">
                 <div class="flex justify-end">
                     <button @click="onBack('sign_in')" type="button" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Cancel</button>
@@ -47,10 +47,10 @@
 </template>
 
 <script lang="ts">
-    import { ref, defineComponent, watch, onMounted } from 'vue';
+    import { ref, defineComponent, onMounted, computed } from 'vue';
     import Modal from '../components/modal.vue';
     import Form from '../components/form/form.vue';
-    import FormUtil from '../utils/form.js';
+    //import FormUtil from '../utils/form.js';
     import { useRouter } from 'vue-router';
 
     export default defineComponent({
@@ -61,6 +61,7 @@
         },
         setup() {
             const router = useRouter();
+            let registrationStep = ref('user');
             let userForm = ref({
                 image: {
                     label: 'Image',
@@ -103,7 +104,6 @@
                     label: 'Type',
                     value: '',
                     type: 'select',
-                    options: [{}],
                 },
                 name: {
                     label: 'Name',
@@ -140,42 +140,47 @@
             });
 
             onMounted(() => {
-                orgForm.value.type.options = [
+                orgForm.value.type['options'] = [
                     {name: 'individual', value: 'Individual'},
                     {name: 'company', value: 'Company'}
                 ];
             });
 
-            let registrationStep = ref('user');
-
             const onValidateUser = () => {
-                registrationStep.value = 'organization';
+                const errors = {
+                    firstname: 'The firstname field is required', 
+                    lastname: 'The lastname field is required'
+                };
+                userForm.value['errors'] = errors;
+                // registrationStep.value = 'organization';
             }
 
             const onValidateOrganization = () => {
                 registrationStep.value = 'complete';
             }
 
-            let onBack = (type: string) => {
+            const onBack = (type: string) => {
                 if (type === 'organization') registrationStep.value = 'organization';
                 if (type === 'user') registrationStep.value = 'user';
                 if (type === 'sign_in') router.push({ name: 'login' });
             }
 
-            let updateUserForm = (value: any) => {
+            const updateUserForm = (value: any) => {
                 userForm.value[value.name].value = value.value;
             };
 
-            let updateOrgForm = (value: any) => {
+            const updateOrgForm = (value: any) => {
                 orgForm.value[value.name].value = value.value;
             };
 
-            let updateOrgBillingAddressForm = (value: any) => {
+            const updateOrgBillingAddressForm = (value: any) => {
                 orgBillingAddressForm.value[value.name].value = value.value;
             };
 
+            const compUserForm = computed(() => userForm);
+
             return {
-                userForm,
+                compUserForm,
                 orgForm,
                 orgBillingAddressForm,
                 registrationStep,
