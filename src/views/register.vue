@@ -19,12 +19,12 @@
                 <h1 class="text-2xl font-medium leading-6 text-gray-900">User Information</h1>
                 <p class="mt-1 text-sm text-gray-500">Please fill the required fields.</p>
             </div>
-            <Form :form="orgForm" @onchange-form="updateOrgForm"></Form>
+            <Form :form="compOrgForm" @onchange-form="updateOrgForm"></Form>
             <div class="mt-5">
                 <div class="mb-3">
                     <h2 class="text-xl font-medium leading-6 text-gray-900">Billing Address</h2>
                 </div>
-                <Form :form="orgBillingAddressForm" @onchange-form="updateOrgBillingAddressForm"></Form>
+                <Form :form="compOrgBillingAddressForm" @onchange-form="updateOrgBillingAddressForm"></Form>
             </div>
             <div class="pt-5">
                 <div class="flex justify-end">
@@ -152,6 +152,7 @@
                     lastname: 'The lastname field is required'
                 };
                 userForm.value['errors'] = errors;
+                console.log(userForm.value);
                 // registrationStep.value = 'organization';
             }
 
@@ -178,11 +179,13 @@
             };
 
             const compUserForm = computed(() => userForm);
+            const compOrgForm = computed(() => orgForm);
+            const compOrgBillingAddressForm = computed(() => orgBillingAddressForm);
 
             return {
                 compUserForm,
-                orgForm,
-                orgBillingAddressForm,
+                compOrgForm,
+                compOrgBillingAddressForm,
                 registrationStep,
                 onValidateUser,
                 onValidateOrganization,
