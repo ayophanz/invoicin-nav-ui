@@ -149,10 +149,10 @@
             const onValidateUser = () => {
                 const errors = {
                     firstname: 'The firstname field is required', 
-                    lastname: 'The lastname field is required'
+                    lastname: 'The lastname field is required',
+                    password: 'The password field is required',
                 };
                 userForm.value['errors'] = errors;
-                console.log(userForm.value);
                 // registrationStep.value = 'organization';
             }
 

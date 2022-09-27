@@ -1,10 +1,11 @@
 <template>
     <div>
-        <div v-for="(field, key) in fields" :key="key">
+        <div v-for="(field, key) in compFields" :key="key">
             <Input v-if="field.type === 'text' || field.type === 'email' || field.type === 'password'" 
                 :type="field.type" 
                 :value="field.value" 
-                :label="field.label" 
+                :label="field.label"
+                :error-message="field.errorMessage"
                 :name="`${key}`"
                 @onchange-data="updateValue"></Input>
             
@@ -25,7 +26,7 @@
 </template>
 
 <script lang="ts">
-    import { ref, toRef, defineComponent, onMounted } from 'vue';
+    import { ref, toRef, defineComponent, onMounted, onUpdated, computed } from 'vue';
     import Input from './input.vue';
     import File from './file.vue';
     import Select from './select.vue';
@@ -53,6 +54,9 @@
 
             onMounted(() => {
                 fields.value = form.value;
+            });
+
+            onUpdated(() => {
                 initErrors(fields);
             });
 
@@ -63,16 +67,19 @@
                             fields.value[key].errorMessage = fields.value.errors[key];
                         }
                     });
-                    console.log(fields.value);
                 }
             };
 
             let updateValue = (value: any) => {
+                // console.log(fields.value[value.name].errorMessage);
+                // if (value.value !== '') fields.value[value.name].errorMessage = '';
                 emit("onchangeForm", value);
             };
 
+            const compFields = computed(() => fields.value);
+
             return {
-                fields,
+                compFields,
                 updateValue,
             };
         },
