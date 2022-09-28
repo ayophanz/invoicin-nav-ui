@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="form-component">
         <div v-for="(field, key) in compFields" :key="key">
             <Input v-if="field.type === 'text' || field.type === 'email' || field.type === 'password'" 
                 :type="field.type" 
@@ -12,6 +12,7 @@
             <File v-else-if="field.type === 'file'" 
                 :value="field.value" 
                 :label="field.label" 
+                :error-message="field.errorMessage"
                 :name="`${key}`"
                 @onchange-data="updateValue"></File>
             
@@ -19,6 +20,7 @@
                 :value="field.value"
                 :options="field.options"
                 :label="field.label"
+                :error-message="field.errorMessage"
                 :name="`${key}`"
                 @onchange-data="updateValue"></Select>
         </div>
@@ -63,16 +65,16 @@
             const initErrors = (fields: any) => {
                 if (fields.value.errors) {
                     Object.keys(fields.value).forEach(function(key) {
-                        if (key !== 'errors' && typeof fields.value.errors[key] !== 'undefined') {
+                        if (key !== 'errors' && 
+                        typeof fields.value.errors[key] !== 'undefined') {
                             fields.value[key].errorMessage = fields.value.errors[key];
                         }
                     });
+                    console.log(fields.value);
                 }
             };
 
             let updateValue = (value: any) => {
-                // console.log(fields.value[value.name].errorMessage);
-                // if (value.value !== '') fields.value[value.name].errorMessage = '';
                 emit("onchangeForm", value);
             };
 

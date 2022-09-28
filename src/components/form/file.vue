@@ -1,5 +1,5 @@
 <template>
-    <div class="mb-2">
+    <div class="mb-2 file-component">
         <label v-if="label !== ''" :for="name" class="block text-sm font-medium text-gray-700">{{ label }}</label>
         <div class="mt-1 rounded-md shadow-sm w-80">
             <Filepond
@@ -15,6 +15,7 @@
                 credits="false"
             ></Filepond>
         </div>
+        <span v-if="errorMessage !== ''" class="text-sm text-red-500">{{ errorMessage }}</span>
     </div>
   </template>
 
@@ -46,6 +47,10 @@
                 type: String,
                 default: '',
             },
+            errorMessage: {
+                type: String,
+                default: '',
+            }
         },
         components: {
             Filepond,
@@ -78,3 +83,8 @@
         },
     });
 </script>
+<style>
+    .file-component .filepond--root {
+        margin-bottom: 0% !important;
+    }
+</style>

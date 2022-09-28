@@ -147,17 +147,26 @@
             });
 
             const onValidateUser = () => {
-                const errors = {
-                    firstname: 'The firstname field is required', 
-                    lastname: 'The lastname field is required',
-                    password: 'The password field is required',
-                };
-                userForm.value['errors'] = errors;
-                // registrationStep.value = 'organization';
+                // const errors = {
+                //     firstname: 'The firstname field is required', 
+                //     lastname: 'The lastname field is required',
+                //     password: 'The password field is required',
+                // };
+                // userForm.value['errors'] = errors;
+                registrationStep.value = 'organization';
             }
 
             const onValidateOrganization = () => {
-                registrationStep.value = 'complete';
+                const errors = {
+                    type: 'The type field is required', 
+                    logo: 'The logo field is required',
+                    name: 'The name field is required',
+                    country: 'The country field is required',
+                };
+                orgForm.value['errors'] = errors;
+                orgBillingAddressForm.value['errors'] = errors;
+                // console.log(orgForm.value);
+                // registrationStep.value = 'complete';
             }
 
             const onBack = (type: string) => {

@@ -1,5 +1,5 @@
 <template>
-    <div class="mb-2">
+    <div class="mb-2 input-component">
         <label v-if="label !== ''" :for="name" class="block text-sm font-medium text-gray-700">{{ label }}</label>
         <div class="mt-1 flex flex-col">
             <input v-model="input" 
@@ -49,7 +49,7 @@
             });
 
             watch(input, (value) => {
-                emit('onchangeData', {name: props.name, value: value});
+               emit('onchangeData', {name: props.name, value: value});
             });
             
             return {
