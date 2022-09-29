@@ -45,10 +45,6 @@
                 type: Object,
                 required: true,
             },
-            errors: {
-                type: Array as () => Array<any>,
-                default: [],
-            }
         },
         setup(props, { emit }) {
             let fields = ref();
@@ -64,13 +60,9 @@
 
             const initErrors = (fields: any) => {
                 if (fields.value.errors) {
-                    Object.keys(fields.value).forEach(function(key) {
-                        if (key !== 'errors' && 
-                        typeof fields.value.errors[key] !== 'undefined') {
-                            fields.value[key].errorMessage = fields.value.errors[key];
-                        }
+                    Object.keys(fields.value.errors).forEach(function(key) {
+                        fields.value[key].errorMessage = fields.value.errors[key];
                     });
-                    console.log(fields.value);
                 }
             };
 

@@ -50,7 +50,8 @@
     import { ref, defineComponent, onMounted, computed } from 'vue';
     import Modal from '../components/modal.vue';
     import Form from '../components/form/form.vue';
-    //import FormUtil from '../utils/form.js';
+    import registerService from '../services/register';
+    import formTraits from '../traits/formTraits.js';
     import { useRouter } from 'vue-router';
 
     export default defineComponent({
@@ -153,7 +154,18 @@
                 //     password: 'The password field is required',
                 // };
                 // userForm.value['errors'] = errors;
-                registrationStep.value = 'organization';
+                
+                userForm.value['errors'] = {};
+                let formData = formTraits.setFormData(userForm.value);
+                console.log(formData);
+                // registerService.validate(formData, 'user')
+                // .then((response) => {
+                //     console.log(response);
+                //     registrationStep.value = 'organization';
+                // }).catch((error) => {
+                //     userForm.value['errors'] = error;
+                //     console.log(error);
+                // });
             }
 
             const onValidateOrganization = () => {
