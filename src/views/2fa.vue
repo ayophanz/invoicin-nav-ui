@@ -1,5 +1,5 @@
 <template>
-    <ModalComponent :state="true" :onClose="false" :showClose="false">
+    <ModalComponent :state="true" :showClose="false">
             <div v-if="step2fa === '2fa-required'">
                 <div class="px-4 py-5 sm:p-6 flex flex-col items-center">
                     <h3 class="text-lg font-medium leading-6 text-gray-900">Verify One Time Password</h3>

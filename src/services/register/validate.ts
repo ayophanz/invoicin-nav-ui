@@ -8,9 +8,9 @@ const fail = (data: object, reject: any) => {
     reject(data);
 };
 
-export default (data: object, type: string) => {
+export default (data: object) => {
     return new Promise((resolve, reject) => {
-        axios.post(`api/account/register/validate/${type}`, data)
+        axios.post('api/account/register/validate', data)
         .then((response) => {
             success(response.data, resolve);
         }).catch((error) => {

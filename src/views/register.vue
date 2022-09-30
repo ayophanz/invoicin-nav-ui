@@ -89,7 +89,7 @@
                     value: '',
                     type: 'password',
                 },
-                confirmPassword: {
+                password_confirmation: {
                     label: 'Confirm password',
                     value: '',
                     type: 'password',
@@ -147,7 +147,7 @@
                 ];
             });
 
-            const onValidateUser = () => {
+            const onValidateUser = async () => {
                 // const errors = {
                 //     firstname: 'The firstname field is required', 
                 //     lastname: 'The lastname field is required',
@@ -156,29 +156,44 @@
                 // userForm.value['errors'] = errors;
                 
                 userForm.value['errors'] = {};
-                let formData = formTraits.setFormData(userForm.value);
-                console.log(formData);
-                // registerService.validate(formData, 'user')
-                // .then((response) => {
-                //     console.log(response);
-                //     registrationStep.value = 'organization';
-                // }).catch((error) => {
-                //     userForm.value['errors'] = error;
-                //     console.log(error);
-                // });
+                let formData = formTraits.setFormData(userForm.value) as any;
+                formData.form_type = 'user';
+                await registerService.validate(formData)
+                .then((response) => {
+                    console.log(response);
+                    //registrationStep.value = 'organization';
+                }).catch((error) => {
+                    userForm.value['errors'] = error;
+                    console.log(error);
+                });
             }
 
             const onValidateOrganization = () => {
-                const errors = {
-                    type: 'The type field is required', 
-                    logo: 'The logo field is required',
-                    name: 'The name field is required',
-                    country: 'The country field is required',
-                };
-                orgForm.value['errors'] = errors;
-                orgBillingAddressForm.value['errors'] = errors;
+                // const errors = {
+                //     type: 'The type field is required', 
+                //     logo: 'The logo field is required',
+                //     name: 'The name field is required',
+                //     country: 'The country field is required',
+                // };
+                // orgForm.value['errors'] = errors;
+                // orgBillingAddressForm.value['errors'] = errors;
                 // console.log(orgForm.value);
                 // registrationStep.value = 'complete';
+
+                // orgForm.value['errors'] = {};
+                // orgBillingAddressForm.value['errors'] = {};
+                // const formData1 = formTraits.setFormData(orgForm.value);
+                // const formData2 = formTraits.setFormData(orgForm.value);
+                // Promise.all([
+                //     registerService.validate(formData1, 'org'),
+                //     registerService.validate(formData2, 'orgBillingAddress') 
+                // ]).then((response) => {
+                //     console.log(response);
+                //     registrationStep.value = 'complete';
+                // }).catch((error) => {
+                //     orgForm.value['errors'] = error[0] ? error[0] : {};
+                //     orgBillingAddressForm.value['errors'] = error[1] ? error[1] : {};
+                // });
             }
 
             const onBack = (type: string) => {
