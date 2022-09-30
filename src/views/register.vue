@@ -1,6 +1,6 @@
 <template>
     <Modal :state="true" :showClose="false">
-        <div v-if="registrationStep === 'user'" class="form w-3/4 mx-auto py-5">
+        <div v-if="registrationStep === 'user'" class="form w-[90%] mx-auto py-5">
             <div class="mb-5">
                 <h1 class="text-2xl font-medium leading-6 text-gray-900">User Information</h1>
                 <p class="mt-1 text-sm text-gray-500">Please fill the required fields.</p>
@@ -14,7 +14,7 @@
             </div>
         </div>
 
-        <div v-if="registrationStep === 'organization'" class="form w-3/4 mx-auto py-5">
+        <div v-if="registrationStep === 'organization'" class="form w-[90%] mx-auto py-5">
             <div class="mb-5">
                 <h1 class="text-2xl font-medium leading-6 text-gray-900">User Information</h1>
                 <p class="mt-1 text-sm text-gray-500">Please fill the required fields.</p>
@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        <div v-if="registrationStep === 'complete'" class="space-y-8 divide-y divide-gray-200 w-3/4 mx-auto py-5">
+        <div v-if="registrationStep === 'complete'" class="space-y-8 divide-y divide-gray-200 w-[90%] mx-auto py-5">
             <div class="flex flex-col justify-center items-center">
                 <button type="button" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-5 text-md font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Save & Complete</button>
                 <div class="text-base mt-3">
@@ -79,7 +79,7 @@
                     value: '',
                     type: 'text',
                 },
-                emailAddress: {
+                email: {
                     label: 'Email address',
                     value: '',
                     type: 'email',
@@ -141,59 +141,55 @@
             });
 
             onMounted(() => {
+                showOptons();
+            });
+
+            const showOptons = () => {
                 orgForm.value.type['options'] = [
                     {name: 'individual', value: 'Individual'},
                     {name: 'company', value: 'Company'}
                 ];
-            });
+            };
 
-            const onValidateUser = async () => {
-                // const errors = {
-                //     firstname: 'The firstname field is required', 
-                //     lastname: 'The lastname field is required',
-                //     password: 'The password field is required',
-                // };
-                // userForm.value['errors'] = errors;
-                
+            const onValidateUser = async () => {                
                 userForm.value['errors'] = {};
                 let formData = formTraits.setFormData(userForm.value) as any;
                 formData.form_type = 'user';
                 await registerService.validate(formData)
-                .then((response) => {
-                    console.log(response);
-                    //registrationStep.value = 'organization';
+                .then(() => {
+                    registrationStep.value = 'organization';
                 }).catch((error) => {
-                    userForm.value['errors'] = error;
                     console.log(error);
+                    userForm.value['errors'] = error;
                 });
             }
 
-            const onValidateOrganization = () => {
-                // const errors = {
-                //     type: 'The type field is required', 
-                //     logo: 'The logo field is required',
-                //     name: 'The name field is required',
-                //     country: 'The country field is required',
-                // };
-                // orgForm.value['errors'] = errors;
-                // orgBillingAddressForm.value['errors'] = errors;
-                // console.log(orgForm.value);
-                // registrationStep.value = 'complete';
+            const onValidateOrganization = async () => {
+                let isOrgSucccess = ref(false);
+                orgForm.value['errors'] = {};
+                let formData1 = formTraits.setFormData(orgForm.value) as any;
+                formData1.form_type = 'org';
+                await registerService.validate(formData1)
+                .then(() => {
+                    isOrgSucccess.value = true;
+                }).catch((error) => {
+                    orgForm.value['errors'] = error;
+                });
 
-                // orgForm.value['errors'] = {};
-                // orgBillingAddressForm.value['errors'] = {};
-                // const formData1 = formTraits.setFormData(orgForm.value);
-                // const formData2 = formTraits.setFormData(orgForm.value);
-                // Promise.all([
-                //     registerService.validate(formData1, 'org'),
-                //     registerService.validate(formData2, 'orgBillingAddress') 
-                // ]).then((response) => {
-                //     console.log(response);
-                //     registrationStep.value = 'complete';
-                // }).catch((error) => {
-                //     orgForm.value['errors'] = error[0] ? error[0] : {};
-                //     orgBillingAddressForm.value['errors'] = error[1] ? error[1] : {};
-                // });
+                let isOrgBillingAddressSucccess = ref(false);
+                orgBillingAddressForm.value['errors'] = {};
+                let formData2 = formTraits.setFormData(orgForm.value) as any;
+                formData2.form_type = 'orgBillingAddress';
+                await registerService.validate(formData2) 
+                .then(() => {
+                    isOrgBillingAddressSucccess.value = true;
+                }).catch((error) => {
+                    orgBillingAddressForm.value['errors'] = error;
+                });
+
+                if (isOrgSucccess.value === true && isOrgBillingAddressSucccess.value === true) {
+                    registrationStep.value = 'complete';
+                }
             }
 
             const onBack = (type: string) => {

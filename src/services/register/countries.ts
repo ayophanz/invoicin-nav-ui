@@ -10,7 +10,7 @@ const fail = (data: object, reject: any) => {
 
 export default (data: object) => {
     return new Promise((resolve, reject) => {
-        axios.post('api/account/register/validate', data)
+        axios.get('api/organization/countries', data)
         .then((response) => {
             success(response.data, resolve);
         }).catch((error) => {
