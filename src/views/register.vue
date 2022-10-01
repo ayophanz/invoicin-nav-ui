@@ -36,7 +36,7 @@
 
         <div v-if="registrationStep === 'complete'" class="space-y-8 divide-y divide-gray-200 w-[90%] mx-auto py-5">
             <div class="flex flex-col justify-center items-center">
-                <button type="button" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-5 text-md font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Save & Complete</button>
+                <button @click="onSaveComplete" type="button" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-5 text-md font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Save & Complete</button>
                 <div class="text-base mt-3">
                     <a href="#" @click="onBack('organization')" class="font-normal text-center hover:underline hover:text-blue-400"> back </a>
                 </div>
@@ -51,6 +51,7 @@
     import Modal from '../components/modal.vue';
     import Form from '../components/form/form.vue';
     import registerService from '../services/register';
+    import sharedService from '../services/shared';
     import formTraits from '../traits/formTraits.js';
     import { useRouter } from 'vue-router';
 
@@ -111,7 +112,7 @@
                     value: '',
                     type: 'text'
                 },
-                email: {
+                orgEmail: {
                     label: 'Email',
                     value: '',
                     type: 'email',
@@ -144,11 +145,18 @@
                 showOptons();
             });
 
-            const showOptons = () => {
+            const showOptons = async () => {
                 orgForm.value.type['options'] = [
-                    {name: 'individual', value: 'Individual'},
-                    {name: 'company', value: 'Company'}
+                    {id: 'individual', name: 'Individual'},
+                    {id: 'company', name: 'Company'}
                 ];
+
+                await sharedService.countries()
+                .then((response: any) => {
+                    orgBillingAddressForm.value.country['options'] = response.data;
+                }).catch((error) => {
+                    console.log(error);
+                });
             };
 
             const onValidateUser = async () => {                
@@ -178,7 +186,7 @@
 
                 let isOrgBillingAddressSucccess = ref(false);
                 orgBillingAddressForm.value['errors'] = {};
-                let formData2 = formTraits.setFormData(orgForm.value) as any;
+                let formData2 = formTraits.setFormData(orgBillingAddressForm.value) as any;
                 formData2.form_type = 'orgBillingAddress';
                 await registerService.validate(formData2) 
                 .then(() => {
@@ -191,6 +199,25 @@
                     registrationStep.value = 'complete';
                 }
             }
+
+            const onSaveComplete = async () => {
+                const userFormData = formTraits.setFormData(userForm.value);
+                const orgFormData = formTraits.setFormData(orgForm.value);
+                const orgBillingAddressFormData = formTraits.setFormData(orgBillingAddressForm.value);
+
+                const formData = {
+                    ...userFormData,
+                    ...orgFormData,
+                    ...orgBillingAddressFormData,
+                };
+
+                await registerService.store(formData)
+                .then((response) => {
+                    console.log(response);
+                }).catch((error) => {
+                    console.log(error);
+                });
+            };
 
             const onBack = (type: string) => {
                 if (type === 'organization') registrationStep.value = 'organization';
@@ -221,6 +248,7 @@
                 registrationStep,
                 onValidateUser,
                 onValidateOrganization,
+                onSaveComplete,
                 onBack,
                 updateUserForm,
                 updateOrgForm,

@@ -1,7 +1,7 @@
 import validate from "./validate";
-import countries from "./countries";
+import store from "./store";
 
 export default {
     validate,
-    countries,
+    store,
 }
