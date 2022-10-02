@@ -153,7 +153,7 @@
 
                 await sharedService.countries()
                 .then((response: any) => {
-                    orgBillingAddressForm.value.country['options'] = response.data;
+                    orgBillingAddressForm.value.country['options'] = response;
                 }).catch((error) => {
                     console.log(error);
                 });

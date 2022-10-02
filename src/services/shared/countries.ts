@@ -1,7 +1,9 @@
 import axios from '../../plugins/axios';
+import countryTransformer from '../../transformers/countryTransformer';
 
-const success = (data: object, resolve: any) => {
-    resolve(data);
+const success = (data: any, resolve: any) => {
+    const transfomer = countryTransformer.fetchCollection(data.data);
+    resolve(transfomer);
 };
 
 const fail = (data: object, reject: any) => {
