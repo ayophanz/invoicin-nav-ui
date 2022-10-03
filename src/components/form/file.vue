@@ -7,8 +7,9 @@
                 ref="pond"
                 label-idle="Drop image here..."
                 :allow-multiple="false"
-                accepted-file-types="image/jpeg, image/png"
+                accepted-file-types="image/jpg, image/jpeg, image/png"
                 :files="value"
+                maxFileSize="1MB"
                 @init="handleFilePondInit"
                 @addfile="onAdd"
                 @removefile="onRemove"
@@ -25,6 +26,7 @@
     import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
     import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
     import FilepondPluginFileEncode from 'filepond-plugin-file-encode';
+    import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
     import 'filepond/dist/filepond.min.css';
     import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
     
@@ -32,6 +34,7 @@
         FilePondPluginImagePreview, 
         FilePondPluginFileValidateType,
         FilepondPluginFileEncode,
+        FilePondPluginFileValidateSize,
     ) as Component;
 
     export default defineComponent({

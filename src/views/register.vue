@@ -9,7 +9,10 @@
             <div class="pt-5">
                 <div class="flex justify-end">
                     <button @click="onBack('sign_in')" type="button" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Cancel</button>
-                    <button @click="onValidateUser" type="button" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Next</button>
+                    <button @click="onValidateUser" :disabled="submitLoading" type="button" class="disabled:opacity-75 ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        <Spinner v-if="submitLoading"></Spinner>
+                        Next
+                    </button>
                 </div>
             </div>
         </div>
@@ -29,14 +32,19 @@
             <div class="pt-5">
                 <div class="flex justify-end">
                     <button @click="onBack('user')" type="button" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Cancel</button>
-                    <button @click="onValidateOrganization" type="button" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Next</button>
+                    <button @click="onValidateOrganization" :disabled="submitLoading" type="button" class="disabled:opacity-75 ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        <Spinner v-if="submitLoading"></Spinner>
+                        Next
+                    </button>
                 </div>
             </div>
         </div>
 
         <div v-if="registrationStep === 'complete'" class="space-y-8 divide-y divide-gray-200 w-[90%] mx-auto py-5">
             <div class="flex flex-col justify-center items-center">
-                <button @click="onSaveComplete" type="button" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-5 text-md font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Save & Complete</button>
+                <button @click="onSaveComplete" :disabled="submitLoading" type="button" class="disabled:opacity-75 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-5 text-md font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <Spinner v-if="submitLoading"></Spinner>
+                    Save & Complete</button>
                 <div class="text-base mt-3">
                     <a href="#" @click="onBack('organization')" class="font-normal text-center hover:underline hover:text-blue-400"> back </a>
                 </div>
@@ -50,19 +58,23 @@
     import { ref, defineComponent, onMounted, computed } from 'vue';
     import Modal from '../components/modal.vue';
     import Form from '../components/form/form.vue';
+    import Spinner from '../components/spinner.vue';
     import registerService from '../services/register';
     import sharedService from '../services/shared';
     import formTraits from '../traits/formTraits.js';
     import { useRouter } from 'vue-router';
+    import { useAccountStore } from '../stores/account';
 
     export default defineComponent({
         name: 'register',
         components: {
             Form,
+            Spinner,
             Modal
         },
         setup() {
             const router = useRouter();
+            let submitLoading = ref(false);
             let registrationStep = ref('user');
             let userForm = ref({
                 image: {
@@ -159,21 +171,25 @@
                 });
             };
 
-            const onValidateUser = async () => {                
+            const onValidateUser = async () => {
+                submitLoading.value = true;             
                 userForm.value['errors'] = {};
                 let formData = formTraits.setFormData(userForm.value) as any;
                 formData.form_type = 'user';
                 await registerService.validate(formData)
                 .then(() => {
                     registrationStep.value = 'organization';
+                    submitLoading.value = false; 
                 }).catch((error) => {
                     console.log(error);
                     userForm.value['errors'] = error;
+                    submitLoading.value = false;
                 });
             }
 
             const onValidateOrganization = async () => {
                 let isOrgSucccess = ref(false);
+                submitLoading.value = true;
                 orgForm.value['errors'] = {};
                 let formData1 = formTraits.setFormData(orgForm.value) as any;
                 formData1.form_type = 'org';
@@ -181,6 +197,7 @@
                 .then(() => {
                     isOrgSucccess.value = true;
                 }).catch((error) => {
+                    submitLoading.value = false;
                     orgForm.value['errors'] = error;
                 });
 
@@ -192,15 +209,18 @@
                 .then(() => {
                     isOrgBillingAddressSucccess.value = true;
                 }).catch((error) => {
+                    submitLoading.value = false;
                     orgBillingAddressForm.value['errors'] = error;
                 });
 
                 if (isOrgSucccess.value === true && isOrgBillingAddressSucccess.value === true) {
                     registrationStep.value = 'complete';
+                    submitLoading.value = false;
                 }
             }
 
             const onSaveComplete = async () => {
+                submitLoading.value = true;
                 const userFormData = formTraits.setFormData(userForm.value);
                 const orgFormData = formTraits.setFormData(orgForm.value);
                 const orgBillingAddressFormData = formTraits.setFormData(orgBillingAddressForm.value);
@@ -212,10 +232,14 @@
                 };
 
                 await registerService.store(formData)
-                .then((response) => {
-                    console.log(response);
+                .then((response: any) => {
+                    submitLoading.value = false;
+                    const accountStore = useAccountStore();
+                    accountStore.login(response.token);
+                    router.push({ name: 'dashboard' });
                 }).catch((error) => {
                     console.log(error);
+                    submitLoading.value = false;
                 });
             };
 
@@ -246,6 +270,7 @@
                 compOrgForm,
                 compOrgBillingAddressForm,
                 registrationStep,
+                submitLoading,
                 onValidateUser,
                 onValidateOrganization,
                 onSaveComplete,

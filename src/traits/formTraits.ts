@@ -6,9 +6,11 @@ export default {
         Object.keys(data).map((key) => {
             if (data[key].type === 'file') {
                 let files = [] as any;
-                data[key].value.forEach((item: any, key: number) => {
-                    files[key] = item.getFileEncodeBase64String();
-                });
+                if (data[key].value) {
+                    data[key].value.forEach((item: any, key: number) => {
+                        files[key] = item.getFileEncodeBase64String();
+                    });
+                }
                 formData[key] = files;
             } else {
                 formData[key] = data[key].value;
