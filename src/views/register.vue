@@ -3,7 +3,7 @@
         <div v-if="registrationStep === 'user'" class="form w-[90%] mx-auto py-5">
             <div class="mb-5">
                 <h1 class="text-2xl font-medium leading-6 text-gray-900">User Information</h1>
-                <p class="mt-1 text-sm text-gray-500">Please fill the required fields.</p>
+                <p class="mt-1 text-sm text-gray-500">Asterisk(*) is required fields.</p>
             </div>
             <Form :form="compUserForm" @onchange-form="updateUserForm"></Form>
             <div class="pt-5">
@@ -19,8 +19,8 @@
 
         <div v-if="registrationStep === 'organization'" class="form w-[90%] mx-auto py-5">
             <div class="mb-5">
-                <h1 class="text-2xl font-medium leading-6 text-gray-900">User Information</h1>
-                <p class="mt-1 text-sm text-gray-500">Please fill the required fields.</p>
+                <h1 class="text-2xl font-medium leading-6 text-gray-900">Organization Information</h1>
+                <p class="mt-1 text-sm text-gray-500">Asterisk(*) is required fields.</p>
             </div>
             <Form :form="compOrgForm" @onchange-form="updateOrgForm"></Form>
             <div class="mt-5">
@@ -75,7 +75,7 @@
         setup() {
             const router = useRouter();
             let submitLoading = ref(false);
-            let registrationStep = ref('user');
+            let registrationStep = ref('organization');//ref('user');
             let userForm = ref({
                 image: {
                     label: 'Image',
@@ -83,27 +83,27 @@
                     type: 'file',
                 },
                 firstname: {
-                    label: 'First Name',
+                    label: 'First Name*',
                     value: '',
                     type: 'text',
                 },
                 lastname: {
-                    label: 'Last Name',
+                    label: 'Last Name*',
                     value: '',
                     type: 'text',
                 },
                 email: {
-                    label: 'Email address',
+                    label: 'Email address*',
                     value: '',
                     type: 'email',
                 },
                 password: {
-                    label: 'Password',
+                    label: 'Password*',
                     value: '',
                     type: 'password',
                 },
                 password_confirmation: {
-                    label: 'Confirm password',
+                    label: 'Confirm password*',
                     value: '',
                     type: 'password',
                 },
@@ -115,39 +115,39 @@
                     type: 'file',
                 },
                 type: {
-                    label: 'Type',
+                    label: 'Type*',
                     value: '',
                     type: 'select',
                 },
                 name: {
-                    label: 'Name',
+                    label: 'Name*',
                     value: '',
                     type: 'text'
                 },
                 orgEmail: {
-                    label: 'Email',
+                    label: 'Email*',
                     value: '',
                     type: 'email',
                 }
             });
             let orgBillingAddressForm = ref({
                 address: {
-                    label: 'Address',
+                    label: 'Address*',
                     value: '',
                     type: 'text',
                 },
                 city: {
-                    label: 'City',
+                    label: 'City*',
                     value: '',
                     type: 'text',
                 },
                 zipcode: {
-                    label: 'Zipcode',
+                    label: 'Zipcode*',
                     value: '',
                     type: 'text',
                 },
                 country: {
-                    label: 'Country',
+                    label: 'Country*',
                     value: '',
                     type: 'select',
                 }
@@ -195,28 +195,29 @@
                 formData1.form_type = 'org';
                 await registerService.validate(formData1)
                 .then(() => {
-                    isOrgSucccess.value = true;
+                    // isOrgSucccess.value = true;
+                    submitLoading.value = false;
                 }).catch((error) => {
                     submitLoading.value = false;
                     orgForm.value['errors'] = error;
                 });
 
-                let isOrgBillingAddressSucccess = ref(false);
-                orgBillingAddressForm.value['errors'] = {};
-                let formData2 = formTraits.setFormData(orgBillingAddressForm.value) as any;
-                formData2.form_type = 'orgBillingAddress';
-                await registerService.validate(formData2) 
-                .then(() => {
-                    isOrgBillingAddressSucccess.value = true;
-                }).catch((error) => {
-                    submitLoading.value = false;
-                    orgBillingAddressForm.value['errors'] = error;
-                });
+                // let isOrgBillingAddressSucccess = ref(false);
+                // orgBillingAddressForm.value['errors'] = {};
+                // let formData2 = formTraits.setFormData(orgBillingAddressForm.value) as any;
+                // formData2.form_type = 'orgBillingAddress';
+                // await registerService.validate(formData2) 
+                // .then(() => {
+                //     isOrgBillingAddressSucccess.value = true;
+                // }).catch((error) => {
+                //     submitLoading.value = false;
+                //     orgBillingAddressForm.value['errors'] = error;
+                // });
 
-                if (isOrgSucccess.value === true && isOrgBillingAddressSucccess.value === true) {
-                    registrationStep.value = 'complete';
-                    submitLoading.value = false;
-                }
+                // if (isOrgSucccess.value === true && isOrgBillingAddressSucccess.value === true) {
+                //     registrationStep.value = 'complete';
+                //     submitLoading.value = false;
+                // }
             }
 
             const onSaveComplete = async () => {
