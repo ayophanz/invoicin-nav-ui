@@ -188,36 +188,28 @@
             }
 
             const onValidateOrganization = async () => {
-                let isOrgSucccess = ref(false);
+                const orgFormData = formTraits.setFormData(orgForm.value);
+                const orgBillingAddressFormData = formTraits.setFormData(orgBillingAddressForm.value);
+
+                const formData = {
+                    ...orgFormData,
+                    ...orgBillingAddressFormData,
+                } as any;
+
                 submitLoading.value = true;
                 orgForm.value['errors'] = {};
-                let formData1 = formTraits.setFormData(orgForm.value) as any;
-                formData1.form_type = 'org';
-                await registerService.validate(formData1)
+                orgBillingAddressForm.value['errors'] = {};
+
+                formData.form_type = 'org';
+                await registerService.validate(formData)
                 .then(() => {
-                    // isOrgSucccess.value = true;
                     submitLoading.value = false;
+                    registrationStep.value = 'complete';
                 }).catch((error) => {
+                    console.log(error);
                     submitLoading.value = false;
-                    orgForm.value['errors'] = error;
+                    // orgForm.value['errors'] = error;
                 });
-
-                // let isOrgBillingAddressSucccess = ref(false);
-                // orgBillingAddressForm.value['errors'] = {};
-                // let formData2 = formTraits.setFormData(orgBillingAddressForm.value) as any;
-                // formData2.form_type = 'orgBillingAddress';
-                // await registerService.validate(formData2) 
-                // .then(() => {
-                //     isOrgBillingAddressSucccess.value = true;
-                // }).catch((error) => {
-                //     submitLoading.value = false;
-                //     orgBillingAddressForm.value['errors'] = error;
-                // });
-
-                // if (isOrgSucccess.value === true && isOrgBillingAddressSucccess.value === true) {
-                //     registrationStep.value = 'complete';
-                //     submitLoading.value = false;
-                // }
             }
 
             const onSaveComplete = async () => {
