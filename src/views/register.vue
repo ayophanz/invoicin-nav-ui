@@ -75,7 +75,7 @@
         setup() {
             const router = useRouter();
             let submitLoading = ref(false);
-            let registrationStep = ref('organization');//ref('user');
+            let registrationStep = ref('user');
             let userForm = ref({
                 image: {
                     label: 'Image',
@@ -181,7 +181,6 @@
                     registrationStep.value = 'organization';
                     submitLoading.value = false; 
                 }).catch((error) => {
-                    console.log(error);
                     userForm.value['errors'] = error;
                     submitLoading.value = false;
                 });
@@ -206,9 +205,9 @@
                     submitLoading.value = false;
                     registrationStep.value = 'complete';
                 }).catch((error) => {
-                    console.log(error);
                     submitLoading.value = false;
-                    // orgForm.value['errors'] = error;
+                    orgForm.value['errors'] = error;
+                    orgBillingAddressForm.value['errors'] = error;
                 });
             }
 
