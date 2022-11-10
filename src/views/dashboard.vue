@@ -114,7 +114,9 @@
 
         <!-- All Modal -->
         <ModalComponent :state="isOpen" :onClose="closeModal">
-            <ServiceComponent v-show="modalFor === 'services'" :enabledServices="services"></ServiceComponent> <!-- All Services -->
+            <!-- All Services -->
+            <ServiceComponent v-show="modalFor === 'services'" :enabledServices="services"></ServiceComponent>
+            <NoticeComponent v-show="modalFor === 'notice'" :noticeType="notice['type']" :noticeTitle="notice['title']" :noticeMessage="notice['message']"></NoticeComponent>
         </ModalComponent>
 
     </div>
@@ -147,6 +149,7 @@
     import SessionExpiredComponent from './sessionExpired.vue';
     import ServiceComponent from '../components/service.vue';
     import ModalComponent from '../components/modal.vue';
+    import NoticeComponent from '../components/notice.vue';
     import accountService from '../services/account';
     import { useAccountStore } from '../stores/account';
 
@@ -161,6 +164,7 @@
             SessionExpiredComponent,
             ServiceComponent,
             ModalComponent,
+            NoticeComponent,
             BookmarkAltIcon,
             FireIcon,
             MenuIcon,
@@ -211,6 +215,7 @@
             const mobileMenuOpen    = ref(false);
             let   isOpen            = ref(false);
             let   modalFor          = ref('');
+            let   notice            = ref([]);
 
             const navAction = (item: { name: string; }) => {
                 if (item.name === 'More') {
@@ -238,6 +243,18 @@
                     console.log(error);
                 });
             }
+
+            onMounted(() => {
+                console.log(me);
+                if (me.email_verified_at === null) {
+                    notice.value['type'] = 'verifyUser';
+                    notice.value['title'] = 'User verification';
+                    notice.value['message'] = 'The user verification is required before proceeding.';
+                    openModal('notice');
+                } else {
+                    //
+                }
+            });
         
             return { 
                 user, 
@@ -246,6 +263,7 @@
                 services,
                 isOpen,
                 modalFor,
+                notice,
                 SaveIcon,
                 XIcon,
                 navAction,
