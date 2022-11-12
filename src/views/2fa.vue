@@ -7,11 +7,14 @@
                         <p>Enter the pin code from Google Authenticator app:</p>
                     </div>
                     <div class="mt-5 flex gap-x-5 items-end flex-wrap w-[400px]">
-                        <div class="w-[300px] sm:max-w-xs">
+                        <div class="w-[260px] sm:max-w-xs">
                             <input type="text" v-model="oneTimePassword" name="otpCode" id="otpCode" :class="Object.keys(errors).length > 0 ? '!border-red-400' : ''" class="pl-2 block h-[36px] w-full border rounded-md border-gray-400 shadow-sm sm:text-sm" />
                         </div>
-                        <button @click="onVerifyOTP" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                            Verify
+                        <button @click="onVerifyOTP" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                            <div class="flex">
+                                <Spinner v-if="submitLoading"></Spinner>
+                                Verify
+                            </div>
                         </button>
                         <span v-if="Object.keys(errors).length > 0" class="text-red-400 text-sm font-semibold text-left">{{ errors[0] }}</span>
                     </div>
@@ -61,6 +64,7 @@
 import { ref, defineComponent } from 'vue';
 import accountService from '../services/account';
 import ModalComponent from '../components/modal.vue';
+import Spinner from '../components/spinner.vue';
 import { useAccountStore } from '../stores/account';
 import { useRouter } from 'vue-router';
 
@@ -68,6 +72,7 @@ export default defineComponent({
     name: 'setupTwofa',
     components: {
         ModalComponent,
+        Spinner,
     },
     setup() {
         let   qrImage         = ref('');
@@ -76,6 +81,7 @@ export default defineComponent({
         let   optCode         = ref('');
         let   oneTimePassword = ref('');
         let   errors          = ref([]);
+        let submitLoading     = ref(false);
         const router          = useRouter();
        
         const accountStore     = useAccountStore();
@@ -121,6 +127,7 @@ export default defineComponent({
         }
 
         const onVerifyOTP = async () => {
+            submitLoading.value = true;
             await accountService.verifyOtp({ user_id: tempUserId.value, otp_code: oneTimePassword.value })
             .then((response) => {
                 if (response.token != '') {
@@ -130,8 +137,10 @@ export default defineComponent({
                 } else {
                     console.log(response);
                 }
+                submitLoading.value = false;
             })
             .catch((error) => {
+                submitLoading.value = false;
                 errors.value = error.error.otp_code;
             });
         }
@@ -161,6 +170,7 @@ export default defineComponent({
             optCode,
             oneTimePassword,
             errors,
+            submitLoading,
             onGenerateSecret,
             on2faEnable,
             onVerifyOTP,

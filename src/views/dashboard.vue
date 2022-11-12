@@ -112,11 +112,17 @@
         </div>
         </div>
 
-        <!-- All Modal -->
+        <!-- Modal -->
         <ModalComponent :state="isOpen" :onClose="closeModal" :showClose="modalFor !== 'notice'">
-            <!-- All Services -->
+            <!-- Services -->
             <ServiceComponent v-show="modalFor === 'services'" :enabledServices="services"></ServiceComponent>
+            
+            <!-- Notice  -->
             <NoticeComponent v-show="modalFor === 'notice'" :noticeType="notice['type']" :noticeTitle="notice['title']" :noticeMessage="notice['message']"></NoticeComponent>
+            
+            <!-- Profile -->
+            <ProfileComponent v-show="modalFor === 'profile'"></ProfileComponent>
+
         </ModalComponent>
 
     </div>
@@ -150,6 +156,7 @@
     import ServiceComponent from '../components/service.vue';
     import ModalComponent from '../components/modal.vue';
     import NoticeComponent from '../components/notice.vue';
+    import ProfileComponent from '../components/profile.vue';
     import accountService from '../services/account';
     import { useAccountStore } from '../stores/account';
 
@@ -165,6 +172,7 @@
             ServiceComponent,
             ModalComponent,
             NoticeComponent,
+            ProfileComponent,
             BookmarkAltIcon,
             FireIcon,
             MenuIcon,
@@ -222,6 +230,8 @@
                     openModal('services');
                 } else if (item.name === 'Logout') {
                     onLogout();
+                } else if (item.name === 'Profile') {
+                    openModal('profile');
                 }
             }
 
@@ -245,7 +255,6 @@
             }
 
             onMounted(() => {
-                console.log(me);
                 if (me.email_verified_at === null) {
                     notice.value['type'] = 'verifyUser';
                     notice.value['title'] = 'User verification';

@@ -114,11 +114,6 @@
                     value: null,
                     type: 'file',
                 },
-                type: {
-                    label: 'Type*',
-                    value: '',
-                    type: 'select',
-                },
                 name: {
                     label: 'Name*',
                     value: '',
@@ -158,11 +153,6 @@
             });
 
             const showOptons = async () => {
-                orgForm.value.type['options'] = [
-                    {id: 'individual', name: 'Individual'},
-                    {id: 'company', name: 'Company'}
-                ];
-
                 await sharedService.countries()
                 .then((response: any) => {
                     orgBillingAddressForm.value.country['options'] = response;
