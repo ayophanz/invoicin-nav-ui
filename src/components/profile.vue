@@ -18,7 +18,11 @@
 <script lang="ts">
     import { ref, defineComponent, computed, onMounted } from 'vue';
     import Form from './form/form.vue';
-    import Spinner from '../components/spinner.vue';
+    import Spinner from './spinner.vue';
+    import { useAccountStore } from '../stores/account';
+    import accountService from './../services/account';
+    import { useToast } from "vue-toastification";
+    import formTraits from '../traits/formTraits.js';
 
     export default defineComponent({
         name: 'ProfileComponent',
@@ -27,6 +31,10 @@
             Spinner,
         },
         setup() {
+            const toast = useToast();
+            const accountStore = useAccountStore();
+            const me = accountStore.getMe;
+            let submitLoading = ref(false);
             let userForm = ref({
                 image: {
                     label: 'Image',
@@ -48,33 +56,40 @@
                     value: '',
                     type: 'email',
                 },
-                password: {
-                    label: 'Password*',
-                    value: '',
-                    type: 'password',
-                },
-                password_confirmation: {
-                    label: 'Confirm password*',
-                    value: '',
-                    type: 'password',
-                },
             });
-
-            let submitLoading = ref(false);
 
             const updateUserForm = (value: any) => {
                 userForm.value[value.name].value = value.value;
             };
 
-            const onSave = () => {
-                //
+            const onSave = async () => {
+                submitLoading.value = true;
+                const userFormData = formTraits.setFormData(userForm.value);
+                await accountService.updateProfile(me.id, userFormData)
+                .then(() => {
+                    submitLoading.value = false;
+                    toast.success('Successfully Save!', {
+                        timeout: 2000
+                    });
+                })
+                .catch((error) => {
+                    submitLoading.value = false;
+                    console.log(error);
+                    toast.error('Something went wrong!', {
+                        timeout: 2000
+                    });
+                });
             };
 
-            const compUserForm = computed(() => userForm);
-
             onMounted(() => {
-                //
+                console.log(me);
+                // userForm.value['firstname'].value = me.first_name;
+                userForm.value['firstname'].value = me.first_name;
+                userForm.value['lastname'].value = me.last_name;
+                userForm.value['email'].value = me.email;
             });
+
+            const compUserForm = computed(() => userForm);
 
             return {
                 compUserForm,

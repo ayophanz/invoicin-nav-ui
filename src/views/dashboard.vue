@@ -31,7 +31,7 @@
                     </nav>
                 </div>
                 <div class="flex-shrink-0 flex p-4">
-                    <a href="#" class="flex-shrink-0 group block" v-tooltip="user.name">
+                    <a href="#" @click.stop="onProfile" class="flex-shrink-0 group block">
                     <div class="flex items-center">
                         <div>
                         <img class="inline-block h-10 w-10 rounded-full" :src="user.imageUrl" alt="" />
@@ -40,7 +40,6 @@
                         <p class="text-base font-medium text-gray-700 group-hover:text-gray-900">
                             {{ user.name }}
                         </p>
-                        <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700">CPA</p>
                         </div>
                     </div>
                     </a>
@@ -56,43 +55,42 @@
     
         <!-- Static sidebar for desktop -->
         <div class="hidden lg:flex lg:flex-shrink-0">
-        <div class="flex flex-col w-20">
-            <div class="flex-1 flex flex-col min-h-0 overflow-y-auto bg-white border-r border-gray-200">
-            <div class="flex-1">
-                <div class="py-4 flex items-center justify-center border-b border-gray-200">
-                <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark.svg?color=blue" alt="Workflow" />
-                </div>
-                <nav aria-label="Sidebar" class="py-6 flex flex-col items-center space-y-3">
-                <template v-for="item in navigation" :key="item.name">
-                    <TransitionRoot
-                    :show="item.enabled"
-                    enter="transform transition duration-[400ms]"
-                    enter-from="opacity-0 rotate-[-120deg] scale-50"
-                    enter-to="opacity-100 rotate-0 scale-100"
-                    leave="transform duration-200 transition ease-in-out"
-                    leave-from="opacity-100 rotate-0 scale-100"
-                    leave-to="opacity-0 scale-95">
-                    <div class="w-full m-auto grid justify-center" :class="item.name == 'More' ? '!mt-20 border-b border-gray-200 pb-3' : ''">
-                        <a :href="item.href" @click="navAction(item)" v-tooltip="item.name" :class="item.classes" class="flex items-center rounded-lg p-2 hover:text-white">
-                            <component :is="item.icon" class="h-6 w-6" aria-hidden="true" />
-                            <span class="sr-only">{{ item.name }}</span>
+            <div class="flex flex-col w-20">
+                <div class="flex-1 flex flex-col min-h-0 overflow-y-auto bg-white border-r border-gray-200">
+                <div class="flex-1">
+                    <div class="py-4 flex items-center justify-center border-b border-gray-200">
+                        <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark.svg?color=blue" alt="Workflow" />
+                    </div>
+                    <nav aria-label="Sidebar" class="py-6 flex flex-col items-center space-y-3">
+                        <template v-for="item in navigation" :key="item.name">
+                            <TransitionRoot
+                            :show="item.enabled"
+                            enter="transform transition duration-[400ms]"
+                            enter-from="opacity-0 rotate-[-120deg] scale-50"
+                            enter-to="opacity-100 rotate-0 scale-100"
+                            leave="transform duration-200 transition ease-in-out"
+                            leave-from="opacity-100 rotate-0 scale-100"
+                            leave-to="opacity-0 scale-95">
+                            <div class="w-full m-auto grid justify-center" :class="item.name == 'More' ? '!mt-20 border-b border-gray-200 pb-3' : ''">
+                                <a :href="item.href" @click="navAction(item)" v-tooltip="item.name" :class="item.classes" class="flex items-center rounded-lg p-2 hover:text-white">
+                                    <component :is="item.icon" class="h-6 w-6" aria-hidden="true" />
+                                    <span class="sr-only">{{ item.name }}</span>
+                                </a>
+                            </div>
+                            </TransitionRoot>
+                        </template>
+                        <a href="#" class="flex-shrink-0 w-full" @click.stop="onProfile">
+                            <img class="block mx-auto h-10 w-10 rounded-full" :src="user.imageUrl" alt="" />
+                            <div class="sr-only">
+                            <p>
+                                {{ user.name }}
+                            </p>
+                            </div>
                         </a>
-                    </div>
-                    </TransitionRoot>
-                </template>
-                <a href="#" class="flex-shrink-0 w-full" v-tooltip="`${user.name} / CPA`">
-                    <img class="block mx-auto h-10 w-10 rounded-full" :src="user.imageUrl" alt="" />
-                    <div class="sr-only">
-                    <p>
-                        {{ user.name }}
-                    </p>
-                    <p>CPA</p>
-                    </div>
-                </a>
-                </nav>
+                    </nav>
+                </div>
+                </div>
             </div>
-            </div>
-        </div>
         </div>
     
         <div class="flex-1 min-w-0 flex flex-col overflow-hidden">
@@ -118,7 +116,7 @@
             <ServiceComponent v-show="modalFor === 'services'" :enabledServices="services"></ServiceComponent>
             
             <!-- Notice  -->
-            <NoticeComponent v-show="modalFor === 'notice'" :noticeType="notice['type']" :noticeTitle="notice['title']" :noticeMessage="notice['message']"></NoticeComponent>
+            <NoticeComponent v-if="notice.length > 0" v-show="modalFor === 'notice'" :noticeType="notice['type']" :noticeTitle="notice['title']" :noticeMessage="notice['message']"></NoticeComponent>
             
             <!-- Profile -->
             <ProfileComponent v-show="modalFor === 'profile'"></ProfileComponent>
@@ -213,7 +211,7 @@
             const navigationTemp = [
                 { name: 'More', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: PlusIcon, enabled: true  },
                 { name: 'Setting', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: AdjustmentsIcon, enabled: true },
-                { name: 'Profile', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: UserIcon, enabled: true  },
+                { name: 'Account', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: UserIcon, enabled: true  },
                 { name: 'Logout', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: LoginIcon, enabled: true },
             ];
 
@@ -230,8 +228,6 @@
                     openModal('services');
                 } else if (item.name === 'Logout') {
                     onLogout();
-                } else if (item.name === 'Profile') {
-                    openModal('profile');
                 }
             }
 
@@ -253,6 +249,10 @@
                     console.log(error);
                 });
             }
+
+            const onProfile = () => {
+                openModal('profile');
+            };
 
             onMounted(() => {
                 if (me.email_verified_at === null) {
@@ -278,6 +278,7 @@
                 notice,
                 SaveIcon,
                 XIcon,
+                onProfile,
                 navAction,
                 closeModal,
             }

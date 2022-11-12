@@ -1,12 +1,16 @@
 import { createApp, h } from 'vue';
-import './style.css';
 import App from './App.vue';
 import { createPinia } from 'pinia';
 import router from './router';
 import axios from './plugins/axios';
 import singleSpaVue from 'single-spa-vue';
-import 'floating-vue/dist/style.css';
 import floatingVue from 'floating-vue';
+import Toast from "vue-toastification";
+
+import './style.css';
+import 'floating-vue/dist/style.css';
+import "vue-toastification/dist/index.css";
+
 // import Echo from "laravel-echo";
 
 // window.Pusher = require('pusher-js');
@@ -19,6 +23,10 @@ import floatingVue from 'floating-vue';
 //   forceTLS: false,
 //   disableStats: true,
 // });
+
+const toastOptions = {
+  // You can set your default options here
+};
 
 const pinia = createPinia();
 const vueLifecycles = singleSpaVue({
@@ -40,6 +48,7 @@ const vueLifecycles = singleSpaVue({
         app.use(pinia);
         app.use(router);
         app.use(floatingVue);
+        app.use(Toast, toastOptions);
         axios.defaults.baseURL = import.meta.env.VITE_API_URL;
         axios.defaults.headers.common.Accept = 'application/json';
         window.axios = axios;

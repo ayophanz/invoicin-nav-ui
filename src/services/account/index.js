@@ -8,6 +8,7 @@ import enable2fa from './enable2fa';
 import verifyOtp from './verifyOtp';
 import authCheck from './authCheck';
 import forgotPassword from './forgotPassword';
+import updateProfile from './updateProfile';
 
 export default {
     login,
@@ -20,4 +21,5 @@ export default {
     verifyOtp,
     authCheck,
     forgotPassword,
+    updateProfile,
 }
