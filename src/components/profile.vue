@@ -83,7 +83,7 @@
 
             onMounted(() => {
                 console.log(me);
-                // userForm.value['firstname'].value = me.first_name;
+                userForm.value['image'].value = me.image;
                 userForm.value['firstname'].value = me.first_name;
                 userForm.value['lastname'].value = me.last_name;
                 userForm.value['email'].value = me.email;
