@@ -56,7 +56,7 @@
         <!-- Static sidebar for desktop -->
         <div class="hidden lg:flex lg:flex-shrink-0">
             <div class="flex flex-col w-20">
-                <div class="flex-1 flex flex-col min-h-0 overflow-y-auto bg-white border-r border-gray-200">
+                <div class="flex-1 flex flex-col min-h-0 overflow-y-auto bg-white border-r border-gray-200 scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-gray-200 scrollbar-track-white">
                 <div class="flex-1">
                     <div class="py-4 flex items-center justify-center border-b border-gray-200">
                         <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark.svg?color=blue" alt="Workflow" />
@@ -72,7 +72,7 @@
                             leave-from="opacity-100 rotate-0 scale-100"
                             leave-to="opacity-0 scale-95">
                             <div class="w-full m-auto grid justify-center" :class="item.name == 'More' ? '!mt-20 border-b border-gray-200 pb-3' : ''">
-                                <a :href="item.href" @click="navAction(item)" v-tooltip="item.name" :class="item.classes" class="flex items-center rounded-lg p-2 hover:text-white">
+                                <a :href="item.href" @click="navAction(item)" v-tooltip="item.name" :class="item.classes" class="flex items-center rounded-full p-2 hover:text-white transition-all">
                                     <component :is="item.icon" class="h-6 w-6" aria-hidden="true" />
                                     <span class="sr-only">{{ item.name }}</span>
                                 </a>
@@ -254,17 +254,18 @@
                 openModal('profile');
             };
 
-            onMounted(() => {
+            onMounted(async () => {
+                await accountService.me();
                 if (me.email_verified_at === null) {
                     notice.value['type'] = 'verifyUser';
                     notice.value['title'] = 'User verification';
                     notice.value['message'] = 'The user verification is required before proceeding.';
-                    openModal('notice');
+                    // openModal('notice');
                 } else if (me.organization_email_verified_at === null) {
                     notice.value['type'] = 'verifyOrganization';
                     notice.value['title'] = 'Organization verification';
                     notice.value['message'] = 'The organization verification is required before proceeding.';
-                    openModal('notice');
+                    // openModal('notice');
                 }
             });
         
