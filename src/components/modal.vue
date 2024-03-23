@@ -84,8 +84,8 @@
             const state = toRef(props, 'state');
             const showClose = toRef(props, 'showClose');
 
-            const closeModal = () => {
-                props.onClose();
+            const closeModal = (e) => {
+                props.onClose?.(e);
             };
             
             return { state, showClose, closeModal };
