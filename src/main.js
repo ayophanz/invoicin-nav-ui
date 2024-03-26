@@ -6,7 +6,6 @@ import axios from './plugins/axios';
 import singleSpaVue from 'single-spa-vue';
 import floatingVue from 'floating-vue';
 import Toast from "vue-toastification";
-import vue3LoadingShimmer from "vue3-loading-shimmer";
 
 import './style.css';
 import 'floating-vue/dist/style.css';
@@ -50,7 +49,6 @@ const vueLifecycles = singleSpaVue({
         app.use(router);
         app.use(floatingVue);
         app.use(Toast, toastOptions);
-        app.use(vue3LoadingShimmer);
         axios.defaults.baseURL = import.meta.env.VITE_API_URL;
         axios.defaults.headers.common.Accept = 'application/json';
         window.axios = axios;

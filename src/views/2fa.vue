@@ -61,7 +61,7 @@
     </ModalComponent>
 </template>
 <script lang="ts">
-import { ref, defineComponent } from 'vue';
+import { ref, defineComponent, onMounted } from 'vue';
 import accountService from '../services/account';
 import ModalComponent from '../components/modal.vue';
 import Spinner from '../components/spinner.vue';
@@ -85,10 +85,17 @@ export default defineComponent({
         const router          = useRouter();
        
         const accountStore     = useAccountStore();
-        const otpSetupRequired = ref(accountStore.getIsOtpSetupRequired);
-        const otpRequired      = ref(accountStore.getIsOtpRequired);
-        const tempUserId       = ref(accountStore.getOtpUserId);
-        const otpStep          = ref(accountStore.getOtpStep);
+        const otpSetupRequired = ref('');
+        const otpRequired      = ref('');
+        const tempUserId       = ref();
+        const otpStep          = ref();
+
+        onMounted(() => {
+            otpSetupRequired.value = accountStore.getIsOtpSetupRequired;
+            otpRequired.value = accountStore.getIsOtpRequired;
+            tempUserId.value = accountStore.getOtpUserId;
+            otpStep.value = accountStore.getOtpStep;
+        });
 
         const onGenerateSecret = async () => {
             await accountService.generate2faSecret()

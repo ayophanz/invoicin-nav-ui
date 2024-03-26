@@ -11,7 +11,8 @@ const beforeEach = async (to, from, next) => {
         return next({ name: 'dashboard' });
     }
 
-    console.log(next);
+    console.log('from');
+    console.log(from);
 
     if (!auth && from.name !== 'login' && to.name === 'twofa') {
         return next({ name: 'login' });

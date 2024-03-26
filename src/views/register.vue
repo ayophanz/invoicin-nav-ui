@@ -232,7 +232,6 @@
             }
 
             const updateUserForm = (value: any) => {
-                console.log(value);
                 userForm.value[value.name].value = value.value;
             };
 
