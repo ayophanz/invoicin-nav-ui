@@ -1,5 +1,5 @@
 <template>
-  <TransitionRoot appear :show="state" as="template" name="modal" :initialFocus="completeButtonRef">
+  <TransitionRoot appear :show="props.state" as="template" name="modal" :initialFocus="completeButtonRef" v-if="domLoaded">
     <Dialog as="div" @close="false" class="relative z-10">
       <TransitionChild
         as="template"
@@ -31,7 +31,7 @@
               <button 
                 ref="completeButtonRef"
                 @click="closeModal"
-                v-show="showClose"
+                v-show="props.showClose"
                 type="button" 
                 class="flex px-1 py-1 right-2 top-2 absolute focus:outline-none">
                 <XIcon class="h-6 w-6 hover:text-red-500 text-red-300" aria-hidden="true" />&nbsp;
@@ -44,57 +44,42 @@
     </Dialog>
   </TransitionRoot>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 
-    /** Imports */
-    import { toRef, ref,onMounted } from 'vue';
-    import { 
-        Dialog,  
-        DialogPanel, 
-        TransitionChild, 
-        TransitionRoot } from '@headlessui/vue';
-    import { XIcon } from '@heroicons/vue/outline';
+  /** Imports */
+  import { ref,onMounted, nextTick, defineProps } from 'vue';
+  import { 
+      Dialog,  
+      DialogPanel, 
+      TransitionChild, 
+      TransitionRoot } from '@headlessui/vue';
+  import { XIcon } from '@heroicons/vue/outline';
 
-    /** Process */
-    export default {
-        name: 'ModalComponent',
-        props: {
-            state: {
-                type: Boolean,
-                required: true,
-            },
-            onClose: {
-                type: Function,
-                required: false,
-            },
-            showClose: {
-              type: Boolean,
-              required: false,
-              default: true,
-            }
-        },
-        components: {
-            Dialog,  
-            DialogPanel, 
-            TransitionChild, 
-            TransitionRoot,
-            XIcon,
-        },
-        setup(props) {
-            const completeButtonRef = ref(null);
-            const state = toRef(false);
-            const showClose = toRef(false);
-
-            onMounted(() => {
-              state.value = props.state;
-              showClose.value = props.showClose;
-            });
-
-            const closeModal = (e: any) => {
-                props.onClose?.(e);
-            };
-            
-            return { state, showClose, completeButtonRef, closeModal };
-        },
+  /** Process */
+  const props = defineProps({
+    state: {
+        type: Boolean,
+        required: true,
+    },
+    onClose: {
+        type: Function,
+        required: false,
+    },
+    showClose: {
+      type: Boolean,
+      required: false,
+      default: true,
     }
+  });
+
+  const completeButtonRef = ref(null);
+  const domLoaded         = ref(false);
+
+  onMounted(async () => {
+    await nextTick(() => { domLoaded.value = true; });
+  });
+
+  const closeModal = (e: any) => {
+      props.onClose?.(e);
+  };
 </script>

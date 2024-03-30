@@ -31,10 +31,10 @@ export const useAccountStore = defineStore('account', {
             this._otpRequired = true;
         },
         otpUserId(user_id) {
-            localStorage.setItem('2fa:user:id', user_id);
+            localStorage.setItem('2fa_token', user_id);
         },
         removeOtpUserId() {
-            localStorage.removeItem('2fa:user:id');
+            localStorage.removeItem('2fa_token');
         },
         otpStep(value) {
             localStorage.setItem('otp_step', value);
@@ -54,7 +54,7 @@ export const useAccountStore = defineStore('account', {
             return this._otpRequired;
         },
         getOtpUserId() {
-            return localStorage.getItem('2fa:user:id');
+            return localStorage.getItem('2fa_token');
         },
         getOtpStep() {
             return localStorage.getItem('otp_step');

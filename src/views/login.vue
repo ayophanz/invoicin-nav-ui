@@ -108,7 +108,7 @@ export default defineComponent({
                     router.push({ name: 'twofa' });
                 } else {
                     accountStore.login(response.token);
-                    router.push({ name: 'dashboard' });
+                    router.push({ name: 'main' });
                 }
             }).catch((error) => {
                 errors.value = error.error;

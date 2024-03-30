@@ -1,5 +1,5 @@
 <template>
-  <ModalComponent :state="true" :onClose="false" :showClose="false">
+  <ModalComponent :state="true" :showClose="false">
     <div v-if="!isSent" class="rounded-md p-4">
       <h2 class="text-center text-4xl">Forgot your password?</h2>
       <div class="grid justify-items-center my-10 w-1/2 mx-auto">

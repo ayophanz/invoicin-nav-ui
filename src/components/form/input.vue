@@ -13,48 +13,42 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { ref, toRef, defineComponent, onMounted, watch } from 'vue';
+<script setup lang="ts">
+    import { ref, toRef, defineProps, defineEmits, onMounted, watch } from 'vue';
 
-    export default defineComponent({
-        name: 'InputComponent',
-        props: {
-            value: {
-                type: String,
-                default: '',
-            },
-            name: {
-                type: String,
-                required: true,
-            },
-            label: {
-                type: String,
-                default: '',
-            },
-            type: {
-                type: String,
-                default: 'text',
-            },
-            errorMessage: {
-                type: String,
-                default: '',
-            }
+    const emit = defineEmits(['onchangeData']);
+    const props = defineProps({
+        value: {
+            type: String,
+            default: '',
         },
-        setup(props, { emit }) {
-            const value = toRef(props, 'value');
-            let input = ref();
+        name: {
+            type: String,
+            required: true,
+        },
+        label: {
+            type: String,
+            default: '',
+        },
+        type: {
+            type: String,
+            default: 'text',
+        },
+        errorMessage: {
+            type: String,
+            default: '',
+        }
+    });
 
-            onMounted(() => {
-                input.value = value.value;
-            });
+    const value = toRef(props.value);
+    let input = ref('');
 
-            watch(input, (value) => {
-               emit('onchangeData', {name: props.name, value: value});
-            });
+    onMounted(() => {
+        input.value = value.value;
+    });
+
+    watch(input, (value) => {
+        emit('onchangeData', {name: props.name, value: value});
+    });
             
-            return {
-                input,
-            };
-        },
-    })
 </script>

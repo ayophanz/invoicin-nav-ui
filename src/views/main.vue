@@ -1,5 +1,5 @@
 <template>
-    <div class="flex h-screen">
+    <div class="flex h-screen" v-if="domLoaded">
         <TransitionRoot as="template" :show="mobileMenuOpen">
         <Dialog as="div" class="relative z-40 lg:hidden" @close="mobileMenuOpen = false">
             <TransitionChild as="template" enter="transition-opacity ease-linear duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="transition-opacity ease-linear duration-300" leave-from="opacity-100" leave-to="opacity-0">
@@ -97,17 +97,17 @@
         <!-- Mobile top navigation -->
         <div class="lg:hidden">
             <div class="bg-white py-2 px-4 flex items-center justify-between sm:px-6 lg:px-8 border-b border-gray-200">
-            <div>
-                <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark.svg?color=black" alt="Workflow" />
+                <div>
+                    <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark.svg?color=black" alt="Workflow" />
+                </div>
+                <div>
+                    <button type="button" class="-mr-3 h-12 w-12 inline-flex items-center justify-center bg-gray-400 rounded-md text-white hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" @click="mobileMenuOpen = true">
+                    <span class="sr-only">Open sidebar</span>
+                    <MenuIcon class="h-6 w-6" aria-hidden="true" />
+                    </button>
+                </div>
+                </div>
             </div>
-            <div>
-                <button type="button" class="-mr-3 h-12 w-12 inline-flex items-center justify-center bg-gray-400 rounded-md text-white hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" @click="mobileMenuOpen = true">
-                <span class="sr-only">Open sidebar</span>
-                <MenuIcon class="h-6 w-6" aria-hidden="true" />
-                </button>
-            </div>
-            </div>
-        </div>
         </div>
 
         <!-- Modal -->
@@ -116,26 +116,22 @@
             <ServiceComponent v-show="modalFor === 'services'" :enabledServices="services"></ServiceComponent>
             
             <!-- Notice  -->
-            <NoticeComponent v-if="notice.length > 0" v-show="modalFor === 'notice'" :noticeType="notice['type']" :noticeTitle="notice['title']" :noticeMessage="notice['message']"></NoticeComponent>
+            <NoticeComponent v-if="notice.length > 0" v-show="modalFor === 'notice'" :showLogout="true" :noticeType="notice['type']" :noticeTitle="notice['title']" :noticeMessage="notice['message']"></NoticeComponent>
             
             <!-- Profile -->
             <ProfileComponent v-show="modalFor === 'profile'"></ProfileComponent>
-
         </ModalComponent>
 
     </div>
 </template>
-<script lang="ts">
-    import { ref, defineComponent, onMounted } from 'vue';
+<script setup lang="ts">
+    import { ref, onMounted, nextTick } from 'vue';
     import { 
-        Dialog, 
-        DialogTitle, 
+        Dialog,
         DialogPanel, 
         TransitionChild, 
         TransitionRoot, } from '@headlessui/vue';
-    import { 
-        BookmarkAltIcon,
-        FireIcon,
+    import {
         MenuIcon,
         UserIcon,
         UsersIcon,
@@ -143,14 +139,12 @@
         ClipboardCheckIcon,
         AdjustmentsIcon,
         PlusIcon,
-        SaveIcon,
         ArchiveIcon,
         FolderOpenIcon,
         ShoppingCartIcon,
         DocumentReportIcon,
         LoginIcon,
     } from '@heroicons/vue/outline';
-    import SessionExpiredComponent from './sessionExpired.vue';
     import ServiceComponent from '../components/service.vue';
     import ModalComponent from '../components/modal.vue';
     import NoticeComponent from '../components/notice.vue';
@@ -158,131 +152,85 @@
     import accountService from '../services/account';
     import { useAccountStore } from '../stores/account';
 
-    export default defineComponent({
-        name: 'dashboard',
-        components: {
-            Dialog,
-            DialogTitle,
-            DialogPanel,
-            TransitionChild,
-            TransitionRoot,
-            SessionExpiredComponent,
-            ServiceComponent,
-            ModalComponent,
-            NoticeComponent,
-            ProfileComponent,
-            BookmarkAltIcon,
-            FireIcon,
-            MenuIcon,
-            UserIcon,
-            UsersIcon,
-            XIcon,
-            ClipboardCheckIcon,
-            AdjustmentsIcon,
-            PlusIcon,
-            SaveIcon,
-            ArchiveIcon,
-            FolderOpenIcon,
-            ShoppingCartIcon,
-            DocumentReportIcon,
-            LoginIcon,
-        },
-        setup() {
             
-            const accountStore = useAccountStore();
-            const me = accountStore.getMe;
+    const accountStore = useAccountStore();
+    const me = accountStore.getMe;
 
-            const user = {
-                name: `${me.first_name} ${me.last_name}`,
-                email: me.email,
-                imageUrl:
-                    'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-                };
-                
-            const servicesTemp = [
-                { name: 'Customer', href: '#', classes: 'text-pink-600 hover:bg-pink-600', icon: UsersIcon, enabled: true },
-                { name: 'Product', href: '#', classes: 'text-purple-600 hover:bg-purple-600', icon: ArchiveIcon, enabled: false },
-                { name: 'Order', href: '#',  classes: 'text-yellow-500 hover:bg-yellow-500', icon: ShoppingCartIcon, enabled: false },
-                { name: 'Invoice', href: '#', classes: 'text-green-500 hover:bg-green-500', icon: ClipboardCheckIcon, enabled: true },
-                { name: 'Inventory', href: '#', classes: 'text-indigo-500 hover:bg-indigo-500', icon: FolderOpenIcon, enabled: false },
-                { name: 'Report', href: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: DocumentReportIcon, enabled: false },
-            ];
-
-            const navigationTemp = [
-                { name: 'More', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: PlusIcon, enabled: true  },
-                { name: 'Setting', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: AdjustmentsIcon, enabled: true },
-                { name: 'Account', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: UserIcon, enabled: true  },
-                { name: 'Logout', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: LoginIcon, enabled: true },
-            ];
-
-            const navigation   = ref([...servicesTemp, ...navigationTemp]);
-            const services     = ref(servicesTemp);
-
-            const mobileMenuOpen    = ref(false);
-            let   isOpen            = ref(false);
-            let   modalFor          = ref('');
-            let   notice            = ref([]);
-
-            const navAction = (item: { name: string; }) => {
-                if (item.name === 'More') {
-                    openModal('services');
-                } else if (item.name === 'Logout') {
-                    onLogout();
-                }
-            }
-
-            const openModal = (type: string) => {
-                isOpen.value         = true;
-                modalFor.value       = type;
-                mobileMenuOpen.value = false;
-            }
-            
-            const closeModal = () => {
-                isOpen.value = false;
-            }
-
-            const onLogout = () => {
-                accountService.logout()
-                .then((response) => {
-                    //
-                }).catch((error) => {
-                    console.log(error);
-                });
-            }
-
-            const onProfile = () => {
-                openModal('profile');
-            };
-
-            onMounted(async () => {
-                await accountService.me();
-                if (me.email_verified_at === null) {
-                    notice.value['type'] = 'verifyUser';
-                    notice.value['title'] = 'User verification';
-                    notice.value['message'] = 'The user verification is required before proceeding.';
-                    // openModal('notice');
-                } else if (me.organization_email_verified_at === null) {
-                    notice.value['type'] = 'verifyOrganization';
-                    notice.value['title'] = 'Organization verification';
-                    notice.value['message'] = 'The organization verification is required before proceeding.';
-                    // openModal('notice');
-                }
-            });
+    const user = {
+        name: `${me.first_name} ${me.last_name}`,
+        email: me.email,
+        imageUrl:
+            'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+        };
         
-            return { 
-                user, 
-                mobileMenuOpen, 
-                navigation,
-                services,
-                isOpen,
-                modalFor,
-                notice,
-                SaveIcon,
-                XIcon,
-                onProfile,
-                navAction,
-                closeModal,
-            }
+    const servicesTemp = [
+        { name: 'Customer', href: '#', classes: 'text-pink-600 hover:bg-pink-600', icon: UsersIcon, enabled: true },
+        { name: 'Product', href: '#', classes: 'text-purple-600 hover:bg-purple-600', icon: ArchiveIcon, enabled: false },
+        { name: 'Order', href: '#',  classes: 'text-yellow-500 hover:bg-yellow-500', icon: ShoppingCartIcon, enabled: false },
+        { name: 'Invoice', href: '#', classes: 'text-green-500 hover:bg-green-500', icon: ClipboardCheckIcon, enabled: true },
+        { name: 'Inventory', href: '#', classes: 'text-indigo-500 hover:bg-indigo-500', icon: FolderOpenIcon, enabled: false },
+        { name: 'Report', href: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: DocumentReportIcon, enabled: false },
+    ];
+
+    const navigationTemp = [
+        { name: 'More', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: PlusIcon, enabled: true  },
+        { name: 'Setting', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: AdjustmentsIcon, enabled: true },
+        { name: 'Account', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: UserIcon, enabled: true  },
+        { name: 'Logout', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: LoginIcon, enabled: true },
+    ];
+
+    const navigation     = ref([...servicesTemp, ...navigationTemp]);
+    const services       = ref(servicesTemp);
+    const domLoaded      = ref(false);
+    const mobileMenuOpen = ref(false);
+    const isOpen         = ref(false);
+    const modalFor       = ref('');
+    const notice         = ref([]);
+
+    onMounted(async () => {
+        await nextTick(() => { domLoaded.value = true; });
+        if (me.email_verified_at === null) {
+            notice.value['type'] = 'verifyUser';
+            notice.value['title'] = 'User verification';
+            notice.value['message'] = 'The user verification is required before proceeding.';
+            openModal('notice');
+        } else if (me.organization_email_verified_at === null) {
+            notice.value['type'] = 'verifyOrganization';
+            notice.value['title'] = 'Organization verification';
+            notice.value['message'] = 'The organization verification is required before proceeding.';
+            openModal('notice');
         }
     });
+
+    const navAction = (item: { name: string; }) => {
+        if (item.name === 'More') {
+            openModal('services');
+        } else if (item.name === 'Logout') {
+            onLogout();
+        }
+    }
+
+    const openModal = (type: string) => {
+        isOpen.value         = true;
+        modalFor.value       = type;
+        mobileMenuOpen.value = false;
+    }
+    
+    const closeModal = () => {
+        isOpen.value = false;
+    }
+
+    const onLogout = () => {
+        accountService.logout()
+        .then((response) => {
+            //
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+
+    const onProfile = () => {
+        openModal('profile');
+    };
+    
 </script>

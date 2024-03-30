@@ -14,12 +14,12 @@
     </div>
 </template>
 
-<script lang="ts">
-import { ref, toRef, defineComponent, onMounted } from 'vue';
+<script setup lang="ts">
+    import { ref, toRef, defineProps, defineEmits, onMounted } from 'vue';
 
-export default defineComponent({
-    name: 'SelectComponent',
-    props: {
+    const emit = defineEmits(['onchangeData']);
+
+    const props = defineProps({
         name: {
             type: String,
             default: '',
@@ -40,23 +40,16 @@ export default defineComponent({
             type: String,
             default: '',
         }
-    },
-    setup(props, { emit }) {
-        const value = toRef(props, 'value');
-        let input = ref();
+    });
 
-        onMounted(() => {
-            input.value = value.value;
-        });
+    const value = toRef(props.value);
+    let input = ref('');
 
-        let onChange = (value: string) => {
-            emit('onchangeData', {name: props.name, value: value});
-        };
+    onMounted(() => {
+        input.value = value.value;
+    });
 
-        return {
-            input,
-            onChange,
-        };
-    }
-});
+    let onChange = (value: string) => {
+        emit('onchangeData', {name: props.name, value: value});
+    };
 </script>

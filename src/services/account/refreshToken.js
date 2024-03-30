@@ -5,7 +5,7 @@ import router from '../../router';
 const success = (response, resolve) => {
     const accountStore = useAccountStore();
     accountStore.refreshToken(response.token);
-    router.push({ name: 'dashboard' });
+    router.push({ name: 'main' });
     return resolve();
 };
 
