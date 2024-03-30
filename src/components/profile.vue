@@ -31,7 +31,7 @@
     let userForm = ref({
         image: {
             label: 'Image',
-            value: null,
+            value: [],
             type: 'file',
         },
         firstname: {
@@ -52,6 +52,7 @@
     });
 
     const updateUserForm = (value: any) => {
+        console.log(value.value);
         userForm.value[value.name].value = value.value;
     };
 
@@ -75,6 +76,7 @@
     };
 
     onMounted(() => {
+        console.log(me.image);
         userForm.value['image'].value = me.image;
         userForm.value['firstname'].value = me.first_name;
         userForm.value['lastname'].value = me.last_name;

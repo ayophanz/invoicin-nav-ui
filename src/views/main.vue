@@ -31,7 +31,7 @@
                     </nav>
                 </div>
                 <div class="flex-shrink-0 flex p-4">
-                    <a href="#" @click.stop="onProfile" class="flex-shrink-0 group block">
+                    <a href="#" class="flex-shrink-0 group block cursor-default">
                     <div class="flex items-center">
                         <div>
                         <img class="inline-block h-10 w-10 rounded-full" :src="user.imageUrl" alt="" />
@@ -79,7 +79,7 @@
                             </div>
                             </TransitionRoot>
                         </template>
-                        <a href="#" class="flex-shrink-0 w-full" @click.stop="onProfile">
+                        <a href="#" class="flex-shrink-0 w-full cursor-default">
                             <img class="block mx-auto h-10 w-10 rounded-full" :src="user.imageUrl" alt="" />
                             <div class="sr-only">
                             <p>
@@ -159,8 +159,7 @@
     const user = {
         name: `${me.first_name} ${me.last_name}`,
         email: me.email,
-        imageUrl:
-            'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+        imageUrl: me.image[0],
         };
         
     const servicesTemp = [
@@ -207,6 +206,8 @@
             openModal('services');
         } else if (item.name === 'Logout') {
             onLogout();
+        } else if (item.name === 'Account') {
+            openModal('profile');
         }
     }
 
@@ -228,9 +229,5 @@
             console.log(error);
         });
     }
-
-    const onProfile = () => {
-        openModal('profile');
-    };
     
 </script>

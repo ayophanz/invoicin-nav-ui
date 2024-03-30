@@ -1,6 +1,6 @@
 <template>
     <div class="mb-2 file-component">
-        <label v-if="label !== ''" :for="name" class="block text-sm font-medium text-gray-700">{{ label }}</label>
+        <label v-if="label !== ''" class="block text-sm font-medium text-gray-700">{{ props.label }}</label>
         <div class="mt-1 rounded-md shadow-sm w-80">
             <Filepond
                 name="file"
@@ -8,7 +8,7 @@
                 label-idle="Drop image here..."
                 :allow-multiple="false"
                 accepted-file-types="image/jpg, image/jpeg, image/png"
-                :files="value"
+                :files="props.value"
                 maxFileSize="1MB"
                 @init="handleFilePondInit"
                 @addfile="onAdd"
@@ -16,12 +16,12 @@
                 credits="false"
             ></Filepond>
         </div>
-        <span v-if="errorMessage !== ''" class="text-sm text-red-500">{{ errorMessage }}</span>
+        <span v-if="props.errorMessage !== ''" class="text-sm text-red-500">{{ props.errorMessage }}</span>
     </div>
   </template>
 
 <script setup lang="ts">
-    import { ref, toRef, defineProps, Component, defineEmits } from 'vue';
+    import { ref, defineProps, Component, defineEmits } from 'vue';
     import vueFilePond from 'vue-filepond';
     import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
     import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
@@ -58,11 +58,10 @@
         }
     });
 
-    const value = toRef(props.value);
     let pond = ref();
 
     const handleFilePondInit = () => {
-        //console.log('file init.');
+        console.log('file init.');
     };
 
     let onAdd = () => {
