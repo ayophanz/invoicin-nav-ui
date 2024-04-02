@@ -1,5 +1,5 @@
 <template>
-    <div class="flex h-screen" v-if="domLoaded">
+    <div class="flex" v-if="domLoaded">
         <TransitionRoot as="template" :show="mobileMenuOpen">
         <Dialog as="div" class="relative z-40 lg:hidden" @close="mobileMenuOpen = false">
             <TransitionChild as="template" enter="transition-opacity ease-linear duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="transition-opacity ease-linear duration-300" leave-from="opacity-100" leave-to="opacity-0">
