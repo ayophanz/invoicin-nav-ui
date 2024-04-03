@@ -13,6 +13,7 @@ const router = createRouter({
     routes: [
       {
         path: '/',
+        alias: ['/organization'],
         name: 'main',
         component: main,
         meta: { 

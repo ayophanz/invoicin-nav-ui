@@ -15,7 +15,6 @@ const beforeEach = async (to, from, next) => {
         .then((res) => {
             const accountStore = useAccountStore();
             accountStore.me(res.data.me);
-            console.log(res.data.me);
         });
     }
     
