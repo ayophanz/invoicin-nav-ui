@@ -118,8 +118,8 @@
             <!-- Notice  -->
             <NoticeComponent v-if="notice.length > 0" v-show="modalFor === 'notice'" :showLogout="true" :noticeType="notice['type']" :noticeTitle="notice['title']" :noticeMessage="notice['message']"></NoticeComponent>
             
-            <!-- Profile -->
-            <ProfileComponent v-show="modalFor === 'profile'"></ProfileComponent>
+            <!-- Account -->
+            <AccountComponent v-show="modalFor === 'account'"></AccountComponent>
         </ModalComponent>
 
     </div>
@@ -148,7 +148,7 @@
     import ServiceComponent from '../components/service.vue';
     import ModalComponent from '../components/modal.vue';
     import NoticeComponent from '../components/notice.vue';
-    import ProfileComponent from '../components/profile.vue';
+    import AccountComponent from '../components/account.vue';
     import accountService from '../services/account';
     import { useAccountStore } from '../stores/account';
 
@@ -207,7 +207,7 @@
         } else if (item.name === 'Logout') {
             onLogout();
         } else if (item.name === 'Account') {
-            openModal('profile');
+            openModal('account');
         }
     }
 

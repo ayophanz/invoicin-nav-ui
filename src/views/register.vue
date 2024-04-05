@@ -218,8 +218,6 @@
                 await registerService.store(formData)
                 .then((response: any) => {
                     submitLoading.value = false;
-                    // const accountStore = useAccountStore();
-                    // accountStore.login(response.token);
                     router.push({ name: 'login' });
                 }).catch((error) => {
                     console.log(error);
