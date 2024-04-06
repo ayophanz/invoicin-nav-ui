@@ -9,37 +9,10 @@
 
             <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
                 <div class="my-2 mx-3 text-center">
-                    <span class="text-red-500">{{ errors['message'] }}</span>
+                    <span class="text-red-500">{{ errorMessage }}</span>
                 </div>
                 <div class="bg-white m:rounded-lg sm:px-10">
-                    <div class="my-5">
-                        <label for="email" class="block text-sm font-medium text-gray-700"> Email address </label>
-                        <div class="mt-1">
-                        <input 
-                            id="email" 
-                            v-model="email" 
-                            name="email"
-                            type="email" 
-                            autocomplete="email" 
-                            :class="Object.keys(errors).length > 0 ? '!border-red-400' : ''"
-                            class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-                        </div>
-                    </div>
-
-                    <div class="my-5">
-                        <label for="password" class="block text-sm font-medium text-gray-700"> Password </label>
-                        <div class="mt-1">
-                        <input 
-                            id="password" 
-                            v-model="password" 
-                            name="password" 
-                            type="password" 
-                            autocomplete="current-password" 
-                            :class="Object.keys(errors).length > 0 ? '!border-red-400' : ''"
-                            class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
-                        </div>
-                    </div>
-
+                    <Form :form="compLoginForm" @onchange-form="updateLoginForm"></Form>
                     <div class="flex items-center justify-between">
                         <!-- <div class="flex items-center">
                         <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
@@ -52,7 +25,10 @@
                     </div>
 
                     <div class="my-5">
-                        <button type="submit" @click.prevent="onLogin" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Sign in</button>
+                        <button type="submit" @click.prevent="onLogin" :disabled="submitLoading" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <Spinner v-if="submitLoading"></Spinner>
+                            Sign in
+                        </button>
                     </div>
 
                     <div class="mt-6">
@@ -76,62 +52,77 @@
         </div>
     </ModalComponent>
 </template>
-<script lang="ts">
-import { ref, defineComponent } from 'vue';
-import ModalComponent from '../components/modal.vue';
-import accountService from '../services/account';
-import { useRouter } from 'vue-router';
-import { useAccountStore } from '../stores/account';
+<script setup lang="ts">
+    import { ref, computed } from 'vue';
+    import ModalComponent from '../components/modal.vue';
+    import Spinner from '../components/spinner.vue';
+    import Form from '../components/form/form.vue';
+    import accountService from '../services/account';
+    import { useRouter } from 'vue-router';
+    import { useAccountStore } from '../stores/account';
+    import formTraits from '../traits/formTraits';
+    import { useToast } from "vue-toastification";
 
-export default defineComponent({
-    name: 'login',
-    components: {
-        ModalComponent
-    },
-    setup() {
-        const router = useRouter();
-        let email    = ref('');
-        let password = ref('');
-        let errors   = ref([]);
+    const toast = useToast();
+    const router = useRouter();
+    let errorMessage  = ref('');
+    let submitLoading = ref(false);
+    let loginForm = ref({
+        email: {
+            label: 'Email',
+            value: '',
+            type: 'email'
+        },
+        password: {
+            label: 'Password',
+            value: '',
+            type: 'password'
+        }
+    });
 
-        const onLogin = async () => {
-            await accountService.login({ email: email.value, password: password.value })
-            .then((response) => {
-                const accountStore = useAccountStore();
-                if (response.otp_required === true) {
-                    accountStore.otpUserId(response.user_id)
-                    accountStore.otpRequired();
-                    router.push({ name: 'twofa' });
-                } else if (response.otp_setup_required === true) {
-                    accountStore.login(response.token);
-                    accountStore.otpSetupRequired();
-                    router.push({ name: 'twofa' });
-                } else {
-                    accountStore.login(response.token);
-                    router.push({ name: 'main' });
-                }
-            }).catch((error) => {
-                errors.value = error.error;
-                console.log(error.error);
+    const onLogin = async () => {
+        errorMessage.value = '';
+        submitLoading.value = true;
+        const formData = formTraits.setFormData(loginForm.value);
+        await accountService.login(formData)
+        .then((response: any) => {
+            const accountStore = useAccountStore();
+            if (response.otp_required === true) {
+                accountStore.otpUserId(response.user_id)
+                accountStore.otpRequired();
+                router.push({ name: 'twofa' });
+            } else if (response.otp_setup_required === true) {
+                accountStore.login(response.token);
+                accountStore.otpSetupRequired();
+                router.push({ name: 'twofa' });
+            } else {
+                accountStore.login(response.token);
+                router.push({ name: 'main' });
+            }
+            toast.success('Successfully login!', {
+                timeout: 2000
             });
-        }
-
-        const forgotPassword = () => {
-            router.push({ name: 'forgotPassword' });
-        }
-
-        const onRegister = () => {
-            router.push({ name: 'register' });
-        }
-
-        return {
-            email,
-            password,
-            errors,
-            forgotPassword,
-            onLogin,
-            onRegister,
-        }
+        }).catch((error) => {
+            submitLoading.value = false;
+            loginForm.value['errors'] = error;
+            errorMessage.value = error.message;
+            toast.error('Something went wrong!', {
+                timeout: 2000
+            });
+        });
     }
-})
+
+    const forgotPassword = () => {
+        router.push({ name: 'forgotPassword' });
+    }
+
+    const onRegister = () => {
+        router.push({ name: 'register' });
+    }
+
+    const updateLoginForm = (value: any) => {
+        loginForm.value[value.name].value = value.value;
+    };
+
+    const compLoginForm = computed(() => loginForm);
 </script>

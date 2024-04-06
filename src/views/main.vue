@@ -148,7 +148,7 @@
     import ServiceComponent from '../components/service.vue';
     import ModalComponent from '../components/modal.vue';
     import NoticeComponent from '../components/notice.vue';
-    import AccountComponent from '../components/account.vue';
+    import AccountComponent from '../components/account/index.vue';
     import accountService from '../services/account';
     import { useAccountStore } from '../stores/account';
 

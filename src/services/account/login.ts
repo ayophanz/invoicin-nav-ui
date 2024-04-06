@@ -1,21 +1,21 @@
 import axios from '../../plugins/axios';
 
-const success = (response, resolve) => {
-    return resolve(response);
+const success = (data: object, resolve: any) => {
+    resolve(data);
 };
 
-const failed = (error, reject) => {
-    return reject(error.response.data);
+const failed = (data: object, reject: any) => {
+    reject(data);
 };
 
-export default data => {
+export default (data: object) => {
     return new Promise((resolve, reject) => {
         axios.post('api/login', data)
         .then((response) => {
             success(response.data, resolve);
         })
         .catch((error) => {
-            failed(error, reject);
+            failed(error.response.data.error, reject);
         })
     });
 }

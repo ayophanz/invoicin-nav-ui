@@ -73,7 +73,8 @@
     const initErrors = (fields: any) => {
         if (fields.value.errors && Object.keys(fields.value.errors).length > 0) {
             Object.keys(fields.value.errors).forEach(function(key) {
-                if (typeof fields.value[key] !== 'undefined') fields.value[key].errorMessage = fields.value.errors[key][0];
+                if (typeof fields.value[key] !== 'undefined' && fields.value.errors && fields.value.errors[key]) 
+                    fields.value[key].errorMessage = fields.value.errors[key][0];
             });
         } else {
             Object.keys(fields.value).forEach(function(key) {
