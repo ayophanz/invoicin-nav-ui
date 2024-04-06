@@ -71,7 +71,7 @@
     };
 
     let onRemove = () => {
-        emit('onchangeData', {name: props.name, value: null});
+        emit('onchangeData', {name: props.name, value: []});
     };
 </script>
 <style>
