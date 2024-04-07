@@ -46,7 +46,7 @@
 <script setup lang="ts">
 
   /** Imports */
-  import { toRef, ref, watch, onMounted, defineComponent } from 'vue';
+  import { toRef, ref, watch, onMounted } from 'vue';
   import { Switch } from '@headlessui/vue';
   import { 
     UsersIcon,

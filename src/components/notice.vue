@@ -16,7 +16,7 @@
 <script setup lang="ts">
 
   /** Imports */
-  import { ref, onMounted, nextTick, defineProps } from 'vue';
+  import { ref, onMounted, nextTick } from 'vue';
   import { ExclamationIcon } from '@heroicons/vue/outline';
   import accountService from '../services/account';
 

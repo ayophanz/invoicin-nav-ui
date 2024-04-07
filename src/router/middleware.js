@@ -1,5 +1,4 @@
 import accountService from '../services/account';
-import { useAccountStore } from '../stores/account';
 
 const beforeEach = async (to, from, next) => {
     const twofaToken = localStorage.getItem('2fa_token');
@@ -10,13 +9,7 @@ const beforeEach = async (to, from, next) => {
         if (res.data.isAuth) auth = true;
     });
 
-    if (auth) {
-        await accountService.me()
-        .then((res) => {
-            const accountStore = useAccountStore();
-            accountStore.me(res.data.me);
-        });
-    }
+    if (auth) await accountService.me();
     
     if (auth && (to.name === 'twofa' || to.name === 'login' || to.name === 'register' || to.name === 'forgotPassword' || to.name === 'sessionExpired')) {
         next({ name: 'main' });

@@ -34,11 +34,11 @@
                     <a href="#" class="flex-shrink-0 group block cursor-default">
                     <div class="flex items-center">
                         <div>
-                        <img class="inline-block h-10 w-10 object-cover rounded-full" :src="user.imageUrl" alt="" />
+                        <img class="inline-block h-10 w-10 object-cover rounded-full" :src="_me.image[0]" alt="" />
                         </div>
                         <div class="ml-3">
                         <p class="text-base font-medium text-gray-700 group-hover:text-gray-900">
-                            {{ user.name }}
+                            {{ `${_me.first_name} ${_me.last_name}` }}
                         </p>
                         </div>
                     </div>
@@ -80,10 +80,10 @@
                             </TransitionRoot>
                         </template>
                         <a href="#" class="flex-shrink-0 w-full cursor-default">
-                            <img class="block mx-auto h-10 w-10 object-cover rounded-full" :src="user.imageUrl" alt="" />
+                            <img class="block mx-auto h-10 w-10 object-cover rounded-full" :src="_me.image[0]" alt="" />
                             <div class="sr-only">
                             <p>
-                                {{ user.name }}
+                                {{ `${_me.first_name} ${_me.last_name}` }}
                             </p>
                             </div>
                         </a>
@@ -151,17 +151,11 @@
     import AccountComponent from '../components/account/index.vue';
     import accountService from '../services/account';
     import { useAccountStore } from '../stores/account';
-
-            
+    import { storeToRefs } from 'pinia';
+      
     const accountStore = useAccountStore();
-    const me = accountStore.getMe;
-
-    const user = {
-        name: `${me.first_name} ${me.last_name}`,
-        email: me.email,
-        imageUrl: me.image[0],
-        };
-        
+    const { _me } = storeToRefs(accountStore);
+    
     const servicesTemp = [
         { name: 'Customer', href: '#', classes: 'text-pink-600 hover:bg-pink-600', icon: UsersIcon, enabled: true },
         { name: 'Product', href: '#', classes: 'text-purple-600 hover:bg-purple-600', icon: ArchiveIcon, enabled: false },
@@ -188,12 +182,12 @@
 
     onMounted(async () => {
         await nextTick(() => { domLoaded.value = true; });
-        if (me.email_verified_at === null) {
+        if (_me.email_verified_at === null) {
             notice.value['type'] = 'verifyUser';
             notice.value['title'] = 'User verification';
             notice.value['message'] = 'The user verification is required before proceeding.';
             openModal('notice');
-        } else if (me.organization_email_verified_at === null) {
+        } else if (_me.organization_email_verified_at === null) {
             notice.value['type'] = 'verifyOrganization';
             notice.value['title'] = 'Organization verification';
             notice.value['message'] = 'The organization verification is required before proceeding.';
@@ -209,17 +203,17 @@
         } else if (item.name === 'Account') {
             openModal('account');
         }
-    }
+    };
 
     const openModal = (type: string) => {
         isOpen.value         = true;
         modalFor.value       = type;
         mobileMenuOpen.value = false;
-    }
+    };
     
     const closeModal = () => {
         isOpen.value = false;
-    }
+    };
 
     const onLogout = () => {
         accountService.logout()
@@ -228,6 +222,6 @@
         }).catch((error) => {
             console.log(error);
         });
-    }
+    };
     
 </script>

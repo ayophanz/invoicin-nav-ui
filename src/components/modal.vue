@@ -47,7 +47,7 @@
 <script setup lang="ts">
 
   /** Imports */
-  import { ref,onMounted, nextTick, defineProps } from 'vue';
+  import { ref,onMounted, nextTick } from 'vue';
   import { 
       Dialog,  
       DialogPanel, 

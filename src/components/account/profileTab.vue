@@ -53,10 +53,10 @@
     const onProfileSave = async () => {
         submitLoading.value = true;
         userForm.value['errors'] = {};
-        console.log(userForm.value.image);
         const userFormData = formTraits.setFormData(userForm.value);
         await accountService.updateProfile(me.id, userFormData)
-        .then(() => {
+        .then(async () => {
+            await accountService.me();
             submitLoading.value = false;
             toast.success('Successfully Save!', {
                 timeout: 2000
