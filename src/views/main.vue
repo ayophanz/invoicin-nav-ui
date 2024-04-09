@@ -34,11 +34,11 @@
                     <a href="#" class="flex-shrink-0 group block cursor-default">
                     <div class="flex items-center">
                         <div>
-                        <img class="inline-block h-10 w-10 object-cover rounded-full" :src="_me.image[0]" alt="" />
+                        <img class="inline-block h-10 w-10 object-cover rounded-full" :src="getMe.image[0]" alt="" />
                         </div>
                         <div class="ml-3">
                         <p class="text-base font-medium text-gray-700 group-hover:text-gray-900">
-                            {{ `${_me.first_name} ${_me.last_name}` }}
+                            {{ `${getMe.first_name} ${getMe.last_name}` }}
                         </p>
                         </div>
                     </div>
@@ -80,10 +80,10 @@
                             </TransitionRoot>
                         </template>
                         <a href="#" class="flex-shrink-0 w-full cursor-default">
-                            <img class="block mx-auto h-10 w-10 object-cover rounded-full" :src="_me.image[0]" alt="" />
+                            <img class="block mx-auto h-10 w-10 object-cover rounded-full" :src="getMe.image[0]" alt="" />
                             <div class="sr-only">
                             <p>
-                                {{ `${_me.first_name} ${_me.last_name}` }}
+                                {{ `${getMe.first_name} ${getMe.last_name}` }}
                             </p>
                             </div>
                         </a>
@@ -116,7 +116,7 @@
             <ServiceComponent v-show="modalFor === 'services'" :enabledServices="services"></ServiceComponent>
             
             <!-- Notice  -->
-            <NoticeComponent v-if="notice.length > 0" v-show="modalFor === 'notice'" :showLogout="true" :noticeType="notice['type']" :noticeTitle="notice['title']" :noticeMessage="notice['message']"></NoticeComponent>
+            <NoticeComponent v-if="notice.length > 0" v-show="modalFor === 'notice'" :notice="notice"></NoticeComponent>
             
             <!-- Account -->
             <AccountComponent v-show="modalFor === 'account'"></AccountComponent>
@@ -154,7 +154,7 @@
     import { storeToRefs } from 'pinia';
       
     const accountStore = useAccountStore();
-    const { _me } = storeToRefs(accountStore);
+    const { getMe } = storeToRefs(accountStore) as any;
     
     const servicesTemp = [
         { name: 'Customer', href: '#', classes: 'text-pink-600 hover:bg-pink-600', icon: UsersIcon, enabled: true },
@@ -178,19 +178,24 @@
     const mobileMenuOpen = ref(false);
     const isOpen         = ref(false);
     const modalFor       = ref('');
-    const notice         = ref([]);
+    const notice         = ref({});
 
     onMounted(async () => {
+        console.log(getMe.value);
         await nextTick(() => { domLoaded.value = true; });
-        if (_me.email_verified_at === null) {
-            notice.value['type'] = 'verifyUser';
-            notice.value['title'] = 'User verification';
-            notice.value['message'] = 'The user verification is required before proceeding.';
+        if (getMe.value.email_verified_at === null) {
+            notice.value = {
+                type: 'info',
+                title: 'User verification',
+                message:'The user verification is required before proceeding.',
+            }
             openModal('notice');
-        } else if (_me.organization_email_verified_at === null) {
-            notice.value['type'] = 'verifyOrganization';
-            notice.value['title'] = 'Organization verification';
-            notice.value['message'] = 'The organization verification is required before proceeding.';
+        } else if (getMe.value.organization_email_verified_at === null) {
+            notice.value = {
+                type: 'info',
+                title: 'Organization verification',
+                message: 'The organization verification is required before proceeding.'
+            };
             openModal('notice');
         }
     });

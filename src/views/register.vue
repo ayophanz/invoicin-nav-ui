@@ -76,7 +76,7 @@
         },
         setup() {
             const router = useRouter();
-            let submitLoading = ref(false);
+            const submitLoading = ref(false);
             let registrationStep = ref('user');
             let userForm = ref({
                 image: {

@@ -1,11 +1,11 @@
 import axios from '../../plugins/axios';
 
 const success = (data: object, resolve: any) => {
-    resolve(data);
+    return resolve(data);
 };
 
 const fail = (data: object, reject: any) => {
-    reject(data);
+    return reject(data);
 };
 
 export default (id: number, data: object) => {

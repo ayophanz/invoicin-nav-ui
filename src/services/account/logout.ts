@@ -1,7 +1,7 @@
 import axios from '../../plugins/axios';
 import { useAccountStore } from '../../stores/account';
 
-const success = (resolve) => {
+const success = (resolve: any) => {
     const accountStore = useAccountStore();
     accountStore.logout();
 
@@ -10,8 +10,8 @@ const success = (resolve) => {
     return resolve();
 };
 
-const failed = (error, reject) => {
-    return reject(error.response.data);
+const fail = (error: object, reject: any) => {
+    return reject(error);
 };
 
 export default () => {
@@ -21,7 +21,7 @@ export default () => {
             success(resolve);
         })
         .catch((error) => {
-            failed(error, reject);
+            fail(error.response.data, reject);
         })
     });
 }

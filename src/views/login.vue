@@ -66,7 +66,7 @@
     const toast = useToast();
     const router = useRouter();
     let errorMessage  = ref('');
-    let submitLoading = ref(false);
+    const submitLoading = ref(false);
     let loginForm = ref({
         email: {
             label: 'Email',

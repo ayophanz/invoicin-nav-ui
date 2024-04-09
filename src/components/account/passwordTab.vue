@@ -1,4 +1,5 @@
 <template>
+    <notice v-if="getMe.isNewPassword" :notice="warning" class="mt-5"></notice>
     <div class="mb-5">
         <p class="mt-5 text-sm text-gray-500">Asterisk(*) is required fields.</p>
     </div>
@@ -7,15 +8,23 @@
 <script setup lang="ts">
     import { ref, computed } from 'vue';
     import Form from '../form/form.vue';
+    import notice from '../notice.vue';
     import accountService from '../../services/account';
     import { useAccountStore } from '../../stores/account';
     import { useToast } from "vue-toastification";
     import formTraits from '../../traits/formTraits.js';
+    import { storeToRefs } from 'pinia';
 
     const toast = useToast();
     const accountStore = useAccountStore();
-    const me = accountStore.getMe;
-    let submitLoading = ref(false);
+    const { getMe } = storeToRefs(accountStore) as any;
+
+    const warning = {
+        type: 'info', 
+        title: 'Pending new password', 
+        message: 'We sent you an email notification about your password change; please confirm.'
+    };
+    const submitLoading = ref(false);
     let passwordForm = ref({
         currentPassword: {
             label: 'Current password*',
@@ -38,13 +47,13 @@
         submitLoading.value = true;
         passwordForm.value['errors'] = {};
         const passwordFormData = formTraits.setFormData(passwordForm.value);
-        await accountService.updatePassword(me.id, passwordFormData)
-        .then(() => {
+        await accountService.updatePassword(getMe.value.id, passwordFormData)
+        .then(async () => {
+            await accountService.me();
             submitLoading.value = false;
             toast.success('Successfully Save!', {
                 timeout: 2000
             });
-            accountService.logout();
         })
         .catch((error) => {
             submitLoading.value = false;

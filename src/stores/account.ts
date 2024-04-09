@@ -1,9 +1,8 @@
-import { _me } from '../types';
 import { defineStore } from 'pinia';
 
 export const useAccountStore = defineStore('account', {
     state: () => ({ 
-        _me: [] as _me[],
+        _me: [],
         _otpRequired: false,
         _otpSetupRequired: false,
     }),

@@ -1,9 +1,10 @@
 export interface _me {
-    id: number,
-    first_name: string,
-    last_name: string,
-    organization_name: string,
-    organization_email: string,
-    organization_email_verified_at: string,
-    image: Array<string>
+    id: Number,
+    first_name: String,
+    last_name: String,
+    email_verified_at: String,
+    image: Array<String>,
+    organization_name: String,
+    organization_email: String,
+    organization_email_verified_at: Date,
 }

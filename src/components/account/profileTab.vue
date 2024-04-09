@@ -11,11 +11,13 @@
     import { useToast } from "vue-toastification";
     import formTraits from '../../traits/formTraits.js';
     import accountService from '../../services/account';
+    import { storeToRefs } from 'pinia';
 
     const toast = useToast();
     const accountStore = useAccountStore();
-    const me = accountStore.getMe;
-    let submitLoading = ref(false);
+    const { getMe } = storeToRefs(accountStore) as any;
+
+    const submitLoading = ref(false);
     let userForm = ref({
         image: {
             label: 'Image',
@@ -40,10 +42,10 @@
     });
 
     onMounted(() => {
-        userForm.value['image'].value = me.image;
-        userForm.value['firstname'].value = me.first_name;
-        userForm.value['lastname'].value = me.last_name;
-        userForm.value['email'].value = me.email;
+        userForm.value['image'].value = getMe.value.image;
+        userForm.value['firstname'].value = getMe.value.first_name;
+        userForm.value['lastname'].value = getMe.value.last_name;
+        userForm.value['email'].value = getMe.value.email;
     });
 
     const updateUserForm = (value: {name: string, value: string}) => {
@@ -54,7 +56,7 @@
         submitLoading.value = true;
         userForm.value['errors'] = {};
         const userFormData = formTraits.setFormData(userForm.value);
-        await accountService.updateProfile(me.id, userFormData)
+        await accountService.updateProfile(getMe.value.id, userFormData)
         .then(async () => {
             await accountService.me();
             submitLoading.value = false;

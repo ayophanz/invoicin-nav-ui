@@ -2,12 +2,12 @@ import axios from '../../plugins/axios';
 import passwordTransformer from '../../transformers/passwordTransformer';
 
 const success = (data: object, resolve: any) => {
-    resolve(data);
+    return resolve(data);
 };
 
 const fail = (data: object, reject: any) => {
     const transfomer = passwordTransformer.fetch(data);
-    reject(transfomer);
+    return reject(transfomer);
 };
 
 export default (id: number, data: object) => {

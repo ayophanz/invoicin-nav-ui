@@ -5,9 +5,9 @@
         <ExclamationIcon class="h-5 w-5 text-yellow-400" aria-hidden="true" />
       </div>
       <div class="ml-3">
-        <h3 class="text-sm font-medium text-yellow-800">{{ props.noticeTitle }}</h3>
+        <h3 class="text-sm font-medium text-yellow-800">{{ props.notice.title }}</h3>
         <div class="mt-2 text-sm text-yellow-700">
-          <p>{{ props.noticeMessage }} <span v-if="props.showLogout" @click="onLogout" class="cursor-pointer hover:underline"> or Logout instead?</span></p>
+          <p>{{ props.notice.message }}</p>
         </div>
       </div>
     </div>
@@ -18,38 +18,16 @@
   /** Imports */
   import { ref, onMounted, nextTick } from 'vue';
   import { ExclamationIcon } from '@heroicons/vue/outline';
-  import accountService from '../services/account';
 
   /** Process */
   const props = defineProps({
-    showLogout: {
-      type: Boolean,
-      required: false,
-    },
-    noticeType: {
-      type: String,
+    notice: {
+      type: Object,
       required: true,
     },
-    noticeTitle: {
-      type: String,
-      required: true,
-    },
-    noticeMessage: {
-      type: String,
-      required: true,
-    }
   });
 
   const domLoaded = ref(false);
-
-  const onLogout = () => {
-      accountService.logout()
-      .then((response) => {
-          //
-      }).catch((error) => {
-          console.log(error);
-      });
-  }
 
   onMounted(async () => {
     await nextTick(() => { domLoaded.value = true; });

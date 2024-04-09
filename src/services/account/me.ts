@@ -5,11 +5,11 @@ const success = (response: object, resolve: any) => {
     if (response) {
         const accountStore = useAccountStore();
         accountStore.me(response);
-        resolve(response);
+        return resolve(response);
     }
 };
 
-const failed = (error: object, reject: any) => {
+const fail = (error: object, reject: any) => {
     return reject(error);
 };
 
@@ -20,7 +20,7 @@ export default () => {
             success(response.data.data, resolve);
         })
         .catch((error) => {
-            failed(error, reject);
+            fail(error, reject);
         })
     });
 }
