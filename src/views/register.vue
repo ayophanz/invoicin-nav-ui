@@ -41,10 +41,13 @@
         </div>
 
         <div v-if="registrationStep === 'complete'" class="space-y-8 divide-y divide-gray-200 w-[90%] mx-auto py-5">
-            <div class="flex flex-col justify-center items-center">
+            <div class="mb-3">
+                <h2 class="text-xl font-medium leading-6 text-gray-900">Almost there!</h2>
+            </div>
+            <div class="flex flex-col justify-center items-center pt-5">
                 <button @click="onSaveComplete" :disabled="submitLoading" type="button" class="disabled:opacity-75 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-5 text-md font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                     <Spinner v-if="submitLoading"></Spinner>
-                    Save & Complete</button>
+                    Save & Login</button>
                 <div class="text-base mt-3">
                     <a href="#" @click="onBack('organization')" class="font-normal text-center hover:underline hover:text-blue-400"> back </a>
                 </div>
@@ -63,7 +66,6 @@
     import sharedService from '../services/shared';
     import formTraits from '../traits/formTraits.js';
     import { useRouter } from 'vue-router';
-    import { useAccountStore } from '../stores/account';
 
     export default defineComponent({
         name: 'register',
@@ -74,7 +76,7 @@
         },
         setup() {
             const router = useRouter();
-            let submitLoading = ref(false);
+            const submitLoading = ref(false);
             let registrationStep = ref('user');
             let userForm = ref({
                 image: {
@@ -216,9 +218,7 @@
                 await registerService.store(formData)
                 .then((response: any) => {
                     submitLoading.value = false;
-                    const accountStore = useAccountStore();
-                    accountStore.login(response.token);
-                    router.push({ name: 'dashboard' });
+                    router.push({ name: 'login' });
                 }).catch((error) => {
                     console.log(error);
                     submitLoading.value = false;
@@ -232,7 +232,6 @@
             }
 
             const updateUserForm = (value: any) => {
-                console.log(value);
                 userForm.value[value.name].value = value.value;
             };
 

@@ -1,26 +1,26 @@
 import axios from '../../plugins/axios';
 import { useAccountStore } from '../../stores/account';
 
-const success = (response, resolve) => {
+const success = (response: object, resolve: any) => {
     if (response) {
         const accountStore = useAccountStore();
-        accountStore.me(response.data.me);
+        accountStore.me(response);
         return resolve(response);
     }
 };
 
-const failed = (error, reject) => {
+const fail = (error: object, reject: any) => {
     return reject(error);
 };
 
 export default () => {
     return new Promise((resolve, reject) => {
-        axios.get('api/me')
+        axios.get('api/account/show')
         .then((response) => {
-            success(response, resolve);
+            success(response.data.data, resolve);
         })
         .catch((error) => {
-            failed(error, reject);
+            fail(error, reject);
         })
     });
 }

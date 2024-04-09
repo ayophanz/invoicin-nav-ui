@@ -2,25 +2,25 @@ import axios from '../../plugins/axios';
 import { useAccountStore } from '../../stores/account';
 import router from '../../router';
 
-const success = (response, resolve) => {
+const success = (response: string, resolve:any) => {
     const accountStore = useAccountStore();
-    accountStore.refreshToken(response.token);
-    router.push({ name: 'dashboard' });
+    accountStore.refreshToken(response);
+    router.push({ name: 'main' });
     return resolve();
 };
 
-const failed = (error, reject) => {
-    return reject(error.response.data);
+const fail = (error: object, reject: any) => {
+    return reject(error);
 };
 
 export default () => {
     return new Promise((resolve, reject) => {
         axios.get('api/refresh')
         .then((response) => {
-            success(response.data, resolve);
+            success(response.data.token, resolve);
         })
         .catch((error) => {
-            failed(error, reject);
+            fail(error.response.data, reject);
         })
     });
 }

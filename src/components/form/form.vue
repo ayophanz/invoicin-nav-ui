@@ -24,62 +24,69 @@
                 :name="`${key}`"
                 @onchange-data="updateValue"></Select>
         </div>
+        <div v-if="props.submit" class="pt-5">
+            <div class="flex justify-center">
+                <button @click="props.submit" :disabled="props.submitLoading !== undefined ? props.submitLoading : false " type="button" class="disabled:opacity-75 ml-3 flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <Spinner v-if="props.submitLoading"></Spinner>
+                    Save
+                </button>
+            </div>
+        </div>
     </div>
 </template>
 
-<script lang="ts">
-    import { ref, toRef, defineComponent, onMounted, onUpdated, computed } from 'vue';
+<script setup lang="ts">
+    import { ref, toRef, defineEmits, onMounted, onUpdated, computed } from 'vue';
     import Input from './input.vue';
     import File from './file.vue';
     import Select from './select.vue';
+    import Spinner from '../spinner.vue';
 
-    export default defineComponent({
-        name: 'FormComponent',
-        components: {
-            Input,
-            File,
-            Select,
-        },
-        props: {
-            form: {
-                type: Object,
-                required: true,
-            },
-        },
-        setup(props, { emit }) {
-            let fields = ref();
-            const form = toRef(props, 'form');
+    const emit = defineEmits(['onchangeForm']);
 
-            onMounted(() => {
-                fields.value = form.value;
+    const props = defineProps({
+        submit: {
+            type: Function,
+            required: false,
+        },
+        submitLoading: {
+            type: Boolean,
+            required: false,
+        },
+        form: {
+            type: Object,
+            required: true,
+        },
+    });
+
+    let fields = ref();
+    const form = toRef(props.form);
+
+    onMounted(() => {
+        fields.value = form.value;
+    });
+
+    onUpdated(() => {
+        initErrors(fields);
+    });
+
+    const initErrors = (fields: any) => {
+        if (fields.value.errors && Object.keys(fields.value.errors).length > 0) {
+            Object.keys(fields.value.errors).forEach(function(key) {
+                if (typeof fields.value[key] !== 'undefined' && fields.value.errors && fields.value.errors[key]) 
+                    fields.value[key].errorMessage = fields.value.errors[key][0];
             });
-
-            onUpdated(() => {
-                initErrors(fields);
+        } else {
+            Object.keys(fields.value).forEach(function(key) {
+                delete fields.value[key].errorMessage;
             });
+        }
+    };
 
-            const initErrors = (fields: any) => {
-                if (fields.value.errors && Object.keys(fields.value.errors).length > 0) {
-                    Object.keys(fields.value.errors).forEach(function(key) {
-                        if (typeof fields.value[key] !== 'undefined') fields.value[key].errorMessage = fields.value.errors[key][0];
-                    });
-                } else {
-                    Object.keys(fields.value).forEach(function(key) {
-                        delete fields.value[key].errorMessage;
-                    });
-                }
-            };
+    let updateValue = (value: object) => {
+        emit('onchangeForm', value);
+    };
 
-            let updateValue = (value: any) => {
-                emit("onchangeForm", value);
-            };
+    const compFields = computed(() => fields.value);
 
-            const compFields = computed(() => fields.value);
-
-            return {
-                compFields,
-                updateValue,
-            };
-        },
-    })
 </script>

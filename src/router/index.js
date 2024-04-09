@@ -1,7 +1,7 @@
 
 import { createRouter, createWebHistory } from 'vue-router';
 import middleware from './middleware';
-import dashboard from '../views/dashboard.vue';
+import main from '../views/main.vue';
 import login from '../views/login.vue';
 import sessionExpired from '../views/sessionExpired.vue';
 import twofa from '../views/2fa.vue';
@@ -13,8 +13,9 @@ const router = createRouter({
     routes: [
       {
         path: '/',
-        name: 'dashboard',
-        component: dashboard,
+        alias: ['/organization'],
+        name: 'main',
+        component: main,
         meta: { 
           auth: true 
         }
