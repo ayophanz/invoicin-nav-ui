@@ -10,7 +10,7 @@ const failed = (error, reject) => {
 
 export default () => {
     return new Promise((resolve, reject) => {
-        axios.get('api/auth-check')
+        axios.get('api/is-auth')
         .then((response) => {
             success(response, resolve);
         })

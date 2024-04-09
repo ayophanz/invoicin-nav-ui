@@ -43,10 +43,10 @@
 
   </div>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 
   /** Imports */
-  import { toRef, ref, watch, onMounted, defineComponent } from 'vue';
+  import { toRef, ref, watch, onMounted } from 'vue';
   import { Switch } from '@headlessui/vue';
   import { 
     UsersIcon,
@@ -55,80 +55,64 @@
     FolderOpenIcon,
     ShoppingCartIcon,
     DocumentReportIcon,
- } from '@heroicons/vue/outline';
+  } from '@heroicons/vue/outline';
 
   /** Process */
-  export default defineComponent({
-    name: 'ServiceComponent',
-    props: {
-      enabledServices: {
-        type: Array,
-        required: true,
-      }
-    },
-    components: {
-        Switch,
-        UsersIcon,
-        ClipboardCheckIcon,
-        ArchiveIcon,
-        FolderOpenIcon,
-        ShoppingCartIcon,
-        DocumentReportIcon,
-    },
-    setup(props) {
-      /** Variables */
-      const services = ref([
-          { name: 'Customer', href: '#', description: 'Free', bgColor: 'bg-pink-600', icon: UsersIcon, enabled: true },
-          { name: 'Product', href: '#', description: 'Free', bgColor: 'bg-purple-600', icon: ArchiveIcon, enabled: false },
-          { name: 'Order', href: '#', description: 'Upgrade', bgColor: 'bg-yellow-500', icon: ShoppingCartIcon, enabled: false },
-          { name: 'Invoice', href: '#', description: 'Free', bgColor: 'bg-green-500', icon: ClipboardCheckIcon, enabled: true },
-          { name: 'Inventory', href: '#', description: 'Upgrade', bgColor: 'bg-indigo-500', icon: FolderOpenIcon, enabled: false },
-          { name: 'Report', href: '#', description: 'Upgrade', bgColor: 'bg-gray-700', icon: DocumentReportIcon, enabled: false },
-      ]);
-
-      const enabledServices = toRef(props, 'enabledServices');
-
-      /** Functions */
-      const enabledService = (item, service) => {
-        if (item.enabled && item.name == service) {
-          enabledServices.value.filter((item) => {
-            if (Object(item).name == service) Object(item).enabled = true;
-          });
-        }
-        if (!item.enabled && item.name == service) {
-          enabledServices.value.filter((item) => {
-            if (Object(item).name == service) Object(item).enabled = false;
-          });
-        }
-      }
-
-      const initServices = () => {
-        enabledServices.value.filter((item) => {
-          services.value.filter((item2) => {
-            if (Object(item).name == Object(item2).name) Object(item2).enabled  = Object(item).enabled;
-          });
-        });
-      }
-
-      /** Built-in functions */
-      watch(
-        services.value,
-        (newVal) => {
-          return newVal.forEach(item => {
-            const services = ['Customer', 'Product', 'Order', 'Invoice', 'Inventory', 'Report'];
-            services.forEach(item2 => {
-                enabledService(item, item2);
-            });
-          });
-        },
-      );
-
-      onMounted(() => {
-        initServices();
-      });
-
-      return { services };
-    } 
+  const props = defineProps({
+    enabledServices: {
+      type: Array,
+      required: true,
+    }
   });
 
+  /** Variables */
+  const services = ref([
+      { name: 'Customer', href: '#', description: 'Free', bgColor: 'bg-pink-600', icon: UsersIcon, enabled: true },
+      { name: 'Product', href: '#', description: 'Free', bgColor: 'bg-purple-600', icon: ArchiveIcon, enabled: false },
+      { name: 'Order', href: '#', description: 'Upgrade', bgColor: 'bg-yellow-500', icon: ShoppingCartIcon, enabled: false },
+      { name: 'Invoice', href: '#', description: 'Free', bgColor: 'bg-green-500', icon: ClipboardCheckIcon, enabled: true },
+      { name: 'Inventory', href: '#', description: 'Upgrade', bgColor: 'bg-indigo-500', icon: FolderOpenIcon, enabled: false },
+      { name: 'Report', href: '#', description: 'Upgrade', bgColor: 'bg-gray-700', icon: DocumentReportIcon, enabled: false },
+  ]);
+
+  const enabledServices = toRef(props.enabledServices);
+
+  /** Functions */
+  const enabledService = (item: any, service: any) => {
+    if (item.enabled && item.name == service) {
+      enabledServices.value.filter((item) => {
+        if (Object(item).name == service) Object(item).enabled = true;
+      });
+    }
+    if (!item.enabled && item.name == service) {
+      enabledServices.value.filter((item) => {
+        if (Object(item).name == service) Object(item).enabled = false;
+      });
+    }
+  }
+
+  const initServices = () => {
+    enabledServices.value.filter((item) => {
+      services.value.filter((item2) => {
+        if (Object(item).name == Object(item2).name) Object(item2).enabled  = Object(item).enabled;
+      });
+    });
+  }
+
+  /** Built-in functions */
+  watch(
+    services.value,
+    (newVal) => {
+      return newVal.forEach(item => {
+        const services = ['Customer', 'Product', 'Order', 'Invoice', 'Inventory', 'Report'];
+        services.forEach(item2 => {
+            enabledService(item, item2);
+        });
+      });
+    },
+  );
+
+  onMounted(() => {
+    initServices();
+  });
 </script>

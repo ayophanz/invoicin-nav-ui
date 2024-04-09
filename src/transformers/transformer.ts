@@ -13,6 +13,7 @@
 export default class Transformer {
     static fetch: any;
     static send: any;
+
     /**
      * Method used to transform a fetched collection
      *
