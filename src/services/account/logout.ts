@@ -4,7 +4,6 @@ import { useAccountStore } from '../../stores/account';
 const success = (resolve: any) => {
     const accountStore = useAccountStore();
     accountStore.logout();
-
     window.location.replace('/login');
 
     return resolve();

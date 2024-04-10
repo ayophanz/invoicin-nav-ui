@@ -125,7 +125,7 @@
     </div>
 </template>
 <script setup lang="ts">
-    import { ref, onMounted, nextTick } from 'vue';
+    import { ref, onMounted, nextTick, watch, onBeforeUnmount } from 'vue';
     import { 
         Dialog,
         DialogPanel, 
@@ -179,6 +179,8 @@
     const isOpen         = ref(false);
     const modalFor       = ref('');
     const notice         = ref({});
+    const t              = ref();
+    const newPassDetect  = ref(false);
 
     onMounted(async () => {
         console.log(getMe.value);
@@ -198,7 +200,35 @@
             };
             openModal('notice');
         }
+        checkingNewPassword();
     });
+
+    watch(() => getMe.value.isNewPassword, (n) => {
+        if (newPassDetect.value) {
+            console.log('stop checking new password');
+            clearInterval(t.value);
+            newPassDetect.value = false;
+            accountService.logout();
+        } else {
+            if (n) {
+                checkingNewPassword();
+            }
+        }
+    });
+
+    onBeforeUnmount(() => {
+        console.log('stop checking new password');
+        clearInterval(t.value);
+    });
+
+    const checkingNewPassword = async () => {
+        if (getMe.value.isNewPassword) {
+            newPassDetect.value = true;
+            t.value = setInterval(async () => {
+                await accountService.me();
+            }, 3000);
+        }
+    };
 
     const navAction = (item: { name: string; }) => {
         if (item.name === 'More') {
@@ -228,5 +258,4 @@
             console.log(error);
         });
     };
-    
 </script>
