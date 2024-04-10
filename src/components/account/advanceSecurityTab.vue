@@ -6,8 +6,8 @@
         </div>
         <div class="text-center my-5">
             <div class="mt-3">
-                <button @click="onGenerateSecret" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                    Generate Secret Key to Enable 2FA
+                <button @click="onGenerateSecret" :disabled="submitLoading" type="button" class="flex m-auto items-center text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    <Spinner v-if="submitLoading"></Spinner> Generate Secret Key to Enable 2FA
                 </button>
             </div>
         </div>
@@ -47,6 +47,7 @@
     import formTraits from '../../traits/formTraits';
     import { useAccountStore } from '../../stores/account';
     import { storeToRefs } from 'pinia';
+    import Spinner from '../spinner.vue';
 
     const accountStore = useAccountStore();
     const { getMe } = storeToRefs(accountStore) as any;
@@ -58,7 +59,7 @@
 
     const submitLoading = ref(false);
     let otpForm = ref({
-        optCode: {
+        otpCode: {
             label: 'OTP code*',
             value: '',
             type: 'text',
@@ -66,6 +67,7 @@
     });
 
     const onGenerateSecret = async () => {
+        submitLoading.value = true;
         await accountService.generate2faSecret()
         .then(() => {
             step2fa.value = 2;
@@ -76,11 +78,13 @@
     const onLoadQRcode = async () => {
         await accountService.genTwofaQRcode({ user_id: getMe.value.id })
         .then((response) => {
+            submitLoading.value = false;
             qrImage.value = response.qr_image_url;
             secret.value = response.secret;
         })
         .catch((error) => {
             console.log(error);
+            submitLoading.value = false;
         });
     }
 
@@ -91,8 +95,9 @@
         .then(() => {
             submitLoading.value = false;
         })
-        .catch(() => {
+        .catch((error) => {
             submitLoading.value = false;
+            otpForm.value['errors'] = error;
         });
     }
 
