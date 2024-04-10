@@ -10,7 +10,7 @@ const failed = (error, reject) => {
 
 export default data => {
     return new Promise((resolve, reject) => {
-        axios.post('api/generate-2fa-qr-code', data)
+        axios.post('api/account/generate-2fa-qr-code', data)
         .then((response) => {
             success(response.data, resolve);
         })

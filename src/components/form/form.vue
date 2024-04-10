@@ -28,7 +28,7 @@
             <div class="flex justify-center">
                 <button @click="props.submit" :disabled="props.submitLoading !== undefined ? props.submitLoading : false " type="button" class="disabled:opacity-75 ml-3 flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                     <Spinner v-if="props.submitLoading"></Spinner>
-                    Save
+                    {{ props.submitText ? props.submitText : 'Save' }}
                 </button>
             </div>
         </div>
@@ -47,6 +47,10 @@
     const props = defineProps({
         submit: {
             type: Function,
+            required: false,
+        },
+        submitText: {
+            type: String,
             required: false,
         },
         submitLoading: {

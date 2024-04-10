@@ -10,7 +10,7 @@ const failed = (error, reject) => {
 
 export default () => {
     return new Promise((resolve, reject) => {
-        axios.post('api/generate-secret')
+        axios.post('api/account/generate-secret')
         .then((response) => {
             success(response.data, resolve);
         })

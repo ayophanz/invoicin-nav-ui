@@ -18,12 +18,14 @@
         </div>
         <ProfileTab v-if="isProfileTab()"></ProfileTab>
         <PasswordTab v-if="isPasswordTab()"></PasswordTab>
+        <advanceSecurityTab v-if="isAdvanceSecurityTab()"></advanceSecurityTab>
     </div>
 </template>
 <script setup lang="ts">
     import { ref } from 'vue';
     import ProfileTab from './profileTab.vue';
     import PasswordTab from './passwordTab.vue';
+    import advanceSecurityTab from './advanceSecurityTab.vue';
     import { KeyIcon, UserIcon, ShieldCheckIcon } from '@heroicons/vue/solid';
 
     const tabs = ref([
@@ -39,6 +41,11 @@
 
     const isPasswordTab = () => {
         const key = tabs.value.findIndex((x: { name: string; }) => x.name === 'Password');
+        return key >= 0 ? tabs.value[key].current : false;
+    };
+
+    const isAdvanceSecurityTab = () => {
+        const key = tabs.value.findIndex((x: { name: string; }) => x.name === 'Advance security');
         return key >= 0 ? tabs.value[key].current : false;
     };
 

@@ -21,7 +21,7 @@
             </div>
         </div>
         
-        <div v-if="step2fa === 'generate-secret'">
+        <!-- <div v-if="step2fa === 'generate-secret'">
             <h4 class="text-center my-5 text-2xl">Set up Google Authenticator</h4>
             <div>
                 <p class="text-left">Two-Factor Authentication (2FA) works by adding an additional layer of security to your account. It requires an additional login credential - beyond just the username and password - to gain account access, and getting that second credential requires access to something that belongs to you.</p>
@@ -56,7 +56,7 @@
                 </div>
                 <span v-if="Object.keys(errors).length > 0" class="text-red-400 text-sm font-semibold text-left">{{ errors[0] }}</span>
             </div>
-        </div>
+        </div> -->
     </ModalComponent>
 </template>
 <script setup lang="ts">
@@ -104,24 +104,24 @@
         });
     }
 
-    const on2faEnable = async () => {
-        await accountService.enable2fa({ user_id: tempUserId.value, otp_code: optCode.value })
-        .then((response) => {
-            if (response.token != '') {
-                accountStore.login(response.token);
-                accountStore.removeOtpUserId();
-                router.push({ name: 'main' });
-            }
-        })
-        .catch((error) => {
-            errors.value = error.error.otp_code;
-        });
-    }
+    // const on2faEnable = async () => {
+    //     await accountService.enable2fa({ user_id: tempUserId.value, otp_code: optCode.value })
+    //     .then((response) => {
+    //         if (response.token != '') {
+    //             accountStore.login(response.token);
+    //             accountStore.removeOtpUserId();
+    //             router.push({ name: 'main' });
+    //         }
+    //     })
+    //     .catch((error) => {
+    //         errors.value = error.error.otp_code;
+    //     });
+    // }
 
     const onVerifyOTP = async () => {
         submitLoading.value = true;
         await accountService.verifyOtp({ user_id: tempUserId.value, otp_code: oneTimePassword.value })
-        .then((response) => {
+        .then((response: any) => {
             if (response.token != '') {
                 accountStore.login(response.token);
                 accountStore.removeOtpUserId();
