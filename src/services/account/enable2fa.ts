@@ -1,17 +1,17 @@
 import axios from '../../plugins/axios';
-import enable2faTransformer from '../../transformers/enable2faTransformer';
+import otpTransformer from '../../transformers/otpTransformer';
 
 const success = (data: object, resolve: any) => {
     return resolve(data);
 };
 
 const fail = (data: object, reject: any) => {
-    const transfomer = enable2faTransformer.fetch(data);
+    const transfomer = otpTransformer.fetch(data);
     return reject(transfomer);
 };
 
 export default (id: number, data: object) => {
-    const transfomer = enable2faTransformer.send(data);
+    const transfomer = otpTransformer.send(data);
     console.log(data);
     console.log(transfomer);
     return new Promise((resolve, reject) => {

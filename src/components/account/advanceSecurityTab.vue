@@ -23,15 +23,8 @@
         </div>
         <div class="my-5">
             <div class="mt-5 flex flex-col gap-x-5 items-center">
-                <!-- <div class="w-full sm:max-w-xs text-left">
-                    <input type="text" v-model="optCode" name="otpCode" id="otpCode" :class="Object.keys(errors).length > 0 ? '!border-red-400' : ''" class="pl-2 block h-[36px] w-full border rounded-md border-gray-400 shadow-sm sm:text-sm" />
-                </div> -->
                 <Form :submit="on2faEnable" submitText="Enable 2FA" :submitLoading="submitLoading" :form="compOtpForm" @onchange-form="updateOtpForm" class="w-[300px]"></Form>
-                <!-- <button @click="on2faEnable" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                    Enable 2fa
-                </button> -->
             </div>
-            <span v-if="Object.keys(errors).length > 0" class="text-red-400 text-sm font-semibold text-left">{{ errors[0] }}</span>
         </div>
     </div>
 
@@ -55,7 +48,6 @@
     const qrImage = ref('');
     const step2fa = ref(1);
     const secret  = ref('');
-    const errors  = ref([]);
 
     const submitLoading = ref(false);
     let otpForm = ref({

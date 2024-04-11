@@ -1,13 +1,13 @@
 /* ============
- * Enable 2FA Transformer
+ * OTP Transformer
  * ============
  *
- * The transformer for the enable 2fa.
+ * The transformer for the OTP.
  */
 
 import Transformer from './transformer';
 
-export default class Enable2faTransformer extends Transformer {
+export default class OtpTransformer extends Transformer {
 
   static fetch(item: any) {
     return {

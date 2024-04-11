@@ -6,41 +6,41 @@
                 <div class="mt-2 max-w-xl text-sm text-gray-500">
                     <p>Enter the pin code from Google Authenticator app:</p>
                 </div>
-                <div class="mt-5 flex gap-x-5 items-end flex-wrap w-[400px]">
-                    <div class="w-[260px] sm:max-w-xs">
-                        <input type="text" v-model="oneTimePassword" name="otpCode" id="otpCode" :class="Object.keys(errors).length > 0 ? '!border-red-400' : ''" class="pl-2 block h-[36px] w-full border rounded-md border-gray-400 shadow-sm sm:text-sm" />
-                    </div>
-                    <button @click="onVerifyOTP" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                        <div class="flex">
-                            <Spinner v-if="submitLoading"></Spinner>
-                            Verify
-                        </div>
-                    </button>
-                    <span v-if="Object.keys(errors).length > 0" class="text-red-400 text-sm font-semibold text-left">{{ errors[0] }}</span>
+                <div class="mt-5 flex flex-col gap-x-5 items-center">
+                    <Form :submit="onVerifyOTP" submitText="Verify" :submitLoading="submitLoading" :form="compOtpForm" @onchange-form="updateOtpForm" class="w-[300px]"></Form>
                 </div>
             </div>
         </div>
     </ModalComponent>
 </template>
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, computed } from 'vue';
     import accountService from '../services/account';
     import ModalComponent from '../components/modal.vue';
-    import Spinner from '../components/spinner.vue';
+    import Form from '../components/form/form.vue';
     import { useAccountStore } from '../stores/account';
     import { useRouter } from 'vue-router';
-
-    let   oneTimePassword = ref('');
-    let   errors          = ref([]);
-    let   submitLoading   = ref(false);
-    const router          = useRouter();
+    import formTraits from '../traits/formTraits';
+    import { storeToRefs } from 'pinia';
 
     const accountStore     = useAccountStore();
-    const tempUserId       = ref(accountStore.getOtpUserId);
+    const { getOtpUserId } = storeToRefs(accountStore) as any;
+    const router           = useRouter();
+
+    const submitLoading = ref(false);
+    let otpForm = ref({
+        otpCode: {
+            label: 'OTP code*',
+            value: '',
+            type: 'text',
+        },
+    });
 
     const onVerifyOTP = async () => {
         submitLoading.value = true;
-        await accountService.verifyOtp({ user_id: tempUserId.value, otp_code: oneTimePassword.value })
+        otpForm.value['errors'] = {};
+        const otpFormData = formTraits.setFormData(otpForm.value);
+        await accountService.verifyOtp(getOtpUserId.value, otpFormData)
         .then((response: any) => {
             if (response.token != '') {
                 accountStore.login(response.token);
@@ -53,7 +53,13 @@
         })
         .catch((error) => {
             submitLoading.value = false;
-            errors.value = error.error.otp_code;
+            otpForm.value['errors'] = error;
         });
     }
+
+    const updateOtpForm = (value: {name: string, value: string}) => {
+        otpForm.value[value.name].value = value.value;
+    };
+
+    const compOtpForm = computed(() => otpForm);
 </script>
