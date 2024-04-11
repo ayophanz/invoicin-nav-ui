@@ -90,10 +90,12 @@
 
     const on2faEnable = async () => {
         submitLoading.value = true;
+        otpForm.value['errors'] = {};
         const otpFormData = formTraits.setFormData(otpForm.value);
         await accountService.enable2fa(getMe.value.id, otpFormData)
         .then(() => {
             submitLoading.value = false;
+            step2fa.value = 2;
         })
         .catch((error) => {
             submitLoading.value = false;
