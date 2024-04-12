@@ -13,7 +13,7 @@ const fail = (data: object, reject: any) => {
 export default (id: number, data: object) => {
     const transfomer = otpTransformer.send(data);
     return new Promise((resolve, reject) => {
-        axios.post(`api/account/enable-2fa/${id}`, transfomer)
+        axios.post(`api/account/disable-2fa/${id}`, transfomer)
         .then((response) => {
             success(response.data, resolve);
         })

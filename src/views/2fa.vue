@@ -22,7 +22,9 @@
     import { useRouter } from 'vue-router';
     import formTraits from '../traits/formTraits';
     import { storeToRefs } from 'pinia';
+    import { useToast } from "vue-toastification";
 
+    const toast            = useToast();
     const accountStore     = useAccountStore();
     const { getOtpUserId } = storeToRefs(accountStore) as any;
     const router           = useRouter();
@@ -46,6 +48,9 @@
                 accountStore.login(response.token);
                 accountStore.removeOtpUserId();
                 router.push({ name: 'main' });
+                toast.success('Successfully login!', {
+                    timeout: 2000
+                });
             } else {
                 console.log(response);
             }

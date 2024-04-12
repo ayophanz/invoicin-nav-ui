@@ -18,7 +18,7 @@ export default (id: number, data: object) => {
             success(response.data, resolve);
         })
         .catch((error) => {
-            fail(error.response.data, reject);
+            fail(error.response.data.errors, reject);
         })
     });
 }

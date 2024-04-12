@@ -1,6 +1,6 @@
 <template>
     <div class="mb-2 input-component">
-        <label v-if="label !== ''" :for="name" class="block text-sm font-medium text-gray-700">{{ label }}</label>
+        <label v-if="label !== ''" :for="name" class="block text-sm font-medium text-gray-700 text-left">{{ label }}</label>
         <div class="mt-1 flex flex-col">
             <input v-model="input" 
                 :type="type" 

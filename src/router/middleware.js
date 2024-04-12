@@ -1,7 +1,10 @@
 import accountService from '../services/account';
+import { useAccountStore } from '../stores/account';
+import { storeToRefs } from 'pinia';
 
 const beforeEach = async (to, from, next) => {
-    const twofaToken = localStorage.getItem('2fa_token');
+    const accountStore = useAccountStore();
+    const { getOtpUserId } = storeToRefs(accountStore);
     
     let auth = false;
     await accountService.authCheck()
@@ -13,7 +16,7 @@ const beforeEach = async (to, from, next) => {
     
     if (auth && (to.name === 'twofa' || to.name === 'login' || to.name === 'register' || to.name === 'forgotPassword' || to.name === 'sessionExpired')) {
         next({ name: 'main' });
-    } else if ((!auth && twofaToken === null && to.name === 'twofa') || (!auth && to.name === 'main')) {
+    } else if ((!auth && getOtpUserId === null && to.name === 'twofa') || (!auth && to.name === 'main')) {
         next({ name: 'login' });
     } else {
         next();

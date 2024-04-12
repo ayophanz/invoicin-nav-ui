@@ -1,5 +1,5 @@
 <template>
-    <notice v-if="getMe.isNewPassword" :notice="warning" class="mt-5"></notice>
+    <Notice v-if="getMe.isNewPassword" :notice="warning" class="mt-5"></Notice>
     <div class="mb-5">
         <p class="mt-5 text-sm text-gray-500">Asterisk(*) is required fields.</p>
     </div>
@@ -8,7 +8,7 @@
 <script setup lang="ts">
     import { ref, computed } from 'vue';
     import Form from '../form/form.vue';
-    import notice from '../notice.vue';
+    import Notice from '../notice.vue';
     import accountService from '../../services/account';
     import { useAccountStore } from '../../stores/account';
     import { useToast } from "vue-toastification";

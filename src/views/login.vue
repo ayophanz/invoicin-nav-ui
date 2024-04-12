@@ -91,17 +91,13 @@
                 accountStore.otpUserId(response.user_id)
                 accountStore.otpRequired();
                 router.push({ name: 'twofa' });
-            } else if (response.otp_setup_required === true) {
-                accountStore.login(response.token);
-                accountStore.otpSetupRequired();
-                router.push({ name: 'twofa' });
             } else {
                 accountStore.login(response.token);
                 router.push({ name: 'main' });
+                toast.success('Successfully login!', {
+                    timeout: 2000
+                });
             }
-            toast.success('Successfully login!', {
-                timeout: 2000
-            });
         }).catch((error) => {
             submitLoading.value = false;
             loginForm.value['errors'] = error;
