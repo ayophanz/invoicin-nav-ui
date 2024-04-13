@@ -19,15 +19,32 @@
 
         <div v-if="registrationStep === 'organization'" class="form w-[90%] mx-auto py-5">
             <div class="mb-5">
-                <h1 class="text-2xl font-medium leading-6 text-gray-900">Organization Information</h1>
+                <h1 class="text-2xl font-medium leading-6 text-gray-900">Additional Information</h1>
                 <p class="mt-1 text-sm text-gray-500">Asterisk(*) is required fields.</p>
             </div>
-            <Form :form="compOrgForm" @onchange-form="updateOrgForm"></Form>
+            <div class="mb-2">
+                <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
+                <select 
+                    @change="onTypeChange(type)" 
+                    v-model="type" 
+                    id="type" 
+                    name="type"
+                    class="mt-1 appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none sm:text-sm">
+                    <option value="company">Company</option>
+                    <option value="personal">Personal</option>
+                </select>
+            </div>
+            <div v-if="type == 'company'" class="mt-5">
+                <div class="mb-3">
+                    <h2 class="text-xl font-medium leading-6 text-gray-900">Organization</h2>
+                </div>
+                <Form :form="compOrgForm" @onchange-form="updateOrgForm"></Form>
+            </div>
             <div class="mt-5">
                 <div class="mb-3">
                     <h2 class="text-xl font-medium leading-6 text-gray-900">Billing Address</h2>
                 </div>
-                <Form :form="compOrgBillingAddressForm" @onchange-form="updateOrgBillingAddressForm"></Form>
+                <Form :form="compBillingAddressForm" @onchange-form="updateBillingAddressForm"></Form>
             </div>
             <div class="pt-5">
                 <div class="flex justify-end">
@@ -57,8 +74,8 @@
     </Modal>
 </template>
 
-<script lang="ts">
-    import { ref, defineComponent, onMounted, computed } from 'vue';
+<script setup lang="ts">
+    import { ref, onMounted, computed } from 'vue';
     import Modal from '../components/modal.vue';
     import Form from '../components/form/form.vue';
     import Spinner from '../components/spinner.vue';
@@ -67,200 +84,195 @@
     import formTraits from '../traits/formTraits.js';
     import { useRouter } from 'vue-router';
 
-    export default defineComponent({
-        name: 'register',
-        components: {
-            Form,
-            Spinner,
-            Modal
+    const router = useRouter();
+    const submitLoading = ref(false);
+    const registrationStep = ref('user');
+    const type = ref('company');
+    let userForm = ref({
+        image: {
+            label: 'Image',
+            value: null,
+            type: 'file',
         },
-        setup() {
-            const router = useRouter();
-            const submitLoading = ref(false);
-            let registrationStep = ref('user');
-            let userForm = ref({
-                image: {
-                    label: 'Image',
-                    value: null,
-                    type: 'file',
-                },
-                firstname: {
-                    label: 'First Name*',
-                    value: '',
-                    type: 'text',
-                },
-                lastname: {
-                    label: 'Last Name*',
-                    value: '',
-                    type: 'text',
-                },
-                email: {
-                    label: 'Email address*',
-                    value: '',
-                    type: 'email',
-                },
-                password: {
-                    label: 'Password*',
-                    value: '',
-                    type: 'password',
-                },
-                password_confirmation: {
-                    label: 'Confirm password*',
-                    value: '',
-                    type: 'password',
-                },
-            });
-            let orgForm = ref({
-                logo: {
-                    label: 'Logo',
-                    value: null,
-                    type: 'file',
-                },
-                name: {
-                    label: 'Name*',
-                    value: '',
-                    type: 'text'
-                },
-                orgEmail: {
-                    label: 'Email*',
-                    value: '',
-                    type: 'email',
-                }
-            });
-            let orgBillingAddressForm = ref({
-                address: {
-                    label: 'Address*',
-                    value: '',
-                    type: 'text',
-                },
-                city: {
-                    label: 'City*',
-                    value: '',
-                    type: 'text',
-                },
-                zipcode: {
-                    label: 'Zipcode*',
-                    value: '',
-                    type: 'text',
-                },
-                country: {
-                    label: 'Country*',
-                    value: '',
-                    type: 'select',
-                }
-            });
-
-            onMounted(() => {
-                showOptons();
-            });
-
-            const showOptons = async () => {
-                await sharedService.countries()
-                .then((response: any) => {
-                    orgBillingAddressForm.value.country['options'] = response;
-                }).catch((error) => {
-                    console.log(error);
-                });
-            };
-
-            const onValidateUser = async () => {
-                submitLoading.value = true;             
-                userForm.value['errors'] = {};
-                let formData = formTraits.setFormData(userForm.value) as any;
-                formData.form_type = 'user';
-                await registerService.validate(formData)
-                .then(() => {
-                    registrationStep.value = 'organization';
-                    submitLoading.value = false; 
-                }).catch((error) => {
-                    userForm.value['errors'] = error;
-                    submitLoading.value = false;
-                });
-            }
-
-            const onValidateOrganization = async () => {
-                const orgFormData = formTraits.setFormData(orgForm.value);
-                const orgBillingAddressFormData = formTraits.setFormData(orgBillingAddressForm.value);
-
-                const formData = {
-                    ...orgFormData,
-                    ...orgBillingAddressFormData,
-                } as any;
-
-                submitLoading.value = true;
-                orgForm.value['errors'] = {};
-                orgBillingAddressForm.value['errors'] = {};
-
-                formData.form_type = 'org';
-                await registerService.validate(formData)
-                .then(() => {
-                    submitLoading.value = false;
-                    registrationStep.value = 'complete';
-                }).catch((error) => {
-                    submitLoading.value = false;
-                    orgForm.value['errors'] = error;
-                    orgBillingAddressForm.value['errors'] = error;
-                });
-            }
-
-            const onSaveComplete = async () => {
-                submitLoading.value = true;
-                const userFormData = formTraits.setFormData(userForm.value);
-                const orgFormData = formTraits.setFormData(orgForm.value);
-                const orgBillingAddressFormData = formTraits.setFormData(orgBillingAddressForm.value);
-
-                const formData = {
-                    ...userFormData,
-                    ...orgFormData,
-                    ...orgBillingAddressFormData,
-                };
-
-                await registerService.store(formData)
-                .then((response: any) => {
-                    submitLoading.value = false;
-                    router.push({ name: 'login' });
-                }).catch((error) => {
-                    console.log(error);
-                    submitLoading.value = false;
-                });
-            };
-
-            const onBack = (type: string) => {
-                if (type === 'organization') registrationStep.value = 'organization';
-                if (type === 'user') registrationStep.value = 'user';
-                if (type === 'sign_in') router.push({ name: 'login' });
-            }
-
-            const updateUserForm = (value: any) => {
-                userForm.value[value.name].value = value.value;
-            };
-
-            const updateOrgForm = (value: any) => {
-                orgForm.value[value.name].value = value.value;
-            };
-
-            const updateOrgBillingAddressForm = (value: any) => {
-                orgBillingAddressForm.value[value.name].value = value.value;
-            };
-
-            const compUserForm = computed(() => userForm);
-            const compOrgForm = computed(() => orgForm);
-            const compOrgBillingAddressForm = computed(() => orgBillingAddressForm);
-
-            return {
-                compUserForm,
-                compOrgForm,
-                compOrgBillingAddressForm,
-                registrationStep,
-                submitLoading,
-                onValidateUser,
-                onValidateOrganization,
-                onSaveComplete,
-                onBack,
-                updateUserForm,
-                updateOrgForm,
-                updateOrgBillingAddressForm,
-            };
+        firstname: {
+            label: 'First Name*',
+            value: '',
+            type: 'text',
         },
-    })
+        lastname: {
+            label: 'Last Name*',
+            value: '',
+            type: 'text',
+        },
+        email: {
+            label: 'Email address*',
+            value: '',
+            type: 'email',
+        },
+        password: {
+            label: 'Password*',
+            value: '',
+            type: 'password',
+        },
+        password_confirmation: {
+            label: 'Confirm password*',
+            value: '',
+            type: 'password',
+        },
+    });
+    let orgForm = ref({
+        logo: {
+            label: 'Logo',
+            value: null,
+            type: 'file',
+        },
+        name: {
+            label: 'Name*',
+            value: '',
+            type: 'text'
+        },
+        orgEmail: {
+            label: 'Email*',
+            value: '',
+            type: 'email',
+        }
+    });
+    let billingAddressForm = ref({
+        country: {
+            label: 'Country*',
+            value: '',
+            type: 'select',
+        },
+        stateProvince: {
+            label: 'State / Province',
+            value: '',
+            type: 'text',
+        },
+        city: {
+            label: 'City*',
+            value: '',
+            type: 'text',
+        },
+        zipcode: {
+            label: 'Zipcode*',
+            value: '',
+            type: 'text',
+        },
+        address: {
+            label: 'Address*',
+            value: '',
+            type: 'text',
+        },
+    });
+
+    onMounted(() => {
+        showOptons();
+    });
+
+    const showOptons = async () => {
+        await sharedService.countries()
+        .then((response: any) => {
+            billingAddressForm.value.country['options'] = response;
+        }).catch((error) => {
+            console.log(error);
+        });
+    };
+
+    const onValidateUser = async () => {
+        submitLoading.value = true;             
+        userForm.value['errors'] = {};
+        let formData = formTraits.setFormData(userForm.value) as any;
+        formData.form_type = 'user';
+        await registerService.validate(formData)
+        .then(() => {
+            registrationStep.value = 'organization';
+            submitLoading.value = false; 
+        }).catch((error) => {
+            userForm.value['errors'] = error;
+            submitLoading.value = false;
+        });
+    }
+
+    const onValidateOrganization = async () => {
+        const orgFormData = formTraits.setFormData(orgForm.value);
+        const billingAddressFormData = formTraits.setFormData(billingAddressForm.value);
+
+        let formData = {
+            ...orgFormData,
+            ...billingAddressFormData,
+        } as any;
+        
+        if (type.value == 'personal') formData = { ...billingAddressFormData };
+
+        submitLoading.value = true;
+        orgForm.value['errors'] = {};
+        billingAddressForm.value['errors'] = {};
+
+        formData.type = type.value;
+        await registerService.validate(formData)
+        .then(() => {
+            submitLoading.value = false;
+            registrationStep.value = 'complete';
+        }).catch((error) => {
+            submitLoading.value = false;
+            orgForm.value['errors'] = error;
+            billingAddressForm.value['errors'] = error;
+        });
+    }
+
+    const onSaveComplete = async () => {
+        submitLoading.value = true;
+        const userFormData = formTraits.setFormData(userForm.value);
+        const orgFormData = formTraits.setFormData(orgForm.value);
+        const billingAddressFormData = formTraits.setFormData(billingAddressForm.value);
+
+        let formData = {
+            ...userFormData,
+            ...orgFormData,
+            ...billingAddressFormData,
+        } as any;
+
+        if (type.value == 'personal') {
+            formData = {
+                ...userFormData,
+                ...billingAddressFormData
+            };
+        }
+
+        formData.type = type.value;
+        await registerService.store(formData)
+        .then(() => {
+            submitLoading.value = false;
+            router.push({ name: 'login' });
+        }).catch((error) => {
+            console.log(error);
+            submitLoading.value = false;
+        });
+    };
+
+    const onBack = (type: string) => {
+        if (type === 'organization') registrationStep.value = 'organization';
+        if (type === 'user') registrationStep.value = 'user';
+        if (type === 'sign_in') router.push({ name: 'login' });
+    }
+
+    const onTypeChange = (value: string) => {
+        console.log(value);
+    };
+
+    const updateUserForm = (value: any) => {
+        userForm.value[value.name].value = value.value;
+    };
+
+    const updateOrgForm = (value: any) => {
+        orgForm.value[value.name].value = value.value;
+    };
+
+    const updateBillingAddressForm = (value: any) => {
+        billingAddressForm.value[value.name].value = value.value;
+    };
+
+    const compUserForm = computed(() => userForm);
+    const compOrgForm = computed(() => orgForm);
+    const compBillingAddressForm = computed(() => billingAddressForm);
 </script>

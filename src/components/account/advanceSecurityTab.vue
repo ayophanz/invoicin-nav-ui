@@ -12,10 +12,10 @@
                 <div v-else class="flex flex-col gap-y-2">
                     <Notice :notice="info" class="mt-5"></Notice>
                     <div v-if="disable2fa" class="mt-5 flex flex-col gap-x-5 items-center">
-                        <Form :submit="on2faDisable" submitText="Disable 2FA" :submitLoading="submitLoading" :form="compOtpForm" @onchange-form="updateOtpForm" class="w-[300px]"></Form>
+                        <Form :submit="on2faDisable" submitText="Revoke 2FA" :submitLoading="submitLoading" :form="compOtpForm" @onchange-form="updateOtpForm" class="w-[300px]"></Form>
                     </div>
                     <a href="#" @click="disable2faToggle()" class="text-sm text-red-700 hover:underline hover:text-red-600 text-center">
-                       {{ !disable2fa ? 'Deactivate 2FA' : 'Cancel' }}
+                       {{ !disable2fa ? 'Revoke 2FA' : 'Cancel' }}
                     </a>
                 </div>
             </div>

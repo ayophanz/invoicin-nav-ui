@@ -34,18 +34,18 @@
             value: '',
             type: 'text',
         },
-        email: {
-            label: 'Email address*',
-            value: '',
-            type: 'email',
-        },
+        // email: {
+        //     label: 'Email address*',
+        //     value: '',
+        //     type: 'email',
+        // },
     });
 
     onMounted(() => {
         userForm.value['image'].value = getMe.value.image;
         userForm.value['firstname'].value = getMe.value.first_name;
         userForm.value['lastname'].value = getMe.value.last_name;
-        userForm.value['email'].value = getMe.value.email;
+        // userForm.value['email'].value = getMe.value.email;
     });
 
     const updateUserForm = (value: {name: string, value: string}) => {
