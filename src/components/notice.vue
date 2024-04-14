@@ -54,4 +54,6 @@
       required: true,
     },
   });
+
+  console.log(props.notice);
 </script>

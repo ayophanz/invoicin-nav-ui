@@ -113,13 +113,13 @@
         <!-- Modal -->
         <ModalComponent :state="isOpen" :onClose="closeModal" :showClose="modalFor !== 'notice'">
             <!-- Services -->
-            <ServiceComponent v-show="modalFor === 'services'" :enabledServices="services"></ServiceComponent>
+            <ServiceComponent v-if="modalFor === 'services'" :enabledServices="services"></ServiceComponent>
             
             <!-- Notice  -->
-            <NoticeComponent v-if="notice.length > 0" v-show="modalFor === 'notice'" :notice="notice"></NoticeComponent>
+            <NoticeComponent v-if="modalFor === 'notice'" :notice="notice"></NoticeComponent>
             
             <!-- Account -->
-            <AccountComponent v-show="modalFor === 'account'"></AccountComponent>
+            <AccountComponent v-if="modalFor === 'account'"></AccountComponent>
         </ModalComponent>
 
     </div>
@@ -189,14 +189,15 @@
             notice.value = {
                 type: 'info',
                 title: 'User verification',
-                message:'The user verification is required before proceeding.',
+                message:`The user verification is required before proceeding, Please check your email (${getMe.value.email}).`
             }
             openModal('notice');
-        } else if (getMe.value.organization_email_verified_at === null) {
+            console.log('test');
+        } else if (getMe.value.organization_email_verified_at === null && getMe.value.organization_email) {
             notice.value = {
                 type: 'info',
                 title: 'Organization verification',
-                message: 'The organization verification is required before proceeding.'
+                message: `The organization verification is required before proceeding, Please check your email (${getMe.value.organization_email}).`
             };
             openModal('notice');
         }

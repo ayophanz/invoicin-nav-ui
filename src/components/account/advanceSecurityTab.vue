@@ -4,6 +4,18 @@
         <div>
             <p class="text-left">Two-Factor Authentication (2FA) works by adding an additional layer of security to your account. It requires an additional login credential - beyond just the username and password - to gain account access, and getting that second credential requires access to something that belongs to you.</p>
         </div>
+        <div class="flex gap-x-2 items-center justify-center">
+            <div>
+                <a target="_blank" href="https://apps.apple.com/us/app/google-authenticator/id388497605">
+                    <img :src="`${api}/storage/assets/ios_download_btn.png`" class="w-auto h-14"/>
+                </a>
+            </div>
+            <div>
+                <a target="_blank" href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en&gl=US">
+                    <img :src="`${api}/storage/assets/android_download_btn.png`" class="w-auto h-14"/>
+                </a>
+            </div>
+        </div>
         <div class="text-center my-5">
             <div class="mt-3">
                 <button v-if="!getMe.is2faEnable" @click="onGenerateSecret" :disabled="submitLoading" type="button" class="flex m-auto items-center text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
@@ -53,6 +65,7 @@
     import Spinner from '../spinner.vue';
     import { useToast } from 'vue-toastification';
 
+    const api = (import.meta as any).env.VITE_API_URL;
     const toast = useToast();
     const accountStore = useAccountStore();
     const { getMe } = storeToRefs(accountStore) as any;

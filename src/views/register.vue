@@ -30,11 +30,11 @@
                     id="type" 
                     name="type"
                     class="mt-1 appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none sm:text-sm">
-                    <option value="company">Company</option>
-                    <option value="personal">Personal</option>
+                    <option value="Company">Company</option>
+                    <option value="Personal">Personal</option>
                 </select>
             </div>
-            <div v-if="type == 'company'" class="mt-5">
+            <div v-if="type == 'Company'" class="mt-5">
                 <div class="mb-3">
                     <h2 class="text-xl font-medium leading-6 text-gray-900">Organization</h2>
                 </div>
@@ -87,7 +87,7 @@
     const router = useRouter();
     const submitLoading = ref(false);
     const registrationStep = ref('user');
-    const type = ref('company');
+    const type = ref('Company');
     let userForm = ref({
         image: {
             label: 'Image',
@@ -114,7 +114,7 @@
             value: '',
             type: 'password',
         },
-        password_confirmation: {
+        passwordConfirmation: {
             label: 'Confirm password*',
             value: '',
             type: 'password',
@@ -126,7 +126,7 @@
             value: null,
             type: 'file',
         },
-        name: {
+        orgName: {
             label: 'Name*',
             value: '',
             type: 'text'
@@ -202,8 +202,13 @@
             ...billingAddressFormData,
         } as any;
         
-        if (type.value == 'personal') formData = { ...billingAddressFormData };
+        formData.form_type = 'org';
+        if (type.value == 'Personal') {
+            formData = billingAddressFormData;
+            formData.form_type = 'address';
+        }
 
+        console.log(billingAddressForm.value);
         submitLoading.value = true;
         orgForm.value['errors'] = {};
         billingAddressForm.value['errors'] = {};
@@ -232,7 +237,7 @@
             ...billingAddressFormData,
         } as any;
 
-        if (type.value == 'personal') {
+        if (type.value == 'Personal') {
             formData = {
                 ...userFormData,
                 ...billingAddressFormData
@@ -256,8 +261,8 @@
         if (type === 'sign_in') router.push({ name: 'login' });
     }
 
-    const onTypeChange = (value: string) => {
-        console.log(value);
+    const onTypeChange = () => {
+        billingAddressForm.value['errors'] = {};
     };
 
     const updateUserForm = (value: any) => {
