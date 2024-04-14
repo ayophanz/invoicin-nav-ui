@@ -1,5 +1,6 @@
 <template>
     <div v-if="step2fa == 1">
+        <Notice v-if="getMe.is2faEnable" :notice="info" class="mt-5"></Notice>
         <h4 class="text-center my-5 text-2xl">Set up Google Authenticator</h4>
         <div>
             <p class="text-left">Two-Factor Authentication (2FA) works by adding an additional layer of security to your account. It requires an additional login credential - beyond just the username and password - to gain account access, and getting that second credential requires access to something that belongs to you.</p>
@@ -22,7 +23,6 @@
                     <Spinner v-if="submitLoading"></Spinner> Generate Secret Key to Enable 2FA
                 </button>
                 <div v-else class="flex flex-col gap-y-2">
-                    <Notice :notice="info" class="mt-5"></Notice>
                     <div v-if="disable2fa" class="mt-5 flex flex-col gap-x-5 items-center">
                         <Form :submit="on2faDisable" submitText="Revoke 2FA" :submitLoading="submitLoading" :form="compOtpForm" @onchange-form="updateOtpForm" class="w-[300px]"></Form>
                     </div>
@@ -73,7 +73,7 @@
     const info = {
         type: 'success', 
         title: '2Fa was activated.', 
-        message: 'Every time you logged in, an additional authentication was needed.'
+        message: 'Every time you sign in an additional authentication was required.'
     };
 
     const qrImage    = ref('');
