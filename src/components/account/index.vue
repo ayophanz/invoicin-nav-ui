@@ -18,34 +18,43 @@
         </div>
         <ProfileTab v-if="isProfileTab()"></ProfileTab>
         <PasswordTab v-if="isPasswordTab()"></PasswordTab>
-        <advanceSecurityTab v-if="isAdvanceSecurityTab()"></advanceSecurityTab>
+        <AdvanceSecurityTab v-if="isAdvanceSecurityTab()"></AdvanceSecurityTab>
+        <AddressTab v-if="isAddressTab()"></AddressTab>
     </div>
 </template>
 <script setup lang="ts">
     import { ref } from 'vue';
     import ProfileTab from './profileTab.vue';
     import PasswordTab from './passwordTab.vue';
-    import advanceSecurityTab from './advanceSecurityTab.vue';
-    import { KeyIcon, UserIcon, ShieldCheckIcon } from '@heroicons/vue/solid';
+    import AdvanceSecurityTab from './advanceSecurityTab.vue';
+    import AddressTab from './addressTab.vue';
+    import { KeyIcon, UserIcon, ShieldCheckIcon, LocationMarkerIcon } from '@heroicons/vue/solid';
 
     const tabs = ref([
         { name: 'Profile', href: '#', icon: UserIcon, current: true },
+        { name: 'Address', href: '#', icon: LocationMarkerIcon, current: false },
         { name: 'Password', href: '#', icon: KeyIcon, current: false },
         { name: 'Advance security', href: '#', icon: ShieldCheckIcon, current: false },
     ]);
 
     const isProfileTab = () => {
-        const key = tabs.value.findIndex((x: { name: string; }) => x.name === 'Profile');
-        return key >= 0 ? tabs.value[key].current : false;
+        return mapTab('Profile');
     };
 
     const isPasswordTab = () => {
-        const key = tabs.value.findIndex((x: { name: string; }) => x.name === 'Password');
-        return key >= 0 ? tabs.value[key].current : false;
+        return mapTab('Password');
+    };
+
+    const isAddressTab = () => {
+        return mapTab('Address');
     };
 
     const isAdvanceSecurityTab = () => {
-        const key = tabs.value.findIndex((x: { name: string; }) => x.name === 'Advance security');
+        return mapTab('Advance security');
+    };
+
+    const mapTab = (name: string) => {
+        const key = tabs.value.findIndex((x: { name: string; }) => x.name === name);
         return key >= 0 ? tabs.value[key].current : false;
     };
 

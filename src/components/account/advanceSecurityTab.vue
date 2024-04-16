@@ -120,7 +120,7 @@
         .then(async () => {
             await accountService.me();
             submitLoading.value = false;
-            step2fa.value = 2;
+            step2fa.value = 1;
             toast.success('Successfully Save!', {
                 timeout: 2000
             });

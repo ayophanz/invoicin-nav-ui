@@ -11,6 +11,7 @@ import authCheck from './authCheck';
 import forgotPassword from './forgotPassword';
 import updateProfile from './updateProfile';
 import updatePassword from './updatePassword';
+import updateAddress from './updateAddress';
 
 export default {
     login,
@@ -25,5 +26,6 @@ export default {
     authCheck,
     forgotPassword,
     updateProfile,
-    updatePassword
+    updatePassword,
+    updateAddress,
 }

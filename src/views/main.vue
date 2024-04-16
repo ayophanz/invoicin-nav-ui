@@ -192,8 +192,7 @@
                 message:`The user verification is required before proceeding, Please check your email (${getMe.value.email}).`
             }
             openModal('notice');
-            console.log('test');
-        } else if (getMe.value.organization_email_verified_at === null && getMe.value.organization_email) {
+        } else if (getMe.value.organization_email_verified_at === null && getMe.value.type == 'company') {
             notice.value = {
                 type: 'info',
                 title: 'Organization verification',
