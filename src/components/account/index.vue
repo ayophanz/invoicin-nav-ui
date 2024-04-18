@@ -23,12 +23,17 @@
     </div>
 </template>
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, onMounted } from 'vue';
     import ProfileTab from './profileTab.vue';
     import PasswordTab from './passwordTab.vue';
     import AdvanceSecurityTab from './advanceSecurityTab.vue';
     import AddressTab from './addressTab.vue';
     import { KeyIcon, UserIcon, ShieldCheckIcon, LocationMarkerIcon } from '@heroicons/vue/solid';
+    import { storeToRefs } from 'pinia';
+    import { useAccountStore } from '../../stores/account';
+
+    const accountStore = useAccountStore();
+    const { getMe } = storeToRefs(accountStore);
 
     const tabs = ref([
         { name: 'Profile', href: '#', icon: UserIcon, current: true },
@@ -36,6 +41,17 @@
         { name: 'Password', href: '#', icon: KeyIcon, current: false },
         { name: 'Advance security', href: '#', icon: ShieldCheckIcon, current: false },
     ]);
+
+    onMounted(() => {
+        removeAddress(); 
+    });
+
+    const removeAddress = () => {
+        if (getMe.value.type === 'Company') {
+            const key = tabs.value.findIndex((x: { name: string; }) => x.name === 'Address');
+            if (key >= 0 ) tabs.value.splice(key, 1);
+        }
+    };
 
     const isProfileTab = () => {
         return mapTab('Profile');

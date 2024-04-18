@@ -144,6 +144,8 @@
         ShoppingCartIcon,
         DocumentReportIcon,
         LoginIcon,
+        DesktopComputerIcon,
+        UserGroupIcon
     } from '@heroicons/vue/outline';
     import ServiceComponent from '../components/service.vue';
     import ModalComponent from '../components/modal.vue';
@@ -157,11 +159,13 @@
     const { getMe } = storeToRefs(accountStore) as any;
     
     const servicesTemp = [
-        { name: 'Customer', href: '#', classes: 'text-pink-600 hover:bg-pink-600', icon: UsersIcon, enabled: true },
-        { name: 'Product', href: '#', classes: 'text-purple-600 hover:bg-purple-600', icon: ArchiveIcon, enabled: false },
-        { name: 'Order', href: '#',  classes: 'text-yellow-500 hover:bg-yellow-500', icon: ShoppingCartIcon, enabled: false },
-        { name: 'Invoice', href: '#', classes: 'text-green-500 hover:bg-green-500', icon: ClipboardCheckIcon, enabled: true },
-        { name: 'Inventory', href: '#', classes: 'text-indigo-500 hover:bg-indigo-500', icon: FolderOpenIcon, enabled: false },
+        { name: 'Dashboard', href: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: DesktopComputerIcon, enabled: true },
+        { name: 'Organization', href: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: UserGroupIcon, enabled: true },
+        { name: 'Customer', href: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: UsersIcon, enabled: true },
+        { name: 'Product', href: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: ArchiveIcon, enabled: false },
+        { name: 'Order', href: '#',  classes: 'text-gray-700 hover:bg-gray-700', icon: ShoppingCartIcon, enabled: false },
+        { name: 'Invoice', href: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: ClipboardCheckIcon, enabled: false },
+        { name: 'Inventory', href: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: FolderOpenIcon, enabled: false },
         { name: 'Report', href: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: DocumentReportIcon, enabled: false },
     ];
 
@@ -185,6 +189,11 @@
     onMounted(async () => {
         console.log(getMe.value);
         await nextTick(() => { domLoaded.value = true; });
+        noticeVerification();
+        checkingNewPassword();
+    });
+
+    const noticeVerification = () => {
         if (getMe.value.email_verified_at === null) {
             notice.value = {
                 type: 'info',
@@ -192,7 +201,7 @@
                 message:`The user verification is required before proceeding, Please check your email (${getMe.value.email}).`
             }
             openModal('notice');
-        } else if (getMe.value.organization_email_verified_at === null && getMe.value.type == 'company') {
+        } else if (getMe.value.organization_email_verified_at === null && getMe.value.type == 'Company') {
             notice.value = {
                 type: 'info',
                 title: 'Organization verification',
@@ -200,8 +209,7 @@
             };
             openModal('notice');
         }
-        checkingNewPassword();
-    });
+    };
 
     watch(() => getMe.value.isNewPassword, (n) => {
         if (newPassDetect.value) {
