@@ -1,5 +1,5 @@
 <template>
-    <div class="flex" v-if="domLoaded">
+    <div class="flex w-full" v-if="domLoaded">
         <TransitionRoot as="template" :show="mobileMenuOpen">
         <Dialog as="div" class="relative z-40 lg:hidden" @close="mobileMenuOpen = false">
             <TransitionChild as="template" enter="transition-opacity ease-linear duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="transition-opacity ease-linear duration-300" leave-from="opacity-100" leave-to="opacity-0">
@@ -54,9 +54,9 @@
         </TransitionRoot>
     
         <!-- Static sidebar for desktop -->
-        <div class="hidden lg:flex lg:flex-shrink-0">
-            <div class="flex flex-col w-20">
-                <div class="flex-1 flex flex-col min-h-0 overflow-y-auto bg-white border-r border-gray-200 scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-gray-200 scrollbar-track-white">
+        <div class="hidden lg:flex lg:flex-shrink-0 w-full">
+            <div class="flex flex-col w-full">
+                <div class="flex-1 flex flex-col min-h-0 overflow-y-auto bg-white scrollbar-track-white">
                 <div class="flex-1">
                     <div class="py-4 flex items-center justify-center border-b border-gray-200">
                         <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark.svg?color=blue" alt="Workflow" />
@@ -72,7 +72,7 @@
                             leave-from="opacity-100 rotate-0 scale-100"
                             leave-to="opacity-0 scale-95">
                             <div class="w-full m-auto grid justify-center" :class="item.name == 'More' ? '!mt-20 border-b border-gray-200 pb-3' : ''">
-                                <a :href="item.href" @click="navAction(item)" v-tooltip="item.name" :class="item.classes" class="flex items-center rounded-full p-2 hover:text-white transition-all">
+                                <a href="javascript:;" @click="navAction(item)" v-tooltip="item.name" :class="item.classes" class="flex items-center rounded-full p-2 hover:text-white transition-all">
                                     <component :is="item.icon" class="h-6 w-6" aria-hidden="true" />
                                     <span class="sr-only">{{ item.name }}</span>
                                 </a>
@@ -154,26 +154,26 @@
     import accountService from '../services/account';
     import { useAccountStore } from '../stores/account';
     import { storeToRefs } from 'pinia';
-      
+
     const accountStore = useAccountStore();
     const { getMe } = storeToRefs(accountStore) as any;
     
     const servicesTemp = [
-        { name: 'Dashboard', href: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: DesktopComputerIcon, enabled: true },
-        { name: 'Organization', href: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: UserGroupIcon, enabled: true },
-        { name: 'Customer', href: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: UsersIcon, enabled: true },
-        { name: 'Product', href: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: ArchiveIcon, enabled: false },
+        { name: 'Dashboard', to: '/', classes: 'text-gray-700 hover:bg-gray-700', icon: DesktopComputerIcon, enabled: true },
+        { name: 'Organization', to: '/organization', classes: 'text-gray-700 hover:bg-gray-700', icon: UserGroupIcon, enabled: true },
+        { name: 'Customer', to: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: UsersIcon, enabled: true },
+        { name: 'Product', to: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: ArchiveIcon, enabled: false },
         { name: 'Order', href: '#',  classes: 'text-gray-700 hover:bg-gray-700', icon: ShoppingCartIcon, enabled: false },
-        { name: 'Invoice', href: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: ClipboardCheckIcon, enabled: false },
-        { name: 'Inventory', href: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: FolderOpenIcon, enabled: false },
-        { name: 'Report', href: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: DocumentReportIcon, enabled: false },
+        { name: 'Invoice', to: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: ClipboardCheckIcon, enabled: false },
+        { name: 'Inventory', to: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: FolderOpenIcon, enabled: false },
+        { name: 'Report', to: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: DocumentReportIcon, enabled: false },
     ];
 
     const navigationTemp = [
-        { name: 'More', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: PlusIcon, enabled: true  },
-        { name: 'Setting', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: AdjustmentsIcon, enabled: true },
-        { name: 'Account', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: UserIcon, enabled: true  },
-        { name: 'Logout', href: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: LoginIcon, enabled: true },
+        { name: 'More', to: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: PlusIcon, enabled: true  },
+        { name: 'Setting', to: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: AdjustmentsIcon, enabled: true },
+        { name: 'Account', to: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: UserIcon, enabled: true  },
+        { name: 'Logout', to: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: LoginIcon, enabled: true },
     ];
 
     const navigation     = ref([...servicesTemp, ...navigationTemp]);
@@ -238,13 +238,15 @@
         }
     };
 
-    const navAction = (item: { name: string; }) => {
+    const navAction = (item: { name: string, to: string }) => {
         if (item.name === 'More') {
             openModal('services');
         } else if (item.name === 'Logout') {
             onLogout();
         } else if (item.name === 'Account') {
             openModal('account');
+        } else {
+            window.history.pushState(item.name.toLowerCase(), item.name, item.to);
         }
     };
 
