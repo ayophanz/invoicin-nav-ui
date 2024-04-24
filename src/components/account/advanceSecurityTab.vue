@@ -57,12 +57,12 @@
 <script setup lang="ts">
     import { ref, computed } from 'vue';
     import accountService from '../../services/account';
-    import Form from '../form/form.vue';
-    import Notice from '../notice.vue';
+    import Form from '../form/Form.vue';
+    import Notice from '../Notice.vue';
     import formTraits from '../../traits/formTraits';
     import { useAccountStore } from '../../stores/account';
     import { storeToRefs } from 'pinia';
-    import Spinner from '../spinner.vue';
+    import Spinner from '../Spinner.vue';
     import { useToast } from 'vue-toastification';
 
     const api = (import.meta as any).env.VITE_API_URL;

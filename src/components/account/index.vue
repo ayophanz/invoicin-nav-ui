@@ -1,12 +1,12 @@
 <template>
     <div>
-        <div class="sm:hidden">
+        <div class="block lg:hidden">
             <label for="tabs" class="sr-only">Select a tab</label>
             <select id="tabs" name="tabs" @change="changeTab($event?.target?.selectedIndex)" class="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
                 <option v-for="(tab, key) in tabs" :key="key" :selected="tab.current">{{ tab.name }}</option>
             </select>
         </div>
-        <div class="hidden sm:block">
+        <div class="hidden lg:block">
             <div class="border-b border-gray-200">
                 <nav class="-mb-px flex space-x-8" aria-label="Tabs">
                 <a v-for="(tab, key) in tabs" :key="key" @click="changeTab(key)" href="javascript:;" :class="[tab.current ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'group inline-flex items-center border-b-2 py-4 px-1 text-sm font-medium']" :aria-current="tab.current ? 'page' : undefined">
@@ -24,10 +24,10 @@
 </template>
 <script setup lang="ts">
     import { ref, onMounted } from 'vue';
-    import ProfileTab from './profileTab.vue';
-    import PasswordTab from './passwordTab.vue';
-    import AdvanceSecurityTab from './advanceSecurityTab.vue';
-    import AddressTab from './addressTab.vue';
+    import ProfileTab from './ProfileTab.vue';
+    import PasswordTab from './PasswordTab.vue';
+    import AdvanceSecurityTab from './AdvanceSecurityTab.vue';
+    import AddressTab from './AddressTab.vue';
     import { KeyIcon, UserIcon, ShieldCheckIcon, LocationMarkerIcon } from '@heroicons/vue/solid';
     import { storeToRefs } from 'pinia';
     import { useAccountStore } from '../../stores/account';

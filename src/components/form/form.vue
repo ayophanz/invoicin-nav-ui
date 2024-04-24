@@ -37,10 +37,10 @@
 
 <script setup lang="ts">
     import { ref, toRef, defineEmits, onMounted, onUpdated, computed } from 'vue';
-    import Input from './input.vue';
-    import File from './file.vue';
-    import Select from './select.vue';
-    import Spinner from '../spinner.vue';
+    import Input from './Input.vue';
+    import File from './File.vue';
+    import Select from './Select.vue';
+    import Spinner from '../Spinner.vue';
 
     const emit = defineEmits(['onchangeForm']);
 

@@ -57,55 +57,55 @@
         <div class="lg:flex lg:flex-shrink-0 w-full">
             <div class="flex flex-col w-full">
                 <div class="flex-1 flex flex-col min-h-0 overflow-y-auto bg-white scrollbar-track-white">
-                <div class="flex-1">
-                    <div class="py-4 flex items-center justify-center border-b border-gray-200">
-                        <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark.svg?color=blue" alt="Workflow" />
+                    <div class="flex-1">
+                        <div class="py-4 flex items-center justify-center border-b border-gray-200">
+                            <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark.svg?color=blue" alt="Workflow" />
+                        </div>
+                        <nav aria-label="Sidebar" class="py-6 flex flex-col items-center space-y-3">
+                            <template v-for="item in navigation" :key="item.name">
+                                <TransitionRoot
+                                :show="item.enabled"
+                                enter="transform transition duration-[400ms]"
+                                enter-from="opacity-0 rotate-[-120deg] scale-50"
+                                enter-to="opacity-100 rotate-0 scale-100"
+                                leave="transform duration-200 transition ease-in-out"
+                                leave-from="opacity-100 rotate-0 scale-100"
+                                leave-to="opacity-0 scale-95">
+                                <div class="w-full m-auto grid justify-center" :class="item.name == 'More' ? '!mt-20 border-b border-gray-200 pb-3' : ''">
+                                    <a href="javascript:;" @click="navAction(item)" v-tooltip="item.name" :class="item.active == true ? 'bg-gray-700 text-white' : 'text-gray-700'" class="hover:bg-gray-700 flex items-center rounded-full p-2 hover:text-white transition-all">
+                                        <component :is="item.icon" class="h-6 w-6" aria-hidden="true" />
+                                        <span class="sr-only">{{ item.name }}</span>
+                                    </a>
+                                </div>
+                                </TransitionRoot>
+                            </template>
+                            <a href="#" class="flex-shrink-0 w-full cursor-default">
+                                <img class="block mx-auto h-10 w-10 object-cover rounded-full" :src="getMe.image[0]" alt="" />
+                                <div class="sr-only">
+                                <p>
+                                    {{ `${getMe.first_name} ${getMe.last_name}` }}
+                                </p>
+                                </div>
+                            </a>
+                        </nav>
                     </div>
-                    <nav aria-label="Sidebar" class="py-6 flex flex-col items-center space-y-3">
-                        <template v-for="item in navigation" :key="item.name">
-                            <TransitionRoot
-                            :show="item.enabled"
-                            enter="transform transition duration-[400ms]"
-                            enter-from="opacity-0 rotate-[-120deg] scale-50"
-                            enter-to="opacity-100 rotate-0 scale-100"
-                            leave="transform duration-200 transition ease-in-out"
-                            leave-from="opacity-100 rotate-0 scale-100"
-                            leave-to="opacity-0 scale-95">
-                            <div class="w-full m-auto grid justify-center" :class="item.name == 'More' ? '!mt-20 border-b border-gray-200 pb-3' : ''">
-                                <a href="javascript:;" @click="navAction(item)" v-tooltip="item.name" :class="item.active == true ? 'bg-gray-700 text-white' : ''" class="text-gray-700 hover:bg-gray-700 flex items-center rounded-full p-2 hover:text-white transition-all">
-                                    <component :is="item.icon" class="h-6 w-6" aria-hidden="true" />
-                                    <span class="sr-only">{{ item.name }}</span>
-                                </a>
-                            </div>
-                            </TransitionRoot>
-                        </template>
-                        <a href="#" class="flex-shrink-0 w-full cursor-default">
-                            <img class="block mx-auto h-10 w-10 object-cover rounded-full" :src="getMe.image[0]" alt="" />
-                            <div class="sr-only">
-                            <p>
-                                {{ `${getMe.first_name} ${getMe.last_name}` }}
-                            </p>
-                            </div>
-                        </a>
-                    </nav>
-                </div>
                 </div>
             </div>
         </div>
     
         <div class="flex-1 min-w-0 flex flex-col overflow-hidden">
         <!-- Mobile top navigation -->
-        <div class="lg:hidden">
-            <div class="bg-white py-2 px-4 flex items-center justify-between sm:px-6 lg:px-8 border-b border-gray-200">
-                <div>
-                    <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark.svg?color=black" alt="Workflow" />
-                </div>
-                <div>
-                    <button type="button" class="-mr-3 h-12 w-12 inline-flex items-center justify-center bg-gray-400 rounded-md text-white hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" @click="mobileMenuOpen = true">
-                    <span class="sr-only">Open sidebar</span>
-                    <MenuIcon class="h-6 w-6" aria-hidden="true" />
-                    </button>
-                </div>
+            <div class="lg:hidden">
+                <div class="bg-white py-2 px-4 flex items-center justify-between sm:px-6 lg:px-8 border-b border-gray-200">
+                    <div>
+                        <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark.svg?color=black" alt="Workflow" />
+                    </div>
+                    <div>
+                        <button type="button" class="-mr-3 h-12 w-12 inline-flex items-center justify-center bg-gray-400 rounded-md text-white hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" @click="mobileMenuOpen = true">
+                        <span class="sr-only">Open sidebar</span>
+                        <MenuIcon class="h-6 w-6" aria-hidden="true" />
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -147,10 +147,10 @@
         DesktopComputerIcon,
         UserGroupIcon
     } from '@heroicons/vue/outline';
-    import ServiceComponent from '../components/service.vue';
-    import ModalComponent from '../components/modal.vue';
-    import NoticeComponent from '../components/notice.vue';
-    import AccountComponent from '../components/account/index.vue';
+    import ServiceComponent from '../components/Service.vue';
+    import ModalComponent from '../components/Modal.vue';
+    import NoticeComponent from '../components/Notice.vue';
+    import AccountComponent from '../components/account/Index.vue';
     import accountService from '../services/account';
     import { useAccountStore } from '../stores/account';
     import { storeToRefs } from 'pinia';
@@ -159,7 +159,7 @@
     const { getMe } = storeToRefs(accountStore) as any;
     
     const servicesTemp = [
-        { name: 'Dashboard', to: 'dashboard', icon: DesktopComputerIcon, enabled: true, active: false },
+        { name: 'Dashboard', to: '/', icon: DesktopComputerIcon, enabled: true, active: false },
         { name: 'Organization', to: 'organization', icon: UserGroupIcon, enabled: true, active: false },
         { name: 'Customer', to: 'customer', icon: UsersIcon, enabled: true, active: false },
         { name: 'Product', to: 'product', icon: ArchiveIcon, enabled: true, active: false },
@@ -260,8 +260,7 @@
         });
         const key = navigation.value.findIndex((x: { to: string; }) => x.to === location.pathname.split('/')[1]);
         if (key >= 0) navigation.value[key].active = true;
-        console.log(navigation.value);
-        console.log(location.pathname.split('/')[1]);
+        else navigation.value[0].active = true;
     };
 
     const openModal = (type: string) => {

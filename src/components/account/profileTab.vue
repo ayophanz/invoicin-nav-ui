@@ -5,12 +5,12 @@
     <Form :submit="onProfileSave" :submitLoading="submitLoading" :form="compUserForm" @onchange-form="updateUserForm"></Form>
 </template>
 <script setup lang="ts">
-    import Form from '../form/form.vue';
+    import Form from '../form/Form.vue';
     import { ref, computed, onMounted } from 'vue';
-    import { useAccountStore } from '../../stores/account';
+    import { useAccountStore } from '../../stores/account.js';
     import { useToast } from "vue-toastification";
     import formTraits from '../../traits/formTraits.js';
-    import accountService from '../../services/account';
+    import accountService from '../../services/account/index.js';
     import { storeToRefs } from 'pinia';
 
     const toast = useToast();

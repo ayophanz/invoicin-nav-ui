@@ -16,8 +16,8 @@
 <script setup lang="ts">
     import { ref, computed } from 'vue';
     import accountService from '../services/account';
-    import ModalComponent from '../components/modal.vue';
-    import Form from '../components/form/form.vue';
+    import ModalComponent from '../components/Modal.vue';
+    import Form from '../components/form/Form.vue';
     import { useAccountStore } from '../stores/account';
     import { useRouter } from 'vue-router';
     import formTraits from '../traits/formTraits';

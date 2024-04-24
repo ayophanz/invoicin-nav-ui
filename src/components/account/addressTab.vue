@@ -26,7 +26,7 @@
     import { ref, onMounted, computed} from 'vue';
     import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
     import { MinusIcon, PlusIcon } from '@heroicons/vue/outline';
-    import Form from '../form/form.vue';
+    import Form from '../form/Form.vue';
     import sharedService from '../../services/shared';
     import { storeToRefs } from 'pinia';
     import { useAccountStore } from '../../stores/account';

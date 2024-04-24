@@ -33,7 +33,7 @@
      /** Imports */
     import { ref, defineComponent } from 'vue';
     import accountService from '../services/account';
-    import ModalComponent from '../components/modal.vue';
+    import ModalComponent from '../components/Modal.vue';
     import { useRouter } from 'vue-router';
 
      /** Process */

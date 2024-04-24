@@ -29,7 +29,7 @@
      /** Imports */
     import { defineComponent } from 'vue';
     import { ExclamationIcon } from '@heroicons/vue/outline';
-    import ModalComponent from '../components/modal.vue';
+    import ModalComponent from '../components/Modal.vue';
     import accountService from '../services/account';
 
      /** Process */

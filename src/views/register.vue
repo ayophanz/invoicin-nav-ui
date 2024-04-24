@@ -76,11 +76,11 @@
 
 <script setup lang="ts">
     import { ref, onMounted, computed } from 'vue';
-    import Modal from '../components/modal.vue';
-    import Form from '../components/form/form.vue';
-    import Spinner from '../components/spinner.vue';
-    import registerService from '../services/register';
-    import sharedService from '../services/shared';
+    import Modal from '../components/Modal.vue';
+    import Form from '../components/form/Form.vue';
+    import Spinner from '../components/Spinner.vue';
+    import registerService from '../services/register/index.js';
+    import sharedService from '../services/shared/index.js';
     import formTraits from '../traits/formTraits.js';
     import { useRouter } from 'vue-router';
 

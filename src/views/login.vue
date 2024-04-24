@@ -54,9 +54,9 @@
 </template>
 <script setup lang="ts">
     import { ref, computed } from 'vue';
-    import ModalComponent from '../components/modal.vue';
-    import Spinner from '../components/spinner.vue';
-    import Form from '../components/form/form.vue';
+    import ModalComponent from '../components/Modal.vue';
+    import Spinner from '../components/Spinner.vue';
+    import Form from '../components/form/Form.vue';
     import accountService from '../services/account';
     import { useRouter } from 'vue-router';
     import { useAccountStore } from '../stores/account';

@@ -1,21 +1,24 @@
 
 import { createRouter, createWebHistory } from 'vue-router';
 import middleware from './middleware';
-import main from '../views/main.vue';
-import login from '../views/login.vue';
-import sessionExpired from '../views/sessionExpired.vue';
-import twofa from '../views/2fa.vue';
-import forgotPassword from '../views/forgotPassword.vue';
-import register from '../views/register.vue';
+import Main from '../views/Main.vue';
+import Login from '../views/Login.vue';
+import SessionExpired from '../views/SessionExpired.vue';
+import TwoFA from '../views/TwoFA.vue';
+import ForgotPassword from '../views/ForgotPassword.vue';
+import Register from '../views/Register.vue';
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
       {
         path: '/',
-        alias: ['/organization'],
+        alias: [
+          '/organization',
+          '/customer',
+        ],
         name: 'main',
-        component: main,
+        component: Main,
         meta: { 
           auth: true 
         }
@@ -23,7 +26,7 @@ const router = createRouter({
       {
         path: '/login',
         name: 'login',
-        component: login,
+        component: Login,
         meta: { 
           auth: false 
         }
@@ -31,7 +34,7 @@ const router = createRouter({
       {
         path: '/session-expired',
         name: 'sessionExpired',
-        component: sessionExpired,
+        component: SessionExpired,
         meta: { 
           auth: false
         }
@@ -39,7 +42,7 @@ const router = createRouter({
       {
         path: '/2fa',
         name: 'twofa',
-        component: twofa,
+        component: TwoFA,
         meta: { 
           auth: false
         }
@@ -47,7 +50,7 @@ const router = createRouter({
       {
         path: '/forgot-password',
         name: 'forgotPassword',
-        component: forgotPassword,
+        component: ForgotPassword,
         meta: { 
           auth: true
         }
@@ -55,7 +58,7 @@ const router = createRouter({
       {
         path: '/register',
         name: 'register', 
-        component: register,
+        component: Register,
         meta: { 
           auth: false
         }
