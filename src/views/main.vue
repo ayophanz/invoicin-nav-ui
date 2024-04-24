@@ -162,11 +162,11 @@
         { name: 'Dashboard', to: '/', classes: 'text-gray-700 hover:bg-gray-700', icon: DesktopComputerIcon, enabled: true },
         { name: 'Organization', to: '/organization', classes: 'text-gray-700 hover:bg-gray-700', icon: UserGroupIcon, enabled: true },
         { name: 'Customer', to: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: UsersIcon, enabled: true },
-        { name: 'Product', to: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: ArchiveIcon, enabled: false },
-        { name: 'Order', href: '#',  classes: 'text-gray-700 hover:bg-gray-700', icon: ShoppingCartIcon, enabled: false },
-        { name: 'Invoice', to: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: ClipboardCheckIcon, enabled: false },
-        { name: 'Inventory', to: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: FolderOpenIcon, enabled: false },
-        { name: 'Report', to: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: DocumentReportIcon, enabled: false },
+        { name: 'Product', to: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: ArchiveIcon, enabled: true },
+        { name: 'Order', href: '#',  classes: 'text-gray-700 hover:bg-gray-700', icon: ShoppingCartIcon, enabled: true },
+        { name: 'Invoice', to: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: ClipboardCheckIcon, enabled: true },
+        { name: 'Inventory', to: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: FolderOpenIcon, enabled: true },
+        { name: 'Report', to: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: DocumentReportIcon, enabled: true },
     ];
 
     const navigationTemp = [
