@@ -24,7 +24,7 @@
                     <nav aria-label="Sidebar" class="mt-5">
                     <div v-for="item in navigation" :key="item.name" class="px-2 space-y-1" :class="item.name == 'More' ? '!mt-20 border-b border-gray-200 pb-3' : ''">
                         <router-link v-if="item.enabled" :to="item.href" @click="navAction(item)" class="group p-2 rounded-md flex items-center text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900">
-                            <component :is="item.icon" :class="item.classes" class="mr-4 h-6 w-6" aria-hidden="true" />
+                            <component :is="item.icon" class="text-gray-700 hover:bg-gray-700 mr-4 h-6 w-6" aria-hidden="true" />
                             {{ item.name }}
                         </router-link>
                     </div>
@@ -72,7 +72,7 @@
                             leave-from="opacity-100 rotate-0 scale-100"
                             leave-to="opacity-0 scale-95">
                             <div class="w-full m-auto grid justify-center" :class="item.name == 'More' ? '!mt-20 border-b border-gray-200 pb-3' : ''">
-                                <a href="javascript:;" @click="navAction(item)" v-tooltip="item.name" :class="item.classes" class="flex items-center rounded-full p-2 hover:text-white transition-all">
+                                <a href="javascript:;" @click="navAction(item)" v-tooltip="item.name" :class="item.active == true ? 'bg-gray-700 text-white' : ''" class="text-gray-700 hover:bg-gray-700 flex items-center rounded-full p-2 hover:text-white transition-all">
                                     <component :is="item.icon" class="h-6 w-6" aria-hidden="true" />
                                     <span class="sr-only">{{ item.name }}</span>
                                 </a>
@@ -159,24 +159,24 @@
     const { getMe } = storeToRefs(accountStore) as any;
     
     const servicesTemp = [
-        { name: 'Dashboard', to: '/', classes: 'text-gray-700 hover:bg-gray-700', icon: DesktopComputerIcon, enabled: true },
-        { name: 'Organization', to: '/organization', classes: 'text-gray-700 hover:bg-gray-700', icon: UserGroupIcon, enabled: true },
-        { name: 'Customer', to: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: UsersIcon, enabled: true },
-        { name: 'Product', to: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: ArchiveIcon, enabled: true },
-        { name: 'Order', href: '#',  classes: 'text-gray-700 hover:bg-gray-700', icon: ShoppingCartIcon, enabled: true },
-        { name: 'Invoice', to: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: ClipboardCheckIcon, enabled: true },
-        { name: 'Inventory', to: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: FolderOpenIcon, enabled: true },
-        { name: 'Report', to: '#', classes: 'text-gray-700 hover:bg-gray-700', icon: DocumentReportIcon, enabled: true },
+        { name: 'Dashboard', to: 'dashboard', icon: DesktopComputerIcon, enabled: true, active: false },
+        { name: 'Organization', to: 'organization', icon: UserGroupIcon, enabled: true, active: false },
+        { name: 'Customer', to: 'customer', icon: UsersIcon, enabled: true, active: false },
+        { name: 'Product', to: 'product', icon: ArchiveIcon, enabled: true, active: false },
+        { name: 'Order', href: 'order', icon: ShoppingCartIcon, enabled: true, active: false },
+        { name: 'Invoice', to: 'invoice', icon: ClipboardCheckIcon, enabled: true, active: false },
+        { name: 'Inventory', to: 'inventory', icon: FolderOpenIcon, enabled: true, active: false },
+        { name: 'Report', to: 'report', icon: DocumentReportIcon, enabled: true, active: false },
     ];
 
     const navigationTemp = [
-        { name: 'More', to: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: PlusIcon, enabled: true  },
-        { name: 'Setting', to: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: AdjustmentsIcon, enabled: true },
-        { name: 'Account', to: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: UserIcon, enabled: true  },
-        { name: 'Logout', to: '#', classes: 'text-gray-400 hover:bg-gray-400', icon: LoginIcon, enabled: true },
+        { name: 'More', to: '#', icon: PlusIcon, enabled: true, active: false  },
+        { name: 'Setting', to: '#', icon: AdjustmentsIcon, enabled: true, active: false },
+        { name: 'Account', to: '#', icon: UserIcon, enabled: true, active: false  },
+        { name: 'Logout', to: '#', icon: LoginIcon, enabled: true, active: false },
     ];
 
-    const navigation     = ref([...servicesTemp, ...navigationTemp]);
+    const navigation     = ref([...servicesTemp, ...navigationTemp]) as any;
     const services       = ref(servicesTemp);
     const domLoaded      = ref(false);
     const mobileMenuOpen = ref(false);
@@ -187,10 +187,13 @@
     const newPassDetect  = ref(false);
 
     onMounted(async () => {
-        console.log(getMe.value);
         await nextTick(() => { domLoaded.value = true; });
-        noticeVerification();
-        checkingNewPassword();
+        if (domLoaded.value) {
+            console.log(getMe.value);
+            selectedService();
+            noticeVerification();
+            checkingNewPassword();
+        }
     });
 
     const noticeVerification = () => {
@@ -247,7 +250,18 @@
             openModal('account');
         } else {
             window.history.pushState(item.name.toLowerCase(), item.name, item.to);
+            selectedService();
         }
+    };
+
+    const selectedService = () => {
+        navigation.value.forEach((item: { active: boolean }) => {
+                item.active = false;
+        });
+        const key = navigation.value.findIndex((x: { to: string; }) => x.to === location.pathname.split('/')[1]);
+        if (key >= 0) navigation.value[key].active = true;
+        console.log(navigation.value);
+        console.log(location.pathname.split('/')[1]);
     };
 
     const openModal = (type: string) => {
