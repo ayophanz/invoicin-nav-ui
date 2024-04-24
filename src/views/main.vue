@@ -54,7 +54,7 @@
         </TransitionRoot>
     
         <!-- Static sidebar for desktop -->
-        <div class="hidden lg:flex lg:flex-shrink-0 w-full">
+        <div class="lg:flex lg:flex-shrink-0 w-full">
             <div class="flex flex-col w-full">
                 <div class="flex-1 flex flex-col min-h-0 overflow-y-auto bg-white scrollbar-track-white">
                 <div class="flex-1">
