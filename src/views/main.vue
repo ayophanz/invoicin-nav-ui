@@ -23,7 +23,7 @@
                     </div>
                     <nav aria-label="Sidebar" class="mt-5">
                     <div v-for="item in navigation" :key="item.name" class="px-2 space-y-1" :class="item.name == 'More' ? '!mt-20 border-b border-gray-200 pb-3' : ''">
-                        <router-link v-if="item.enabled" :to="item.href" @click="navAction(item)" class="group p-2 rounded-md flex items-center text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+                        <router-link v-if="item.enabled" :to="item.to" @click="navAction(item)" class="group p-2 rounded-md flex items-center text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900">
                             <component :is="item.icon" class="text-gray-700 hover:bg-gray-700 mr-4 h-6 w-6" aria-hidden="true" />
                             {{ item.name }}
                         </router-link>
@@ -159,11 +159,11 @@
     const { getMe } = storeToRefs(accountStore) as any;
     
     const servicesTemp = [
-        { name: 'Dashboard', to: '/', icon: DesktopComputerIcon, enabled: true, active: false },
+        { name: 'Dashboard', to: '', icon: DesktopComputerIcon, enabled: true, active: false },
         { name: 'Organization', to: 'organization', icon: UserGroupIcon, enabled: true, active: false },
         { name: 'Customer', to: 'customer', icon: UsersIcon, enabled: true, active: false },
         { name: 'Product', to: 'product', icon: ArchiveIcon, enabled: true, active: false },
-        { name: 'Order', href: 'order', icon: ShoppingCartIcon, enabled: true, active: false },
+        { name: 'Order', to: 'order', icon: ShoppingCartIcon, enabled: true, active: false },
         { name: 'Invoice', to: 'invoice', icon: ClipboardCheckIcon, enabled: true, active: false },
         { name: 'Inventory', to: 'inventory', icon: FolderOpenIcon, enabled: true, active: false },
         { name: 'Report', to: 'report', icon: DocumentReportIcon, enabled: true, active: false },
@@ -249,7 +249,7 @@
         } else if (item.name === 'Account') {
             openModal('account');
         } else {
-            window.history.pushState(item.name.toLowerCase(), item.name, item.to);
+            window.history.replaceState({}, '', `${window.location.origin}/${item.to}`);
             selectedService();
         }
     };

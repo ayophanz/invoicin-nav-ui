@@ -14,8 +14,8 @@ const router = createRouter({
       {
         path: '/',
         alias: [
-          '/organization',
-          '/customer',
+          '/organization/:pathMatch(.*)*',
+          '/customer/:pathMatch(.*)*',
         ],
         name: 'main',
         component: Main,

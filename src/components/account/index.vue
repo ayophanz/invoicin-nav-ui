@@ -2,7 +2,7 @@
     <div>
         <div class="block lg:hidden">
             <label for="tabs" class="sr-only">Select a tab</label>
-            <select id="tabs" name="tabs" @change="changeTab($event?.target?.selectedIndex)" class="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+            <select id="tabs" name="tabs" @change="changeTab(($event as any).target.selectedIndex)" class="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
                 <option v-for="(tab, key) in tabs" :key="key" :selected="tab.current">{{ tab.name }}</option>
             </select>
         </div>
