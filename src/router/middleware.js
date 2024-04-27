@@ -12,14 +12,14 @@ const beforeEach = (to, from, next) => {
         if (res.data.isAuth) {
             accountService.me();
             if (to.name === 'twofa' || to.name === 'login' || to.name === 'register' || to.name === 'forgotPassword' || to.name === 'sessionExpired') 
-                return next({ name: 'main' });
+                window.history.replaceState({}, '', window.location.origin);
         } else {
             if ((getOtpUserId === null && to.name === 'twofa') || (!auth && to.name === 'main')) 
-                return next({ name: 'login' });
+                window.history.replaceState({}, '', `${window.location.origin}/login`);
         }
     });
     
-    return next();
+    next();
 }
 
 export default {

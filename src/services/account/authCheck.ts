@@ -1,10 +1,10 @@
 import axios from '../../plugins/axios';
 
-const success = (response, resolve) => {
-    return resolve(response);
+const success = (data: object, resolve: any) => {
+    return resolve(data);
 };
 
-const failed = (error, reject) => {
+const failed = (error: object, reject: any) => {
     return reject(error);
 };
 

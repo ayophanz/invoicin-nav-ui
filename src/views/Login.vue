@@ -93,7 +93,7 @@
                 router.push({ name: 'twofa' });
             } else {
                 accountStore.login(response.token);
-                router.push({ name: 'main' });
+                window.history.replaceState({}, '', window.location.origin);
                 toast.success('Successfully login!', {
                     timeout: 2000
                 });
