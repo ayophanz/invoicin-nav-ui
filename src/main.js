@@ -7,10 +7,6 @@ import singleSpaVue from 'single-spa-vue';
 import floatingVue from 'floating-vue';
 import Toast from "vue-toastification";
 
-import './style.css';
-import 'floating-vue/dist/style.css';
-import "vue-toastification/dist/index.css";
-
 // import Echo from "laravel-echo";
 
 // window.Pusher = require('pusher-js');

@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  important: '#nav-container',
   content: [
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx,html}",
@@ -7,6 +8,9 @@ module.exports = {
   theme: {
     extend: {},
   },
+  corePlugins: {
+		preflight: false
+	},
   plugins: [
     require('@tailwindcss/forms'),
     require('tailwind-scrollbar'),
