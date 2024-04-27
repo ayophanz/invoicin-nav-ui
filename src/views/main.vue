@@ -34,7 +34,7 @@
                     <a href="#" class="flex-shrink-0 group block cursor-default">
                     <div class="flex items-center">
                         <div>
-                        <img class="inline-block h-10 w-10 object-cover rounded-full" :src="getMe.image[0]" alt="" />
+                        <img class="inline-block h-10 w-10 object-cover rounded-full" :src="getMe.image ? getMe.image[0] : ''" alt="" />
                         </div>
                         <div class="ml-3">
                         <p class="text-base font-medium text-gray-700 group-hover:text-gray-900">
@@ -80,7 +80,7 @@
                                 </TransitionRoot>
                             </template>
                             <a href="#" class="flex-shrink-0 w-full cursor-default">
-                                <img class="block mx-auto h-10 w-10 object-cover rounded-full" :src="getMe.image[0]" alt="" />
+                                <img class="block mx-auto h-10 w-10 object-cover rounded-full" :src="getMe.image ? getMe.image[0] : ''" alt="" />
                                 <div class="sr-only">
                                 <p>
                                     {{ `${getMe.first_name} ${getMe.last_name}` }}

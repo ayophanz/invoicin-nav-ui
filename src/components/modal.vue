@@ -1,6 +1,6 @@
 <template>
   <TransitionRoot appear :show="props.state" as="template" name="modal" :initialFocus="completeButtonRef" v-if="domLoaded">
-    <Dialog as="div" @close="false" class="relative z-10">
+    <Dialog as="div" @close="false" class="relative z-10 nav-container">
       <TransitionChild
         as="template"
         enter="duration-300 ease-out"

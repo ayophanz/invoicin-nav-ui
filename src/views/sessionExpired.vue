@@ -1,5 +1,5 @@
 <template>
-  <ModalComponent :state="true" :onClose="false" :showClose="false">
+  <ModalComponent :state="true" :showClose="false">
     <div class="rounded-md bg-yellow-50 p-4">
       <div class="flex">
         <div class="flex-shrink-0">

@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  important: '#nav-container',
+  important: '.nav-container',
   content: [
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx,html}",
@@ -9,7 +9,7 @@ module.exports = {
     extend: {},
   },
   corePlugins: {
-		preflight: false
+		preflight: true
 	},
   plugins: [
     require('@tailwindcss/forms'),
