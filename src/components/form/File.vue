@@ -7,7 +7,7 @@
                 ref="pond"
                 label-idle="Drop image here..."
                 :allow-multiple="false"
-                accepted-file-types="image/jpg, image/jpeg, image/png"
+                accepted-file-types="image/*"
                 :files="props.value"
                 maxFileSize="1MB"
                 @init="handleFilePondInit"
