@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-    import { ref, toRef, defineEmits, onMounted, onUpdated, computed } from 'vue';
+    import { ref, toRef, onMounted, onUpdated, computed } from 'vue';
     import Input from './Input.vue';
     import File from './File.vue';
     import Select from './Select.vue';

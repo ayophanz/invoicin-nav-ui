@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-    import { ref, toRef, defineEmits, onMounted } from 'vue';
+    import { ref, toRef, onMounted } from 'vue';
 
     const emit = defineEmits(['onchangeData']);
 

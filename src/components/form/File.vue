@@ -21,7 +21,7 @@
   </template>
 
 <script setup lang="ts">
-    import { ref, Component, defineEmits } from 'vue';
+    import { ref, Component } from 'vue';
     import vueFilePond from 'vue-filepond';
     import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
     import FilePondPluginImagePreview from 'filepond-plugin-image-preview';

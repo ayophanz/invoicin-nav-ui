@@ -8,7 +8,7 @@
     import Form from '../form/Form.vue';
     import { ref, computed, onMounted } from 'vue';
     import { useAccountStore } from '../../stores/account.js';
-    import { useToast } from "vue-toastification";
+    import { useToast } from 'vue-toastification';
     import formTraits from '../../traits/formTraits.js';
     import accountService from '../../services/account/index.js';
     import { storeToRefs } from 'pinia';
