@@ -2,6 +2,7 @@
     <div class="mb-2 select-component">
         <label v-if="label !== ''" :for="name" class="block text-sm font-medium text-gray-700">{{ label }}</label>
         <select 
+            autocomplete="off"
             @change="onChange(input)" 
             v-model="input" 
             :id="name" 

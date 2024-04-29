@@ -189,7 +189,6 @@
     onMounted(async () => {
         await nextTick(() => { domLoaded.value = true; });
         if (domLoaded.value) {
-            console.log(getMe.value);
             selectedService();
             noticeVerification();
             checkingNewPassword();

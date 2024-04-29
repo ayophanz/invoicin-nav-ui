@@ -2,14 +2,14 @@ import accountService from '../services/account';
 import { useAccountStore } from '../stores/account';
 import { storeToRefs } from 'pinia';
 
-const beforeEach = async (to, from, next) => {
+const beforeEach = (to, from, next) => {
     const accountStore = useAccountStore();
     const { getOtpUserId } = storeToRefs(accountStore);
     
-    await accountService.authCheck()
-    .then(async (res) => {
+    accountService.authCheck()
+    .then((res) => {
         if (res.data.isAuth) {
-            await accountService.me();
+            accountService.me();
             if (to.name === 'twofa' || to.name === 'login' || to.name === 'register' || to.name === 'forgotPassword' || to.name === 'sessionExpired')
                 window.history.replaceState({}, '', window.location.origin);
         } else {
