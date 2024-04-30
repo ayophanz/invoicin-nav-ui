@@ -9,7 +9,7 @@
     import { ref, computed } from 'vue';
     import Form from '../form/Form.vue';
     import Notice from '../Notice.vue';
-    import accountService from '../../services/account/index.js';
+    import accountService from '../../services/account';
     import { useAccountStore } from '../../stores/account.js';
     import { useToast } from "vue-toastification";
     import formTraits from '../../traits/formTraits.js';

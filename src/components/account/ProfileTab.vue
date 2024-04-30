@@ -10,7 +10,7 @@
     import { useAccountStore } from '../../stores/account.js';
     import { useToast } from 'vue-toastification';
     import formTraits from '../../traits/formTraits.js';
-    import accountService from '../../services/account/index.js';
+    import accountService from '../../services/account';
     import { storeToRefs } from 'pinia';
 
     const toast = useToast();
