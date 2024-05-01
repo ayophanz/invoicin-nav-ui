@@ -16,9 +16,10 @@
 </template>
 
 <script setup lang="ts">
-    import { ref, toRef, onMounted, watch } from 'vue';
+    import { ref, watch } from 'vue';
 
     const emit = defineEmits(['onchangeData']);
+    
     const props = defineProps({
         value: {
             type: String,
@@ -42,11 +43,10 @@
         }
     });
 
-    const value = toRef(props.value);
-    let input = ref('');
+    let input = ref(props.value);
 
-    onMounted(() => {
-        input.value = value.value;
+    watch(props, (prop) => {
+        input.value = prop.value;
     });
 
     watch(input, (value) => {

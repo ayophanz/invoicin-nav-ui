@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-    import { ref, toRef, onMounted } from 'vue';
+    import { ref, watch } from 'vue';
 
     const emit = defineEmits(['onchangeData']);
 
@@ -43,11 +43,10 @@
         }
     });
 
-    const value = toRef(props.value);
-    let input = ref('');
+    let input = ref(props.value);
 
-    onMounted(() => {
-        input.value = value.value;
+    watch(props, (prop) => {
+        input.value = prop.value;
     });
 
     let onChange = (value: string) => {
