@@ -89,11 +89,6 @@
     const registrationStep = ref('user');
     const type = ref('Company');
     let userForm = ref({
-        image: {
-            label: 'Image',
-            value: null,
-            type: 'file',
-        },
         firstname: {
             label: 'First Name*',
             value: '',
@@ -121,11 +116,6 @@
         },
     });
     let orgForm = ref({
-        logo: {
-            label: 'Logo',
-            value: null,
-            type: 'file',
-        },
         orgName: {
             label: 'Name*',
             value: '',

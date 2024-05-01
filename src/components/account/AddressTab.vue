@@ -23,7 +23,7 @@
 </template>
   
 <script setup lang="ts">
-    import { ref, onMounted, computed} from 'vue';
+    import { ref, onMounted, computed } from 'vue';
     import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
     import { MinusIcon, PlusIcon } from '@heroicons/vue/outline';
     import Form from '../form/Form.vue';
