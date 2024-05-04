@@ -7,41 +7,40 @@
                     <p>Enter the pin code from Google Authenticator app:</p>
                 </div>
                 <div class="mt-5 flex flex-col gap-x-5 items-center">
-                    <Form :submit="onVerifyOTP" submitText="Verify" :submitLoading="submitLoading" :form="compOtpForm" @onchange-form="updateOtpForm" class="w-[300px]"></Form>
+                    <Form :submit="onVerifyOTP" submitText="Verify" :form="otpForm" class="w-[300px]"></Form>
                 </div>
             </div>
         </div>
     </ModalComponent>
 </template>
 <script setup lang="ts">
-    import { ref, computed } from 'vue';
+    import { ref } from 'vue';
     import accountService from '../services/account';
     import ModalComponent from '../components/Modal.vue';
     import Form from '../components/form/Form.vue';
     import { useAccountStore } from '../stores/account';
     import { useRouter } from 'vue-router';
-    import formTraits from '../traits/formTraits';
     import { storeToRefs } from 'pinia';
     import { useToast } from "vue-toastification";
+    import formUtil from '../utils/form.js';
 
     const toast            = useToast();
     const accountStore     = useAccountStore();
     const { getOtpUserId } = storeToRefs(accountStore) as any;
     const router           = useRouter();
 
-    const submitLoading = ref(false);
-    let otpForm = ref({
+    let otpForm = new formUtil(ref({
         otpCode: {
             label: 'OTP code*',
             value: '',
             type: 'text',
         },
-    });
+    }));
 
     const onVerifyOTP = async () => {
-        submitLoading.value = true;
-        otpForm.value['errors'] = {};
-        const otpFormData = formTraits.setFormData(otpForm.value);
+        otpForm.setLoading(true);
+        otpForm.setErrors({});
+        const otpFormData = otpForm.getFormData();
         await accountService.verifyOtp(getOtpUserId.value, otpFormData)
         .then((response: any) => {
             if (response.token != '') {
@@ -54,17 +53,11 @@
             } else {
                 console.log(response);
             }
-            submitLoading.value = false;
+            otpForm.setLoading(false);
         })
         .catch((error) => {
-            submitLoading.value = false;
-            otpForm.value['errors'] = error;
+            otpForm.setLoading(false);
+            otpForm.setErrors(error);
         });
     }
-
-    const updateOtpForm = (value: {name: string, value: string}) => {
-        otpForm.value[value.name].value = value.value;
-    };
-
-    const compOtpForm = computed(() => otpForm);
 </script>

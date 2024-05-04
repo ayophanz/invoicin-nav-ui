@@ -26,7 +26,7 @@
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="relative w-full max-w-5xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+              :class="dialogClass" class="relative max-w-5xl transform overflow-hidden rounded-md bg-white p-6 text-left align-middle shadow-xl transition-all"
             >
               <button 
                 ref="completeButtonRef"
@@ -69,6 +69,11 @@
       type: Boolean,
       required: false,
       default: true,
+    },
+    dialogClass: {
+      type: String,
+      required: false,
+      default: 'w-full'
     }
   });
 

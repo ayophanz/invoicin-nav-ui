@@ -1,6 +1,6 @@
 <template>
     <div class="form-component">
-        <div v-for="(field, key) in compFields" :key="key">
+        <div v-for="(field, key) in fields" :key="key">
             <Input v-if="field.type === 'text' || field.type === 'email' || field.type === 'password'" 
                 :type="field.type" 
                 :value="field.value" 
@@ -26,8 +26,8 @@
         </div>
         <div v-if="props.submit" class="pt-5">
             <div class="flex justify-center">
-                <button @click="props.submit" :disabled="props.submitLoading !== undefined ? props.submitLoading : false " type="button" class="disabled:opacity-75 ml-3 flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                    <Spinner v-if="props.submitLoading"></Spinner>
+                <button @click="props.submit" :disabled="props.form.getLoading()" type="button" class="disabled:opacity-75 ml-3 flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <Spinner v-if="props.form.getLoading()"></Spinner>
                     {{ props.submitText ? props.submitText : 'Save' }}
                 </button>
             </div>
@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-    import { ref, onUpdated, computed } from 'vue';
+    import { ref, onUpdated } from 'vue';
     import Input from './Input.vue';
     import File from './File.vue';
     import Select from './Select.vue';
@@ -53,17 +53,13 @@
             type: String,
             required: false,
         },
-        submitLoading: {
-            type: Boolean,
-            required: false,
-        },
         form: {
             type: Object,
             required: true,
         },
     });
 
-    let fields = ref(props.form);
+    let fields = ref(props.form.fields());
 
     onUpdated(() => {
         initErrors(fields);
@@ -83,8 +79,6 @@
     };
 
     let updateValue = (value: object) => {
-        emit('onchangeForm', value);
+        props.form.updateFormData(value);
     };
-
-    let compFields = computed(() => fields.value);
 </script>

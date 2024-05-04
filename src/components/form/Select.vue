@@ -19,7 +19,7 @@
     import { ref, watch } from 'vue';
 
     const emit = defineEmits(['onchangeData']);
-
+    
     const props = defineProps({
         name: {
             type: String,

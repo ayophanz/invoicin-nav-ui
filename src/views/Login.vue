@@ -1,10 +1,10 @@
 
 <template>
-    <ModalComponent :state="true" :showClose="false">
-        <div class="min-h-full flex flex-col justify-center py-12">
+    <ModalComponent :state="true" :showClose="false" :dialogClass="'max-w-md'">
+        <div class="min-h-full flex flex-col justify-center">
             <div class="sm:mx-auto sm:w-full sm:max-w-md">
                 <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=600" alt="Workflow" />
-                <h2 class="mt-6 text-center text-3xl tracking-tight font-bold text-gray-900">Sign in to your account</h2>
+                <h2 class="mt-6 text-center text-3xl tracking-tight font-bold text-gray-900">Invoicin</h2>
             </div>
 
             <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -12,7 +12,7 @@
                     <span class="text-red-500">{{ errorMessage }}</span>
                 </div>
                 <div class="bg-white m:rounded-lg sm:px-10">
-                    <Form :form="compLoginForm" @onchange-form="updateLoginForm"></Form>
+                    <Form :form="form"></Form>
                     <div class="flex items-center justify-between">
                         <!-- <div class="flex items-center">
                         <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
@@ -53,21 +53,22 @@
     </ModalComponent>
 </template>
 <script setup lang="ts">
-    import { ref, computed } from 'vue';
+    import { ref } from 'vue';
     import ModalComponent from '../components/Modal.vue';
     import Spinner from '../components/Spinner.vue';
     import Form from '../components/form/Form.vue';
     import accountService from '../services/account';
     import { useRouter } from 'vue-router';
     import { useAccountStore } from '../stores/account';
-    import formTraits from '../traits/formTraits';
     import { useToast } from "vue-toastification";
+    import formUtil from '../utils/form.js';
 
     const toast = useToast();
     const router = useRouter();
+
     let errorMessage  = ref('');
     const submitLoading = ref(false);
-    let loginForm = ref({
+    let form = new formUtil(ref({
         email: {
             label: 'Email',
             value: '',
@@ -78,13 +79,12 @@
             value: '',
             type: 'password'
         }
-    });
+    }));
 
     const onLogin = async () => {
         errorMessage.value = '';
         submitLoading.value = true;
-        const formData = formTraits.setFormData(loginForm.value);
-        await accountService.login(formData)
+        await accountService.login(form.getFormData())
         .then((response: any) => {
             const accountStore = useAccountStore();
             if (response.otp_required === true) {
@@ -99,8 +99,8 @@
                 });
             }
         }).catch((error) => {
-            submitLoading.value = false;
-            loginForm.value['errors'] = error;
+            submitLoading.value = true;
+            form.setErrors(error);
             errorMessage.value = error.message;
             toast.error('Something went wrong!', {
                 timeout: 2000
@@ -115,10 +115,4 @@
     const onRegister = () => {
         router.push({ name: 'register' });
     }
-
-    const updateLoginForm = (value: any) => {
-        loginForm.value[value.name].value = value.value;
-    };
-
-    const compLoginForm = computed(() => loginForm);
 </script>

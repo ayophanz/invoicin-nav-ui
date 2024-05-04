@@ -5,7 +5,7 @@
                 <h1 class="text-2xl font-medium leading-6 text-gray-900">User Information</h1>
                 <p class="mt-1 text-sm text-gray-500">Asterisk(*) is required fields.</p>
             </div>
-            <Form :form="compUserForm" @onchange-form="updateUserForm"></Form>
+            <Form :form="userForm"></Form>
             <div class="pt-5">
                 <div class="flex justify-end">
                     <button @click="onBack('sign_in')" type="button" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Cancel</button>
@@ -38,13 +38,13 @@
                 <div class="mb-3">
                     <h2 class="text-xl font-medium leading-6 text-gray-900">Organization</h2>
                 </div>
-                <Form :form="compOrgForm" @onchange-form="updateOrgForm"></Form>
+                <Form :form="orgForm"></Form>
             </div>
             <div class="mt-5">
                 <div class="mb-3">
                     <h2 class="text-xl font-medium leading-6 text-gray-900">Billing Address</h2>
                 </div>
-                <Form :form="compBillingAddressForm" @onchange-form="updateBillingAddressForm"></Form>
+                <Form :form="billingAddressForm"></Form>
             </div>
             <div class="pt-5">
                 <div class="flex justify-end">
@@ -75,20 +75,21 @@
 </template>
 
 <script setup lang="ts">
-    import { ref, onMounted, computed } from 'vue';
+    import { ref, onMounted } from 'vue';
     import Modal from '../components/Modal.vue';
     import Form from '../components/form/Form.vue';
     import Spinner from '../components/Spinner.vue';
     import registerService from '../services/register/index.js';
     import sharedService from '../services/shared/index.js';
-    import formTraits from '../traits/formTraits.js';
     import { useRouter } from 'vue-router';
+    import formUtil from '../utils/form.js';
 
     const router = useRouter();
+
     const submitLoading = ref(false);
     const registrationStep = ref('user');
     const type = ref('Company');
-    let userForm = ref({
+    let userForm = new formUtil(ref({
         firstname: {
             label: 'First Name*',
             value: '',
@@ -114,8 +115,8 @@
             value: '',
             type: 'password',
         },
-    });
-    let orgForm = ref({
+    }));
+    let orgForm = new formUtil(ref({
         orgName: {
             label: 'Name*',
             value: '',
@@ -126,8 +127,8 @@
             value: '',
             type: 'email',
         }
-    });
-    let billingAddressForm = ref({
+    }));
+    let billingAddressForm = new formUtil(ref({
         country: {
             label: 'Country*',
             value: '',
@@ -153,7 +154,7 @@
             value: '',
             type: 'text',
         },
-    });
+    }));
 
     onMounted(() => {
         showOptons();
@@ -162,7 +163,7 @@
     const showOptons = async () => {
         await sharedService.countries()
         .then((response: any) => {
-            billingAddressForm.value.country['options'] = response;
+            billingAddressForm.setOptions('country', response);
         }).catch((error) => {
             console.log(error);
         });
@@ -170,22 +171,22 @@
 
     const onValidateUser = async () => {
         submitLoading.value = true;             
-        userForm.value['errors'] = {};
-        let formData = formTraits.setFormData(userForm.value) as any;
+        userForm.setErrors({});
+        let formData = userForm.getFormData() as any;
         formData.form_type = 'user';
         await registerService.validate(formData)
         .then(() => {
             registrationStep.value = 'organization';
             submitLoading.value = false; 
         }).catch((error) => {
-            userForm.value['errors'] = error;
+            userForm.setErrors(error);
             submitLoading.value = false;
         });
     }
 
     const onValidateOrganization = async () => {
-        const orgFormData = formTraits.setFormData(orgForm.value);
-        const billingAddressFormData = formTraits.setFormData(billingAddressForm.value);
+        const orgFormData = orgForm.getFormData();
+        const billingAddressFormData = billingAddressForm.getFormData();
 
         let formData = {
             ...orgFormData,
@@ -198,10 +199,9 @@
             formData.form_type = 'address';
         }
 
-        console.log(billingAddressForm.value);
         submitLoading.value = true;
-        orgForm.value['errors'] = {};
-        billingAddressForm.value['errors'] = {};
+        orgForm.setErrors({});
+        billingAddressForm.setErrors({});
 
         formData.type = type.value;
         await registerService.validate(formData)
@@ -210,27 +210,24 @@
             registrationStep.value = 'complete';
         }).catch((error) => {
             submitLoading.value = false;
-            orgForm.value['errors'] = error;
-            billingAddressForm.value['errors'] = error;
+            orgForm.setErrors(error);
+            billingAddressForm.setErrors(error);
         });
     }
 
     const onSaveComplete = async () => {
         submitLoading.value = true;
-        const userFormData = formTraits.setFormData(userForm.value);
-        const orgFormData = formTraits.setFormData(orgForm.value);
-        const billingAddressFormData = formTraits.setFormData(billingAddressForm.value);
 
         let formData = {
-            ...userFormData,
-            ...orgFormData,
-            ...billingAddressFormData,
+            ...userForm.getFormData(),
+            ...orgForm.getFormData(),
+            ...billingAddressForm.getFormData()
         } as any;
 
         if (type.value == 'Personal') {
             formData = {
-                ...userFormData,
-                ...billingAddressFormData
+                ...userForm.getFormData(),
+                ...billingAddressForm.getFormData()
             };
         }
 
@@ -252,22 +249,6 @@
     }
 
     const onTypeChange = () => {
-        billingAddressForm.value['errors'] = {};
+        billingAddressForm.setErrors({});
     };
-
-    const updateUserForm = (value: any) => {
-        userForm.value[value.name].value = value.value;
-    };
-
-    const updateOrgForm = (value: any) => {
-        orgForm.value[value.name].value = value.value;
-    };
-
-    const updateBillingAddressForm = (value: any) => {
-        billingAddressForm.value[value.name].value = value.value;
-    };
-
-    const compUserForm = computed(() => userForm);
-    const compOrgForm = computed(() => orgForm);
-    const compBillingAddressForm = computed(() => billingAddressForm);
 </script>

@@ -24,7 +24,7 @@
                 </button>
                 <div v-else class="flex flex-col gap-y-2">
                     <div v-if="disable2fa" class="mt-5 flex flex-col gap-x-5 items-center">
-                        <Form :submit="on2faDisable" submitText="Revoke 2FA" :submitLoading="submitLoading" :form="compOtpForm" @onchange-form="updateOtpForm" class="w-[300px]"></Form>
+                        <Form :submit="on2faDisable" submitText="Revoke 2FA" :form="otpForm" class="w-[300px]"></Form>
                     </div>
                     <a href="#" @click="disable2faToggle()" class="text-sm text-red-700 hover:underline hover:text-red-600 text-center">
                        {{ !disable2fa ? 'Revoke 2FA' : 'Cancel' }}
@@ -44,7 +44,7 @@
         </div>
         <div class="my-5">
             <div class="mt-5 flex flex-col gap-x-5 items-center">
-                <Form :submit="on2faEnable" submitText="Enable 2FA" :submitLoading="submitLoading" :form="compOtpForm" @onchange-form="updateOtpForm" class="w-[300px]"></Form>
+                <Form :submit="on2faEnable" submitText="Enable 2FA" :form="otpForm" class="w-[300px]"></Form>
             </div>
         </div>
     </div>
@@ -55,15 +55,15 @@
 
 </template>
 <script setup lang="ts">
-    import { ref, computed } from 'vue';
+    import { ref } from 'vue';
     import accountService from '../../services/account';
     import Form from '../form/Form.vue';
     import Notice from '../Notice.vue';
-    import formTraits from '../../traits/formTraits';
     import { useAccountStore } from '../../stores/account';
     import { storeToRefs } from 'pinia';
     import Spinner from '../Spinner.vue';
     import { useToast } from 'vue-toastification';
+    import formUtil from '../../utils/form.js';
 
     const api = (import.meta as any).env.VITE_API_URL;
     const toast = useToast();
@@ -82,13 +82,13 @@
     const disable2fa = ref(false);
 
     const submitLoading = ref(false);
-    let otpForm = ref({
+    let otpForm = new formUtil(ref({
         otpCode: {
             label: 'OTP code*',
             value: '',
             type: 'text',
         },
-    });
+    }));
 
     const onGenerateSecret = async () => {
         submitLoading.value = true;
@@ -113,21 +113,21 @@
     }
 
     const on2faEnable = async () => {
-        submitLoading.value = true;
-        otpForm.value['errors'] = {};
-        const otpFormData = formTraits.setFormData(otpForm.value);
+        otpForm.setErrors({});
+        otpForm.setLoading(true);
+        const otpFormData = otpForm.getFormData();
         await accountService.enable2fa(getMe.value.id, otpFormData)
         .then(async () => {
             await accountService.me();
-            submitLoading.value = false;
+            otpForm.setLoading(false);
             step2fa.value = 1;
             toast.success('Successfully Save!', {
                 timeout: 2000
             });
         })
         .catch((error) => {
-            submitLoading.value = false;
-            otpForm.value['errors'] = error;
+            otpForm.setErrors(error);
+            otpForm.setLoading(true);
             toast.error('Something went wrong!', {
                 timeout: 2000
             });
@@ -135,21 +135,21 @@
     }
 
     const on2faDisable = async () => {
-        submitLoading.value = true;
-        otpForm.value['errors'] = {};
-        const otpFormData = formTraits.setFormData(otpForm.value);
+        otpForm.setErrors({});
+        otpForm.setLoading(true);
+        const otpFormData = otpForm.getFormData();
         await accountService.disable2fa(getMe.value.id, otpFormData)
         .then(async () => {
             await accountService.me();
-            submitLoading.value = false;
+            otpForm.setLoading(false);
             step2fa.value = 1;
             toast.success('Successfully Save!', {
                 timeout: 2000
             });
         })
         .catch((error) => {
-            submitLoading.value = false;
-            otpForm.value['errors'] = error;
+            otpForm.setErrors(error);
+            otpForm.setLoading(false);
             toast.error('Something went wrong!', {
                 timeout: 2000
             });
@@ -159,10 +159,4 @@
     const disable2faToggle = () => {
         disable2fa.value = !disable2fa.value;
     };
-
-    const updateOtpForm = (value: {name: string, value: string}) => {
-        otpForm.value[value.name].value = value.value;
-    };
-
-    const compOtpForm = computed(() => otpForm);
 </script>

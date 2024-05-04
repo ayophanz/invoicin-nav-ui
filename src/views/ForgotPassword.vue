@@ -1,19 +1,10 @@
 <template>
-  <ModalComponent :state="true" :showClose="false">
+  <ModalComponent :state="true" :showClose="false" :dialogClass="'w-auto'">
     <div v-if="!isSent" class="rounded-md p-4">
-      <h2 class="text-center text-4xl">Forgot your password?</h2>
-      <div class="grid justify-items-center my-10 w-1/2 mx-auto">
-        <label class="text-left justify-self-start">Email</label>
-        <input 
-          id="email" 
-          v-model="email" 
-          name="email"
-          type="email" 
-          autocomplete="email"
-          :class="Object.keys(errors).length > 0 ? '!border-red-400' : ''"
-          class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-        <span v-if="Object.keys(errors).length > 0" class="text-red-400 text-sm font-semibold text-left justify-self-start">{{ errors[0] }}</span>
-        </div>
+      <h2 class="text-center text-3xl font-semibold">Forgot your password?</h2>
+      <div class="flex mt-4 w-full">
+        <Form :form="form" class="w-full"></Form>
+      </div>
       <div class="flex justify-center items-center gap-4 my-4">
         <button @click="reset" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
           Reset Password
@@ -26,52 +17,42 @@
       <a @click.prevent="backToSignIn" href="#" class="hover:underline text-center">back to sign in</a>
     </div>
   </ModalComponent>
-  </template>
+</template>
   
-
-<script lang="ts">
-     /** Imports */
-    import { ref, defineComponent } from 'vue';
+<script setup lang="ts">
+    import { ref } from 'vue';
     import accountService from '../services/account';
     import ModalComponent from '../components/Modal.vue';
     import { useRouter } from 'vue-router';
+    import Form from '../components/form/Form.vue';
+    import formUtil from '../utils/form.js';
 
-     /** Process */
-    export default defineComponent({
-        name: 'forgotPassword',
-        components: {
-          ModalComponent,
-        },
-        setup() {
+    const router = useRouter();
 
-          const email  = ref('');
-          const router = useRouter();
-          let   errors = ref([]);
-          let   isSent = ref(false);
+    let isSent = ref(false);
+    let form = new formUtil(ref({
+      email: {
+        label: 'Email*',
+        value: '',
+        type: 'email'
+      }
+    }));
 
-          const reset = async () => {
-              isSent.value = false;
-              errors.value = [];
-              await accountService.forgotPassword({ email: email.value })
-              .then((response) => {
-                console.log(response);
-                isSent.value = true;
-              }).catch((error) => {
-                errors.value = error.error.email;
-              });
-          };
+    const reset = async () => {
+        isSent.value = false;
+        form.setLoading(false);
+        form.setErrors({});
+        await accountService.forgotPassword(form.getFormData())
+        .then(() => {
+          form.setLoading(false);
+          isSent.value = true;
+        }).catch((error) => {
+          form.setLoading(false);
+          form.setErrors(error);
+        });
+    };
 
-          const backToSignIn = () => {
-            router.push({ name: 'login' });
-          };
-
-          return {
-            email,
-            errors,
-            isSent,
-            reset,
-            backToSignIn,
-          }
-        }
-    });
+    const backToSignIn = () => {
+      router.push({ name: 'login' });
+    };
 </script>
