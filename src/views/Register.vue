@@ -1,5 +1,5 @@
 <template>
-    <Modal :state="true" :showClose="false">
+    <Modal :state="true" :showClose="false" :dialogClass="dialogClass">
         <div v-if="registrationStep === 'user'" class="form w-[90%] mx-auto py-5">
             <div class="mb-5">
                 <h1 class="text-2xl font-medium leading-6 text-gray-900">User Information</h1>
@@ -57,7 +57,7 @@
             </div>
         </div>
 
-        <div v-if="registrationStep === 'complete'" class="space-y-8 divide-y divide-gray-200 w-[90%] mx-auto py-5">
+        <div v-if="registrationStep === 'complete'" class="space-y-8 divide-y divide-gray-200 w-80 mx-auto">
             <div class="mb-3">
                 <h2 class="text-xl font-medium leading-6 text-gray-900">Almost there!</h2>
             </div>
@@ -86,6 +86,7 @@
 
     const router = useRouter();
 
+    const dialogClass = ref('w-full');
     const submitLoading = ref(false);
     const registrationStep = ref('user');
     const type = ref('Company');
@@ -208,6 +209,7 @@
         .then(() => {
             submitLoading.value = false;
             registrationStep.value = 'complete';
+            dialogClass.value = 'w-auto';
         }).catch((error) => {
             submitLoading.value = false;
             orgForm.setErrors(error);
@@ -243,6 +245,7 @@
     };
 
     const onBack = (type: string) => {
+        dialogClass.value = 'w-full';
         if (type === 'organization') registrationStep.value = 'organization';
         if (type === 'user') registrationStep.value = 'user';
         if (type === 'sign_in') router.push({ name: 'login' });

@@ -9,7 +9,6 @@ const beforeEach = (to, from, next) => {
     accountService.authCheck()
     .then((res) => {
         if (res.data.isAuth) {
-            accountService.me();
             if (to.name === 'twofa' || to.name === 'login' || to.name === 'register' || to.name === 'forgotPassword' || to.name === 'sessionExpired')
                 window.history.replaceState({}, '', window.location.origin);
         } else {

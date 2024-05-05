@@ -1,5 +1,5 @@
 <template>
-    <div class="flex w-full" v-if="domLoaded">
+    <div class="flex w-full">
         <TransitionRoot as="template" :show="mobileMenuOpen">
         <Dialog as="div" class="relative z-40 lg:hidden" @close="mobileMenuOpen = false">
             <TransitionChild as="template" enter="transition-opacity ease-linear duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="transition-opacity ease-linear duration-300" leave-from="opacity-100" leave-to="opacity-0">
@@ -125,7 +125,7 @@
     </div>
 </template>
 <script setup lang="ts">
-    import { ref, onMounted, nextTick, watch, onBeforeUnmount } from 'vue';
+    import { ref, onMounted, watch, onBeforeUnmount } from 'vue';
     import { 
         Dialog,
         DialogPanel, 
@@ -178,7 +178,6 @@
 
     const navigation     = ref([...servicesTemp, ...navigationTemp]) as any;
     const services       = ref(servicesTemp);
-    const domLoaded      = ref(false);
     const mobileMenuOpen = ref(false);
     const isOpen         = ref(false);
     const modalFor       = ref('');
@@ -187,12 +186,10 @@
     const newPassDetect  = ref(false);
 
     onMounted(async () => {
-        await nextTick(() => { domLoaded.value = true; });
-        if (domLoaded.value) {
-            selectedService();
-            noticeVerification();
-            checkingNewPassword();
-        }
+        await accountService.me();
+        selectedService();
+        noticeVerification();
+        checkingNewPassword();
     });
 
     const noticeVerification = () => {
