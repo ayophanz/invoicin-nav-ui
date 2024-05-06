@@ -61,10 +61,9 @@
     import File from './File.vue';
     import Select from './Select.vue';
     import Radio from './Radio.vue';
-    import checkbox from './checkbox.vue';
+    import Checkbox from './Checkbox.vue';
     import Spinner from '../Spinner.vue';
-import Checkbox from './checkbox.vue';
-
+    
     const emit = defineEmits(['onchangeForm']);
 
     const props = defineProps({
