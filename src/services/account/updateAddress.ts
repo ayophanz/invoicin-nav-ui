@@ -1,19 +1,19 @@
 import axios from '../../plugins/axios';
-import registerTransformer from '../../transformers/registerTransformer';
+import addresstransformer from '../../transformers/addressTransformer';
 
 const success = (data: object, resolve: any) => {
-    resolve(data);
+    return resolve(data);
 };
 
 const fail = (data: object, reject: any) => {
-    const transfomer = registerTransformer.fetch(data);
-    reject(transfomer);
+    const transformer = addresstransformer.fetch(data);
+    return reject(transformer);
 };
 
-export default (data: any) => {
-    const transfomer = registerTransformer.send(data);
+export default (id: number, data: object) => {
+    const transformer = addresstransformer.send(data);
     return new Promise((resolve, reject) => {
-        axios.post(`api/account/register/${data.form_type}/validate`, transfomer)
+        axios.post(`api/account/address/update/${id}`, transformer)
         .then((response) => {
             success(response.data, resolve);
         }).catch((error) => {

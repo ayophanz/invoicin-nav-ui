@@ -1,19 +1,19 @@
 <template>
-    <notice v-if="getMe.isNewPassword" :notice="warning" class="mt-5"></notice>
+    <Notice v-if="getMe.isNewPassword" :notice="warning" class="mt-5"></Notice>
     <div class="mb-5">
         <p class="mt-5 text-sm text-gray-500">Asterisk(*) is required fields.</p>
     </div>
-    <Form :submit="onPasswordSave" :submitLoading="submitLoading" :form="compPasswordForm" @onchange-form="updatePasswordForm"></Form>
+    <Form :submit="onPasswordSave" :form="form"></Form>
 </template>
 <script setup lang="ts">
-    import { ref, computed } from 'vue';
-    import Form from '../form/form.vue';
-    import notice from '../notice.vue';
+    import { reactive } from 'vue';
+    import Form from '../form/Form.vue';
+    import Notice from '../Notice.vue';
     import accountService from '../../services/account';
-    import { useAccountStore } from '../../stores/account';
+    import { useAccountStore } from '../../stores/account.js';
     import { useToast } from "vue-toastification";
-    import formTraits from '../../traits/formTraits.js';
     import { storeToRefs } from 'pinia';
+    import formUtil from '../../utils/form.js';
 
     const toast = useToast();
     const accountStore = useAccountStore();
@@ -24,8 +24,8 @@
         title: 'Pending new password', 
         message: 'We sent you an email notification about your password change; please confirm.'
     };
-    const submitLoading = ref(false);
-    let passwordForm = ref({
+
+    let form = reactive(new formUtil({
         currentPassword: {
             label: 'Current password*',
             value: '',
@@ -41,32 +41,26 @@
             value: '',
             type: 'password',
         },
-    });
+    }));
 
     const onPasswordSave = async () => {
-        submitLoading.value = true;
-        passwordForm.value['errors'] = {};
-        const passwordFormData = formTraits.setFormData(passwordForm.value);
-        await accountService.updatePassword(getMe.value.id, passwordFormData)
+        form.setErrors({});
+        form.setLoading(true);
+        const formData = form.getFormData();
+        await accountService.updatePassword(getMe.value.id, formData)
         .then(async () => {
             await accountService.me();
-            submitLoading.value = false;
+            form.setLoading(false);
             toast.success('Successfully Save!', {
                 timeout: 2000
             });
         })
         .catch((error) => {
-            submitLoading.value = false;
-            passwordForm.value['errors'] = error;
+            form.setLoading(false);
+            form.setErrors(error);
             toast.error('Something went wrong!', {
                 timeout: 2000
             });
         });
     };
-
-    const updatePasswordForm = (value: {name: string, value: string}) => {
-        passwordForm.value[value.name].value = value.value;
-    };
-
-    const compPasswordForm = computed(() => passwordForm);
 </script>

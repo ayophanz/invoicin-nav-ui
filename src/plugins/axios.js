@@ -26,7 +26,7 @@ axios.interceptors.response.use(
             if (errorCode === 40101) {
                 if (router.currentRoute.value.meta.auth == true || Object.keys(router.currentRoute.value.meta).length == 0) {
                     accountStore.sessionExpired();
-                    router.push({ name: 'sessionExpired' });
+                    window.history.replaceState({}, '', `${window.location.origin}/session-expired`);
                 }
                 return Promise.reject(error);
             }
@@ -35,7 +35,7 @@ axios.interceptors.response.use(
              * Login required
              */
             if (errorCode === 40102) {
-                router.push({ name: 'login' });
+                window.history.replaceState({}, '', `${window.location.origin}/login`);
                 return Promise.reject(error);
             }
         }

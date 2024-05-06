@@ -1,19 +1,38 @@
 <template>
     <div class="form-component">
-        <div v-for="(field, key) in compFields" :key="key">
+        <div v-for="(field, key) in fields" :key="key">
             <Input v-if="field.type === 'text' || field.type === 'email' || field.type === 'password'" 
                 :type="field.type" 
                 :value="field.value" 
                 :label="field.label"
                 :error-message="field.errorMessage"
                 :name="`${key}`"
+                v-show="field.visible == undefined || field.visible ? true : false"
                 @onchange-data="updateValue"></Input>
+
+            <Radio v-else-if="field.type == 'radio'"
+                :value="field.value"
+                :options="field.options"
+                :label="field.label"
+                :error-message="field.errorMessage"
+                :name="`${key}`"
+                v-show="field.visible == undefined || field.visible ? true : false"
+                @onchange-data="updateValue"></Radio>
+            
+            <Checkbox v-else-if="field.type == 'checkbox'"
+                :value="field.value"
+                :label="field.label"
+                :error-message="field.errorMessage"
+                :name="`${key}`"
+                v-show="field.visible == undefined || field.visible ? true : false"
+                @onchange-data="updateValue"></Checkbox>
             
             <File v-else-if="field.type === 'file'" 
                 :value="field.value" 
                 :label="field.label" 
                 :error-message="field.errorMessage"
                 :name="`${key}`"
+                v-show="field.visible == undefined || field.visible ? true : false"
                 @onchange-data="updateValue"></File>
             
             <Select v-else-if="field.type === 'select'"
@@ -22,13 +41,14 @@
                 :label="field.label"
                 :error-message="field.errorMessage"
                 :name="`${key}`"
+                v-show="field.visible == undefined || field.visible ? true : false"
                 @onchange-data="updateValue"></Select>
         </div>
         <div v-if="props.submit" class="pt-5">
             <div class="flex justify-center">
-                <button @click="props.submit" :disabled="props.submitLoading !== undefined ? props.submitLoading : false " type="button" class="disabled:opacity-75 ml-3 flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                    <Spinner v-if="props.submitLoading"></Spinner>
-                    Save
+                <button @click="props.submit" :disabled="props.form.getLoading()" type="button" class="disabled:opacity-75 ml-3 flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <Spinner v-if="props.form.getLoading()"></Spinner>
+                    {{ props.submitText ? props.submitText : 'Save' }}
                 </button>
             </div>
         </div>
@@ -36,11 +56,14 @@
 </template>
 
 <script setup lang="ts">
-    import { ref, toRef, defineEmits, onMounted, onUpdated, computed } from 'vue';
-    import Input from './input.vue';
-    import File from './file.vue';
-    import Select from './select.vue';
-    import Spinner from '../spinner.vue';
+    import { ref, onUpdated } from 'vue';
+    import Input from './Input.vue';
+    import File from './File.vue';
+    import Select from './Select.vue';
+    import Radio from './Radio.vue';
+    import checkbox from './checkbox.vue';
+    import Spinner from '../Spinner.vue';
+import Checkbox from './checkbox.vue';
 
     const emit = defineEmits(['onchangeForm']);
 
@@ -49,8 +72,8 @@
             type: Function,
             required: false,
         },
-        submitLoading: {
-            type: Boolean,
+        submitText: {
+            type: String,
             required: false,
         },
         form: {
@@ -59,17 +82,12 @@
         },
     });
 
-    let fields = ref();
-    const form = toRef(props.form);
-
-    onMounted(() => {
-        fields.value = form.value;
-    });
+    let fields = ref(props.form.fields());
 
     onUpdated(() => {
         initErrors(fields);
     });
-
+    
     const initErrors = (fields: any) => {
         if (fields.value.errors && Object.keys(fields.value.errors).length > 0) {
             Object.keys(fields.value.errors).forEach(function(key) {
@@ -84,9 +102,6 @@
     };
 
     let updateValue = (value: object) => {
-        emit('onchangeForm', value);
+        props.form.updateFormData(value);
     };
-
-    const compFields = computed(() => fields.value);
-
 </script>

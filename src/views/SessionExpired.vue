@@ -1,5 +1,5 @@
 <template>
-  <ModalComponent :state="true" :onClose="false" :showClose="false">
+  <ModalComponent :state="true" :showClose="false">
     <div class="rounded-md bg-yellow-50 p-4">
       <div class="flex">
         <div class="flex-shrink-0">
@@ -29,7 +29,7 @@
      /** Imports */
     import { defineComponent } from 'vue';
     import { ExclamationIcon } from '@heroicons/vue/outline';
-    import ModalComponent from '../components/modal.vue';
+    import ModalComponent from '../components/Modal.vue';
     import accountService from '../services/account';
 
      /** Process */
