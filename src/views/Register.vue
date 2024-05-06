@@ -75,7 +75,7 @@
 </template>
 
 <script setup lang="ts">
-    import { ref, onMounted } from 'vue';
+    import { ref, reactive, onMounted } from 'vue';
     import Modal from '../components/Modal.vue';
     import Form from '../components/form/Form.vue';
     import Spinner from '../components/Spinner.vue';
@@ -90,7 +90,7 @@
     const submitLoading = ref(false);
     const registrationStep = ref('user');
     const type = ref('Company');
-    let userForm = new formUtil(ref({
+    let userForm = reactive(new formUtil({
         firstname: {
             label: 'First Name*',
             value: '',
@@ -117,7 +117,7 @@
             type: 'password',
         },
     }));
-    let orgForm = new formUtil(ref({
+    let orgForm = reactive(new formUtil({
         orgName: {
             label: 'Name*',
             value: '',
@@ -129,7 +129,7 @@
             type: 'email',
         }
     }));
-    let billingAddressForm = new formUtil(ref({
+    let billingAddressForm = reactive(new formUtil({
         country: {
             label: 'Country*',
             value: '',

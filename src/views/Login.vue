@@ -53,7 +53,7 @@
     </ModalComponent>
 </template>
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, reactive } from 'vue';
     import ModalComponent from '../components/Modal.vue';
     import Spinner from '../components/Spinner.vue';
     import Form from '../components/form/Form.vue';
@@ -68,7 +68,7 @@
 
     let errorMessage  = ref('');
     const submitLoading = ref(false);
-    let form = new formUtil(ref({
+    let form = reactive(new formUtil({
         email: {
             label: 'Email',
             value: '',

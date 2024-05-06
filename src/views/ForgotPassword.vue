@@ -20,7 +20,7 @@
 </template>
   
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, reactive } from 'vue';
     import accountService from '../services/account';
     import ModalComponent from '../components/Modal.vue';
     import { useRouter } from 'vue-router';
@@ -30,7 +30,7 @@
     const router = useRouter();
 
     let isSent = ref(false);
-    let form = new formUtil(ref({
+    let form = reactive(new formUtil({
       email: {
         label: 'Email*',
         value: '',

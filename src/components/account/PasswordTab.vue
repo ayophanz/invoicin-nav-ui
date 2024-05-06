@@ -6,7 +6,7 @@
     <Form :submit="onPasswordSave" :form="form"></Form>
 </template>
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { reactive } from 'vue';
     import Form from '../form/Form.vue';
     import Notice from '../Notice.vue';
     import accountService from '../../services/account';
@@ -25,7 +25,7 @@
         message: 'We sent you an email notification about your password change; please confirm.'
     };
 
-    let form = new formUtil(ref({
+    let form = reactive(new formUtil({
         currentPassword: {
             label: 'Current password*',
             value: '',

@@ -14,7 +14,7 @@
     </ModalComponent>
 </template>
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { reactive } from 'vue';
     import accountService from '../services/account';
     import ModalComponent from '../components/Modal.vue';
     import Form from '../components/form/Form.vue';
@@ -29,7 +29,7 @@
     const { getOtpUserId } = storeToRefs(accountStore) as any;
     const router           = useRouter();
 
-    let otpForm = new formUtil(ref({
+    let otpForm = reactive(new formUtil({
         otpCode: {
             label: 'OTP code*',
             value: '',

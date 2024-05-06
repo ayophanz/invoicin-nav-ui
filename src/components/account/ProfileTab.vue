@@ -6,7 +6,7 @@
 </template>
 <script setup lang="ts">
     import Form from '../form/Form.vue';
-    import { ref, onMounted } from 'vue';
+    import { onMounted, reactive } from 'vue';
     import { useAccountStore } from '../../stores/account.js';
     import { useToast } from 'vue-toastification';
     import accountService from '../../services/account';
@@ -17,7 +17,7 @@
     const accountStore = useAccountStore();
     const { getMe } = storeToRefs(accountStore) as any;
 
-    let form = new formUtil(ref({
+    let form = reactive(new formUtil({
         image: {
             label: 'Image',
             value: [],

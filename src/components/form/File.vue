@@ -1,22 +1,24 @@
 <template>
     <div class="mb-2 file-component">
-        <label v-if="label !== ''" class="block text-sm font-medium text-gray-700">{{ props.label }}</label>
-        <div class="mt-1 rounded-md shadow-sm w-80">
-            <Filepond
-                name="file"
-                ref="pond"
-                label-idle="Drop image here..."
-                :allow-multiple="false"
-                :accepted-file-types="['image/*']"
-                :files="props.value"
-                maxFileSize="1MB"
-                @init="handleFilePondInit"
-                @addfile="onAdd"
-                @removefile="onRemove"
-                credits="false"
-            ></Filepond>
+        <div class="px-2">
+            <label v-if="label !== ''" class="block text-sm font-medium text-gray-700">{{ props.label }}</label>
+            <div class="mt-1 rounded-md shadow-sm w-80">
+                <Filepond
+                    name="file"
+                    ref="pond"
+                    label-idle="Drop image here..."
+                    :allow-multiple="false"
+                    :accepted-file-types="['image/*']"
+                    :files="props.value"
+                    maxFileSize="1MB"
+                    @init="handleFilePondInit"
+                    @addfile="onAdd"
+                    @removefile="onRemove"
+                    credits="false"
+                ></Filepond>
+            </div>
+            <span v-if="props.errorMessage !== ''" class="text-sm text-red-500">{{ props.errorMessage }}</span>
         </div>
-        <span v-if="props.errorMessage !== ''" class="text-sm text-red-500">{{ props.errorMessage }}</span>
     </div>
   </template>
 

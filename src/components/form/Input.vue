@@ -1,16 +1,18 @@
 <template>
     <div class="mb-2 input-component">
-        <label v-if="label !== ''" :for="name" class="block text-sm font-medium text-gray-700 text-left">{{ label }}</label>
-        <div class="mt-1 flex flex-col">
-            <input 
-                autocomplete="off"
-                v-model="input" 
-                :type="type" 
-                :name="name" 
-                :id="name"
-                :class="errorMessage !== '' ? 'border-red-500' : 'border-gray-300'"
-                class="appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-            <span v-if="errorMessage !== ''" class="text-sm text-red-500">{{ errorMessage }}</span>
+        <div class="px-2">
+            <label v-if="label !== ''" :for="name" class="block text-sm font-medium text-gray-700 text-left">{{ label }}</label>
+            <div class="mt-1 flex flex-col">
+                <input 
+                    autocomplete="off"
+                    v-model="input" 
+                    :type="type" 
+                    :name="name" 
+                    :id="name"
+                    :class="errorMessage !== '' ? 'border-red-500' : 'border-gray-300'"
+                    class="appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <span v-if="errorMessage !== ''" class="text-sm text-red-500">{{ errorMessage }}</span>
+            </div>
         </div>
     </div>
 </template>

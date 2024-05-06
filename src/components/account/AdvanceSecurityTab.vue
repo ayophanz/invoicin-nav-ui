@@ -55,7 +55,7 @@
 
 </template>
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, reactive } from 'vue';
     import accountService from '../../services/account';
     import Form from '../form/Form.vue';
     import Notice from '../Notice.vue';
@@ -82,7 +82,7 @@
     const disable2fa = ref(false);
 
     const submitLoading = ref(false);
-    let otpForm = new formUtil(ref({
+    let otpForm = reactive(new formUtil({
         otpCode: {
             label: 'OTP code*',
             value: '',

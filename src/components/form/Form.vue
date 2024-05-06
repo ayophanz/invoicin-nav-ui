@@ -7,13 +7,32 @@
                 :label="field.label"
                 :error-message="field.errorMessage"
                 :name="`${key}`"
+                v-show="field.visible == undefined || field.visible ? true : false"
                 @onchange-data="updateValue"></Input>
+
+            <Radio v-else-if="field.type == 'radio'"
+                :value="field.value"
+                :options="field.options"
+                :label="field.label"
+                :error-message="field.errorMessage"
+                :name="`${key}`"
+                v-show="field.visible == undefined || field.visible ? true : false"
+                @onchange-data="updateValue"></Radio>
+            
+            <Checkbox v-else-if="field.type == 'checkbox'"
+                :value="field.value"
+                :label="field.label"
+                :error-message="field.errorMessage"
+                :name="`${key}`"
+                v-show="field.visible == undefined || field.visible ? true : false"
+                @onchange-data="updateValue"></Checkbox>
             
             <File v-else-if="field.type === 'file'" 
                 :value="field.value" 
                 :label="field.label" 
                 :error-message="field.errorMessage"
                 :name="`${key}`"
+                v-show="field.visible == undefined || field.visible ? true : false"
                 @onchange-data="updateValue"></File>
             
             <Select v-else-if="field.type === 'select'"
@@ -22,6 +41,7 @@
                 :label="field.label"
                 :error-message="field.errorMessage"
                 :name="`${key}`"
+                v-show="field.visible == undefined || field.visible ? true : false"
                 @onchange-data="updateValue"></Select>
         </div>
         <div v-if="props.submit" class="pt-5">
@@ -40,7 +60,10 @@
     import Input from './Input.vue';
     import File from './File.vue';
     import Select from './Select.vue';
+    import Radio from './Radio.vue';
+    import checkbox from './checkbox.vue';
     import Spinner from '../Spinner.vue';
+import Checkbox from './checkbox.vue';
 
     const emit = defineEmits(['onchangeForm']);
 
