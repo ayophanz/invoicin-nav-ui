@@ -99,7 +99,7 @@
                 });
             }
         }).catch((error) => {
-            submitLoading.value = true;
+            submitLoading.value = false;
             form.setErrors(error);
             errorMessage.value = error.message;
             toast.error('Something went wrong!', {
