@@ -47,7 +47,7 @@
     });
 
     const removeAddress = () => {
-        if (getMe.value.type === 'Company') {
+        if (getMe.value.type != 'Personal') {
             const key = tabs.value.findIndex((x: { name: string; }) => x.name === 'Address');
             if (key >= 0 ) tabs.value.splice(key, 1);
         }
