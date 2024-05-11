@@ -49,7 +49,7 @@
           >Type</label
         >
         <select
-          @change="onTypeChange(type)"
+          @change="onTypeChange()"
           v-model="type"
           id="type"
           name="type"

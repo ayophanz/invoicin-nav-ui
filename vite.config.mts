@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-import dns from "dns";
+import checker from "vite-plugin-checker";
+import * as dns from "dns";
 
 dns.setDefaultResultOrder("verbatim");
 
@@ -23,6 +24,9 @@ export default defineConfig({
     port: 9001,
   },
   plugins: [
+    checker({
+      typescript: true,
+    }),
     vue({
       template: {
         transformAssetUrls: {
