@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "declarationDir": "dist",
+    "isolatedModules": true,
+    "composite": true
+  },
+  "include": ["env.d.ts", "vite.config.*", "src/**/*"],
+  "exclude": ["src/**/*.test*"]
+}
