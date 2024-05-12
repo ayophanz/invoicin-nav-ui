@@ -14,7 +14,13 @@
           :type="type"
           :name="name"
           :id="name"
-          :class="errorMessage !== '' ? 'border-red-500' : 'border-gray-300'"
+          :disabled="disabled"
+          :class="[
+            disabled
+              ? 'disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200'
+              : '',
+            errorMessage !== '' ? 'border-red-500' : 'border-gray-300',
+          ]"
           class="appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         />
         <span v-if="errorMessage !== ''" class="text-sm text-red-500">{{
@@ -46,6 +52,10 @@ const props = defineProps({
   type: {
     type: String,
     default: "text",
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
   },
   errorMessage: {
     type: String,

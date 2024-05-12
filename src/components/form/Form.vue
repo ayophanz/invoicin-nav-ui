@@ -10,6 +10,7 @@
         :type="field.type"
         :value="field.value"
         :label="field.label"
+        :disabled="field.disabled"
         :error-message="field.errorMessage"
         :name="`${key}`"
         v-show="field.visible == undefined || field.visible ? true : false"

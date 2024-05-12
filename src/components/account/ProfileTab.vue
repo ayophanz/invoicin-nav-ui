@@ -24,6 +24,12 @@ let form = reactive(
       value: [],
       type: "file",
     },
+    role: {
+      label: "Role",
+      value: getMe.value.roles[0],
+      type: "text",
+      disabled: true,
+    },
     firstname: {
       label: "First Name*",
       value: "",
