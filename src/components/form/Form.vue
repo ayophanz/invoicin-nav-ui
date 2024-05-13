@@ -61,15 +61,10 @@
     </div>
     <div v-if="props.submit" class="pt-5">
       <div class="flex justify-center">
-        <button
-          @click="props.submit"
-          :disabled="props.form.getLoading()"
-          type="button"
-          class="disabled:opacity-75 ml-3 flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-        >
+        <Button @click="props.submit" :disabled="props.form.getLoading()">
           <Spinner v-if="props.form.getLoading()"></Spinner>
           {{ props.submitText ? props.submitText : "Save" }}
-        </button>
+        </Button>
       </div>
     </div>
   </div>
@@ -83,6 +78,7 @@ import Select from "./Select.vue";
 import Radio from "./Radio.vue";
 import Checkbox from "./Checkbox.vue";
 import Spinner from "../Spinner.vue";
+import Button from "../Button.vue";
 
 const emit = defineEmits(["onchangeForm"]);
 

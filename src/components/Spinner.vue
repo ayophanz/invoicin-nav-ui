@@ -26,7 +26,7 @@
 const props = defineProps({
   className: {
     type: String,
-    default: "-ml-1 mr-3 h-5 w-5 text-white",
+    default: "-ml-1 h-5 w-5",
   },
 });
 </script>
