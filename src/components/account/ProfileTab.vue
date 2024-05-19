@@ -46,8 +46,8 @@ let form = reactive(
 onMounted(() => {
   const data = {
     image: getMe.value.image,
-    firstname: getMe.value.first_name,
-    lastname: getMe.value.last_name,
+    firstname: getMe.value.firstname,
+    lastname: getMe.value.lastname,
   };
 
   form.setFormData(data);

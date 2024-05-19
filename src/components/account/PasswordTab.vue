@@ -3,7 +3,11 @@
   <div class="mb-5">
     <p class="mt-5 text-sm text-gray-500">Asterisk(*) is required fields.</p>
   </div>
-  <Form :submit="onPasswordSave" :form="form"></Form>
+  <Form
+    :submit="onPasswordSave"
+    submitText="Update & Logout"
+    :form="form"
+  ></Form>
 </template>
 <script setup lang="ts">
 import { reactive } from "vue";
@@ -53,11 +57,11 @@ const onPasswordSave = async () => {
   await accountService
     .updatePassword(getMe.value.id, formData)
     .then(async () => {
-      await accountService.me();
       form.setLoading(false);
       toast.success("Successfully Save!", {
         timeout: 2000,
       });
+      accountService.logout();
     })
     .catch((error) => {
       form.setLoading(false);

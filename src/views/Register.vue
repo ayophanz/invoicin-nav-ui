@@ -23,10 +23,10 @@
             @click="onValidateUser"
             :disabled="submitLoading"
             type="button"
-            class="disabled:opacity-75 ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            class="gap-x-1 disabled:opacity-75 ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >
             <Spinner v-if="submitLoading"></Spinner>
-            Next
+            <span>Next</span>
           </button>
         </div>
       </div>
@@ -88,10 +88,10 @@
             @click="onValidateOrganization"
             :disabled="submitLoading"
             type="button"
-            class="disabled:opacity-75 ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            class="gap-x-1 disabled:opacity-75 ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >
             <Spinner v-if="submitLoading"></Spinner>
-            Next
+            <span>Next</span>
           </button>
         </div>
       </div>
@@ -111,10 +111,10 @@
           @click="onSaveComplete"
           :disabled="submitLoading"
           type="button"
-          class="disabled:opacity-75 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-5 text-md font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          class="gap-x-1 disabled:opacity-75 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-5 text-md font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
           <Spinner v-if="submitLoading"></Spinner>
-          Save & Login
+          <span>Save & Login</span>
         </button>
         <div class="text-base mt-3">
           <a

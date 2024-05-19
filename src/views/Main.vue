@@ -225,17 +225,17 @@
     <ModalComponent
       :state="isOpen"
       :onClose="closeModal"
-      :showClose="modalFor !== 'notice'"
+      :showClose="modalFor != 'notice'"
     >
       <!-- Services -->
       <ServiceComponent
-        v-if="modalFor === 'services'"
+        v-if="modalFor == 'services'"
         :enabledServices="services"
       ></ServiceComponent>
 
       <!-- Notice  -->
       <NoticeComponent
-        v-if="modalFor === 'notice'"
+        v-if="modalFor == 'notice'"
         :notice="notice"
       ></NoticeComponent>
 
@@ -245,7 +245,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, watch, onBeforeUnmount } from "vue";
+import { ref, onMounted, watch } from "vue";
 import {
   Dialog,
   DialogPanel,
@@ -275,6 +275,7 @@ import AccountComponent from "../components/account/Index.vue";
 import accountService from "../services/account";
 import { useAccountStore } from "../stores/account";
 import { storeToRefs } from "pinia";
+import pusher from "../pusher";
 
 const accountStore = useAccountStore();
 const { getMe } = storeToRefs(accountStore) as any;
@@ -356,19 +357,29 @@ const services = ref(servicesTemp);
 const mobileMenuOpen = ref(false);
 const isOpen = ref(false);
 const modalFor = ref("");
-const notice = ref({});
-const t = ref();
-const newPassDetect = ref(false);
+const notice = ref(null);
 
 onMounted(async () => {
   await accountService.me();
   selectedService();
   noticeVerification();
-  checkingNewPassword();
+
+  const channel = pusher.subscribe("confirmation");
+  channel.bind("user_confirmed", (data: { verified_at: string }) => {
+    console.log("User confirmed");
+    getMe.value.emailVerifiedAt = data.verified_at;
+    noticeVerification();
+  });
+
+  channel.bind("org_confirmed", (data: { verified_at: string }) => {
+    console.log("Org confirmed");
+    getMe.value.organizationEmailVerifiedAt = data.verified_at;
+    noticeVerification();
+  });
 });
 
 const noticeVerification = () => {
-  if (getMe.value.email_verified_at === null) {
+  if (getMe.value.emailVerifiedAt === null) {
     notice.value = {
       type: "info",
       title: "User verification",
@@ -376,45 +387,19 @@ const noticeVerification = () => {
     };
     openModal("notice");
   } else if (
-    getMe.value.organization_email_verified_at === null &&
+    getMe.value.organizationEmailVerifiedAt === null &&
     getMe.value.type == "Company"
   ) {
     notice.value = {
       type: "info",
       title: "Organization verification",
-      message: `The organization verification is required before proceeding, Please check your email (${getMe.value.organization_email}).`,
+      message: `The organization verification is required before proceeding, Please check your email (${getMe.value.organizationEmail}).`,
     };
     openModal("notice");
-  }
-};
-
-watch(
-  () => getMe.value.isNewPassword,
-  (n) => {
-    if (newPassDetect.value) {
-      console.log("stop checking new password");
-      clearInterval(t.value);
-      newPassDetect.value = false;
-      accountService.logout();
-    } else {
-      if (n) {
-        checkingNewPassword();
-      }
-    }
-  }
-);
-
-onBeforeUnmount(() => {
-  console.log("stop checking new password");
-  clearInterval(t.value);
-});
-
-const checkingNewPassword = async () => {
-  if (getMe.value.isNewPassword) {
-    newPassDetect.value = true;
-    t.value = setInterval(async () => {
-      await accountService.me();
-    }, 3000);
+  } else {
+    notice.value = null;
+    modalFor.value = "";
+    closeModal();
   }
 };
 
