@@ -38,6 +38,13 @@
         @onchange-data="updateValue"
       ></Checkbox>
 
+      <Message
+        v-else-if="field.type === 'message'"
+        :value="field.value"
+        :label="field.label"
+        :name="field.name"
+      ></Message>
+
       <File
         v-else-if="field.type === 'file'"
         :value="field.value"
@@ -78,6 +85,7 @@ import Select from "./Select.vue";
 import Radio from "./Radio.vue";
 import Checkbox from "./Checkbox.vue";
 import Spinner from "../Spinner.vue";
+import Message from "./Message.vue";
 import Button from "../Button.vue";
 
 const emit = defineEmits(["onchangeForm"]);

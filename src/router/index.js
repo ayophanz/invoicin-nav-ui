@@ -7,6 +7,7 @@ import SessionExpired from '../views/SessionExpired.vue';
 import TwoFA from '../views/TwoFA.vue';
 import ForgotPassword from '../views/ForgotPassword.vue';
 import Register from '../views/Register.vue';
+import Invitation from '../views/Invitation.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -21,6 +22,14 @@ const router = createRouter({
         component: Main,
         meta: { 
           auth: true 
+        }
+      },
+      {
+        path: '/invitation/:token',
+        name: 'invitation',
+        component: Invitation,
+        meta: { 
+          auth: false 
         }
       },
       {
@@ -52,7 +61,7 @@ const router = createRouter({
         name: 'forgotPassword',
         component: ForgotPassword,
         meta: { 
-          auth: true
+          auth: false
         }
       },
       {
