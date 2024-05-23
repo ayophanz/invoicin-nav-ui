@@ -41,7 +41,7 @@ export default class Form {
 
   setFormData(data: any) {
     Object.keys(data).map((key) => {
-      if (this.form[key].value) {
+      if (this.form[key]) {
         this.form[key].value = data[key];
       }
     });
@@ -74,7 +74,7 @@ export default class Form {
       }
     } else {
       Object.keys(this.form).map((key) => {
-        if (this.form[key].value) {
+        if (this.form[key]) {
           this.form[key].value = this.initialData[key].value;
         }
       });
@@ -88,7 +88,7 @@ export default class Form {
       }
     } else {
       Object.keys(this.form).map((key) => {
-        if (this.form[key].value) {
+        if (this.form[key]) {
           this.form[key].value = "";
         }
       });

@@ -58,7 +58,7 @@ const onPasswordSave = async () => {
     .updatePassword(getMe.value.id, formData)
     .then(async () => {
       form.setLoading(false);
-      toast.success("Successfully Save!", {
+      toast.success("Successfully!", {
         timeout: 2000,
       });
       accountService.logout();

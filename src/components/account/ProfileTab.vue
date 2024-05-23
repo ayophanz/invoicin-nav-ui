@@ -62,7 +62,7 @@ const onProfileSave = async () => {
     .then(async () => {
       await accountService.me();
       form.setLoading(false);
-      toast.success("Successfully Save!", {
+      toast.success("Successfully!", {
         timeout: 2000,
       });
     })

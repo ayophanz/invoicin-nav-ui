@@ -154,7 +154,7 @@ const onAddressesSave = (index: number) => async () => {
     .updateAddress(getMe.value.id, data)
     .then(() => {
       addresses[index].form.setLoading(false);
-      toast.success("Successfully Save!", {
+      toast.success("Successfully!", {
         timeout: 2000,
       });
     })

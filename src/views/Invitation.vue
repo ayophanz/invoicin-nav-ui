@@ -12,13 +12,16 @@ import Modal from "../components/Modal.vue";
 import Form from "../components/form/Form.vue";
 import formUtil from "../utils/form.js";
 import services from "../services/account";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { useToast } from "vue-toastification";
 
+const toast = useToast();
 const route = useRoute();
+const router = useRouter();
 
 let form = reactive(
   new formUtil({
-    password: {
+    newPassword: {
       label: "Password",
       value: "",
       type: "password",
@@ -37,11 +40,34 @@ onMounted(async () => {
     .verifyInvitation(token)
     .then((response: { data: { valid: boolean } }) => {
       if (response.data.valid == false) {
-        console.log("Invalid");
+        router.push({ name: 'login' });
       }
     })
-    .catch(() => {});
+    .catch(() => {
+      router.push({ name: 'login' });
+    });
 });
 
-const onSubmit = () => {};
+const onSubmit = async () => {
+  form.setLoading(true);
+  form.setErrors({});
+  const token = route.params.token.toString();
+  await services
+    .invitationPasswordSetup(token, form.getFormData())
+    .then(() => {
+      form.reset();
+      form.setLoading(false);
+      toast.success("Successfully!", {
+        timeout: 2000,
+      });
+      router.push({ name: 'login' });
+    })
+    .catch((error) => {
+      form.setLoading(false);
+      form.setErrors(error);
+      toast.error("Something went wrong!", {
+        timeout: 2000,
+      });
+    });
+};
 </script>

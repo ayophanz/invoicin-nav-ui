@@ -122,7 +122,7 @@ const onLogin = async () => {
       } else {
         accountStore.login(response.token);
         window.history.replaceState({}, "", window.location.origin);
-        toast.success("Successfully login!", {
+        toast.success("Successfully!", {
           timeout: 2000,
         });
       }

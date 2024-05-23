@@ -169,7 +169,7 @@ const on2faEnable = async () => {
       await accountService.me();
       otpForm.setLoading(false);
       step2fa.value = 1;
-      toast.success("Successfully Save!", {
+      toast.success("Successfully!", {
         timeout: 2000,
       });
     })
@@ -192,7 +192,7 @@ const on2faDisable = async () => {
       await accountService.me();
       otpForm.setLoading(false);
       step2fa.value = 1;
-      toast.success("Successfully Save!", {
+      toast.success("Successfully!", {
         timeout: 2000,
       });
     })

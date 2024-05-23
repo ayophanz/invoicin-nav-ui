@@ -13,6 +13,7 @@ import updateProfile from "./updateProfile";
 import updatePassword from "./updatePassword";
 import updateAddress from "./updateAddress";
 import verifyInvitation from "./verifyInvitation";
+import invitationPasswordSetup from "./invitationPasswordSetup";
 
 export default {
   login,
@@ -30,4 +31,5 @@ export default {
   updatePassword,
   updateAddress,
   verifyInvitation,
+  invitationPasswordSetup,
 };
