@@ -1,10 +1,10 @@
 <template>
-  <div>
-      <router-view/>
+  <div class="nav-app w-full">
+    <router-view />
   </div>
 </template>
-<script>
-  export default {
-    name: 'App',
-  }
+<script setup lang="ts">
+import "floating-vue/dist/style.css";
+import "vue-toastification/dist/index.css";
+import "./style.css";
 </script>

@@ -4,7 +4,6 @@ export const useAccountStore = defineStore('account', {
     state: () => ({ 
         _me: [],
         _otpRequired: false,
-        _otpSetupRequired: false,
     }),
     actions: {
         login(token: string) {
@@ -24,9 +23,6 @@ export const useAccountStore = defineStore('account', {
         sessionExpired() {
             localStorage.setItem('expired_at', new Date().toString());
         },
-        otpSetupRequired() {
-            this._otpSetupRequired = true;
-        },
         otpRequired() {
             this._otpRequired = true;
         },
@@ -36,9 +32,6 @@ export const useAccountStore = defineStore('account', {
         removeOtpUserId() {
             localStorage.removeItem('2fa_token');
         },
-        otpStep(value: string) {
-            localStorage.setItem('otp_step', value);
-        },
         me(data: object) {
             this._me = data;
         },
@@ -47,17 +40,11 @@ export const useAccountStore = defineStore('account', {
         getIsAuthenticated() {
             return !!localStorage.getItem('id_token');
         },
-        getIsOtpSetupRequired() {
-            return this._otpSetupRequired;
-        },
         getIsOtpRequired() {
             return this._otpRequired;
         },
         getOtpUserId() {
             return localStorage.getItem('2fa_token');
-        },
-        getOtpStep() {
-            return localStorage.getItem('otp_step');
         },
         getMe() {
             return this._me;

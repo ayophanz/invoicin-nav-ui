@@ -1,9 +1,7 @@
 import axios from '../../plugins/axios';
-import countryTransformer from '../../transformers/countryTransformer';
 
 const success = (data: any, resolve: any) => {
-    const transfomer = countryTransformer.fetchCollection(data.data);
-    resolve(transfomer);
+    resolve(data);
 };
 
 const fail = (data: object, reject: any) => {
@@ -12,12 +10,12 @@ const fail = (data: object, reject: any) => {
 
 export default () => {
     return new Promise((resolve, reject) => {
-        axios.get('api/organization/countries')
+        axios.get('api/account/countries')
         .then((response) => {
             success(response.data, resolve);
         }).catch((error) => {
             console.log(error);
-            fail(error.response.data.errors, reject);
+            fail(error, reject);
         });
     } );
 }
