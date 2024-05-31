@@ -1,3 +1,4 @@
+
 import { createApp, h } from 'vue';
 import App from './App.vue';
 import { createPinia } from 'pinia';
@@ -6,19 +7,6 @@ import axios from './plugins/axios';
 import singleSpaVue from 'single-spa-vue';
 import floatingVue from 'floating-vue';
 import Toast from "vue-toastification";
-
-// import Echo from "laravel-echo";
-
-// window.Pusher = require('pusher-js');
-
-// window.Echo = new Echo({
-//   broadcaster: 'pusher',
-//   key: 'a699e23cd2d7d25358a2',
-//   wsHost: window.location.hostname,
-//   wsPort: 6001,
-//   forceTLS: false,
-//   disableStats: true,
-// });
 
 const toastOptions = {
   // You can set your default options here

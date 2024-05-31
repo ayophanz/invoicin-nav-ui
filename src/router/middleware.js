@@ -9,10 +9,10 @@ const beforeEach = (to, from, next) => {
     accountService.authCheck()
     .then((res) => {
         if (res.data.isAuth) {
-            if (to.name === 'twofa' || to.name === 'login' || to.name === 'register' || to.name === 'forgotPassword' || to.name === 'sessionExpired')
+            if (to.meta.auth == false)
                 window.history.replaceState({}, '', window.location.origin);
         } else {
-            if ((getOtpUserId === null && to.name === 'twofa') || to.name === 'main')
+            if ((getOtpUserId === null && to.name === 'twofa') || to.meta.auth == true)
                 window.history.replaceState({}, '', `${window.location.origin}/login`);
         }
     });
