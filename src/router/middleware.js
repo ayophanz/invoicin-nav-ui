@@ -4,11 +4,12 @@ import { storeToRefs } from 'pinia';
 
 const beforeEach = (to, from, next) => {
     const accountStore = useAccountStore();
-    const { getOtpUserId } = storeToRefs(accountStore);
+    const { getOtpUserId, getIsAuthenticated } = storeToRefs(accountStore);
     
     accountService.authCheck()
     .then((res) => {
         if (res.data.isAuth) {
+        // if (getIsAuthenticated) {
             if (to.meta.auth == false)
                 window.history.replaceState({}, '', window.location.origin);
         } else {

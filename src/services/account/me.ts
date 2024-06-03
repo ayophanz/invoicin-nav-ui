@@ -6,7 +6,7 @@ const success = (response: object, resolve: any) => {
   if (response) {
     const transformer = MeTransformer.fetch(response);
     const accountStore = useAccountStore();
-    accountStore.me(transformer);
+    accountStore.setMe(transformer);
     return resolve(response);
   }
 };

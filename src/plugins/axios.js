@@ -25,7 +25,7 @@ axios.interceptors.response.use(
              */
             if (errorCode === 40101) {
                 if (router.currentRoute.value.meta.auth == true || Object.keys(router.currentRoute.value.meta).length == 0) {
-                    accountStore.sessionExpired();
+                    accountStore.setSessionExpired();
                     window.history.replaceState({}, '', `${window.location.origin}/session-expired`);
                 }
                 return Promise.reject(error);

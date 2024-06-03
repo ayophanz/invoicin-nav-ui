@@ -116,11 +116,11 @@ const onLogin = async () => {
     .then((response: any) => {
       const accountStore = useAccountStore();
       if (response.otp_required === true) {
-        accountStore.otpUserId(response.user_id);
-        accountStore.otpRequired();
+        accountStore.setOtpUserId(response.user_id);
+        accountStore.setOtpRequired();
         router.push({ name: "twofa" });
       } else {
-        accountStore.login(response.token);
+        accountStore.setLogin(response.token);
         window.history.replaceState({}, "", window.location.origin);
         toast.success("Successfully!", {
           timeout: 2000,
