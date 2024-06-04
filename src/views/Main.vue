@@ -273,7 +273,9 @@ import { useAccountStore } from "../stores/account";
 import { storeToRefs } from "pinia";
 import pusher from "../pusher";
 import globalEvent from "../globalEvent";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const accountStore = useAccountStore();
 const { getMe } = storeToRefs(accountStore) as any;
 
@@ -444,14 +446,8 @@ const closeModal = () => {
   isOpen.value = false;
 };
 
-const onLogout = () => {
-  accountService
-    .logout()
-    .then((response) => {
-      //
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+const onLogout = async () => {
+  await accountService.logout();
+  router.replace({ path: "/login" });
 };
 </script>

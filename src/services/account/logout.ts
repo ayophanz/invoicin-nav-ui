@@ -4,8 +4,6 @@ import { useAccountStore } from "../../stores/account";
 const success = (resolve: any) => {
   const accountStore = useAccountStore();
   accountStore.setLogout();
-  window.history.replaceState({}, "", `${window.location.origin}/login`);
-
   return resolve();
 };
 
@@ -21,6 +19,7 @@ export default () => {
         success(resolve);
       })
       .catch((error) => {
+        console.log(error);
         fail(error.response.data, reject);
       });
   });

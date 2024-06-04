@@ -3,6 +3,7 @@ import vue from "@vitejs/plugin-vue";
 import checker from "vite-plugin-checker";
 import * as dns from "dns";
 
+const hash = Math.floor(Math.random() * 90000) + 10000;
 dns.setDefaultResultOrder("verbatim");
 
 // https://vitejs.dev/config/
@@ -13,7 +14,7 @@ export default defineConfig({
       preserveEntrySignatures: "exports-only",
       output: {
         format: "system",
-        entryFileNames: "[name].js",
+        entryFileNames: `[name]-${hash}.js`,
       },
     },
     chunkSizeWarningLimit: 2000,
