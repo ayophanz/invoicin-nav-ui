@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { EncryptStorage } from "encrypt-storage";
-// import globalEvent from "../globalEvent";
 
 export const useAccountStore = defineStore("account", {
   state: () => ({
@@ -18,7 +17,7 @@ export const useAccountStore = defineStore("account", {
     setLogout() {
       localStorage.removeItem("expired_at");
       localStorage.removeItem("id_token");
-      localStorage.removeItem("sharedMeState");
+      localStorage.removeItem("@me:sharedMeState");
       (window as any).axios.defaults.headers.common.Authorization = "";
     },
     setRefreshToken(token: string) {
@@ -42,8 +41,6 @@ export const useAccountStore = defineStore("account", {
         prefix: "@me",
       });
       encryptMe.setItem("sharedMeState", data);
-      // console.log("dispatch  me");
-      // globalEvent.dispatch.organization.me(data);
       this._me = data;
     },
   },

@@ -1,20 +1,13 @@
 import accountService from '../services/account';
-import { useAccountStore } from '../stores/account';
-import { storeToRefs } from 'pinia';
 
 const beforeEach = (to, from, next) => {
-    const accountStore = useAccountStore();
-    const { getOtpUserId } = storeToRefs(accountStore);
-    
+
     accountService.authCheck()
     .then((res) => {
-        if (res.data.isAuth) {
-            if (to.meta.auth == false)
-                window.history.replaceState({}, '', window.location.origin);
-        } else {
-            if ((getOtpUserId === null && to.name === 'twofa') || to.meta.auth == true)
-                window.history.replaceState({}, '', `${window.location.origin}/login`);
-        }
+        if (res.data.isAuth && to.meta.auth == false)
+            next({ path: '/', replace: true });
+        else if ((localStorage.getItem("2fa_token") === null && to.name === 'twofa') || to.meta.auth == true)
+            next({ path: 'login', replace: true });
     });
 
     next();

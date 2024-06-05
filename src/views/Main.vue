@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-full">
+  <div v-if="isLoaded" class="flex w-full">
     <TransitionRoot as="template" :show="mobileMenuOpen">
       <Dialog
         as="div"
@@ -278,6 +278,7 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 const accountStore = useAccountStore();
 const { getMe } = storeToRefs(accountStore) as any;
+const isLoaded = ref(false);
 
 const servicesTemp = [
   {
@@ -364,6 +365,7 @@ onMounted(async () => {
   noticeVerification();
   pusherListen();
   customEventListen();
+  isLoaded.value = true;
 });
 
 const customEventListen = () => {
@@ -448,6 +450,6 @@ const closeModal = () => {
 
 const onLogout = async () => {
   await accountService.logout();
-  router.replace({ path: "/login" });
+  window.location.replace(`${window.location.origin}/login`);
 };
 </script>
