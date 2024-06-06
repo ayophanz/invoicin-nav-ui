@@ -1,14 +1,20 @@
 import accountService from '../services/account';
 
 const beforeEach = (to, from, next) => {
+    console.log(to.name);
+    if (localStorage.getItem("2fa_token") === null && to.name === 'twofa')
+        window.history.replaceState({}, '', `${window.location.origin}/login`);
 
-    accountService.authCheck()
-    .then((res) => {
-        if (res.data.isAuth && to.meta.auth == false)
-            next({ path: '/', replace: true });
-        else if ((localStorage.getItem("2fa_token") === null && to.name === 'twofa') || to.meta.auth == true)
-            next({ path: 'login', replace: true });
-    });
+    else if (localStorage.getItem("id_token") === null && to.meta.auth == true)
+        window.history.replaceState({}, '', `${window.location.origin}/login`);
+
+    if (to.meta.auth == false) {
+        accountService.authCheck()
+        .then((res) => {
+            if (res.data.isAuth && to.meta.auth == false)
+                window.history.replaceState({}, '', `${window.location.origin}`);
+        });
+    }
 
     next();
 }

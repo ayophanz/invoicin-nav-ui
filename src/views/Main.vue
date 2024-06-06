@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isLoaded" class="flex w-full">
+  <div class="flex w-full">
     <TransitionRoot as="template" :show="mobileMenuOpen">
       <Dialog
         as="div"
@@ -273,12 +273,9 @@ import { useAccountStore } from "../stores/account";
 import { storeToRefs } from "pinia";
 import pusher from "../pusher";
 import globalEvent from "../globalEvent";
-import { useRouter } from "vue-router";
 
-const router = useRouter();
 const accountStore = useAccountStore();
 const { getMe } = storeToRefs(accountStore) as any;
-const isLoaded = ref(false);
 
 const servicesTemp = [
   {
@@ -360,12 +357,11 @@ const modalFor = ref("");
 const notice = ref(null);
 
 onMounted(async () => {
-  await accountService.me();
   selectedService();
-  noticeVerification();
   pusherListen();
   customEventListen();
-  isLoaded.value = true;
+  await accountService.me();
+  noticeVerification();
 });
 
 const customEventListen = () => {

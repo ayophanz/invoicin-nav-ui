@@ -1,19 +1,11 @@
 import axios from 'axios';
 import router from '../router';
-import { useAccountStore } from './../stores/account';
-
-const logoutErrors = [
-    40102, // No token provided
-    40103, // Invalid token
-];
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 axios.defaults.headers.common.Accept = 'application/json';
 axios.interceptors.response.use(
     (response) => response,
     (error) => {
-        const accountStore = useAccountStore();
-        
         /**
          * Unauthorized
          */
@@ -25,7 +17,7 @@ axios.interceptors.response.use(
              */
             if (errorCode === 40101) {
                 if (router.currentRoute.value.meta.auth == true || Object.keys(router.currentRoute.value.meta).length == 0) {
-                    accountStore.setSessionExpired();
+                    localStorage.setItem("expired_at", new Date().toString());
                     window.history.replaceState({}, '', `${window.location.origin}/session-expired`);
                 }
                 return Promise.reject(error);

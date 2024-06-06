@@ -24,9 +24,6 @@ export const useAccountStore = defineStore("account", {
       useAccountStore().setLogout();
       useAccountStore().setLogin(token);
     },
-    setSessionExpired() {
-      localStorage.setItem("expired_at", new Date().toString());
-    },
     setOtpRequired() {
       this._otpRequired = true;
     },

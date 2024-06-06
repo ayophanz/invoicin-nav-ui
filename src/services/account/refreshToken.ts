@@ -1,11 +1,10 @@
 import axios from "../../plugins/axios";
 import { useAccountStore } from "../../stores/account";
-import router from "../../router";
 
 const success = (response: string, resolve: any) => {
   const accountStore = useAccountStore();
   accountStore.setRefreshToken(response);
-  router.push({ name: "main" });
+  window.history.replaceState({}, "", window.location.origin);
   return resolve();
 };
 
