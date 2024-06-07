@@ -4,7 +4,12 @@ import router from '../router';
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 axios.defaults.headers.common.Accept = 'application/json';
 axios.interceptors.response.use(
-    (response) => response,
+    (response) => {
+        // if (router.currentRoute.value.meta.auth == false)
+        //     return router.replace({ name: 'main' });
+
+        return response;
+    },
     (error) => {
         /**
          * Unauthorized
@@ -18,20 +23,16 @@ axios.interceptors.response.use(
             if (errorCode === 40101) {
                 if (router.currentRoute.value.meta.auth == true || Object.keys(router.currentRoute.value.meta).length == 0) {
                     localStorage.setItem("expired_at", new Date().toString());
-                    window.history.replaceState({}, '', `${window.location.origin}/session-expired`);
+                    return router.replace({ name: 'sessionExpired' });
                 }
-                return Promise.reject(error);
             }
 
             /**
              * Login required
              */
-            if (errorCode === 40102) {
-                window.history.replaceState({}, '', `${window.location.origin}/login`);
-                return Promise.reject(error);
-            }
+            if (errorCode === 40102) return router.replace({ name: 'login' });
         }
-
+        
         return Promise.reject(error);
     }
 );

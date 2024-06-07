@@ -27,26 +27,25 @@
                         </div> -->
 
             <div class="text-sm">
-              <a
-                href="#"
-                @click.prevent="forgotPassword"
+              <RouterLink
+                to="/forgot-password"
                 class="font-medium text-indigo-600 hover:text-indigo-500"
               >
-                Forgot your password?
-              </a>
+                Forgot password?
+              </RouterLink>
             </div>
           </div>
 
           <div class="my-5">
-            <button
-              type="submit"
+            <Button
               @click.prevent="onLogin"
-              :disabled="submitLoading"
-              class="w-full gap-x-2 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              :disabled="form.getLoading()"
+              :loading="form.getLoading()"
+              moreClass="w-full !text-white !bg-gray-700 "
             >
-              <Spinner v-if="submitLoading"></Spinner>
+              <Spinner v-if="form.getLoading()" class="h-4 w-auto"></Spinner>
               <span>Sign in</span>
-            </button>
+            </Button>
           </div>
 
           <div class="mt-6">
@@ -63,11 +62,10 @@
 
             <div class="mt-6 grid grid-cols-1 gap-3 justify-items-center">
               <div>
-                <a
-                  @click.prevent="onRegister"
-                  href="#"
+                <RouterLink
+                  to="/register"
                   class="text-center hover:underline hover:text-blue-400"
-                  >Sign up</a
+                  >Sign up</RouterLink
                 >
               </div>
             </div>
@@ -87,12 +85,12 @@ import { useRouter } from "vue-router";
 import { useAccountStore } from "../stores/account";
 import { useToast } from "vue-toastification";
 import formUtil from "../utils/form.js";
+import Button from "../components/Button.vue";
 
 const toast = useToast();
 const router = useRouter();
 
 let errorMessage = ref("");
-const submitLoading = ref(false);
 let form = reactive(
   new formUtil({
     email: {
@@ -110,7 +108,7 @@ let form = reactive(
 
 const onLogin = async () => {
   errorMessage.value = "";
-  submitLoading.value = true;
+  form.setLoading(true);
   await accountService
     .login(form.getFormData())
     .then((response: any) => {
@@ -128,20 +126,12 @@ const onLogin = async () => {
       }
     })
     .catch((error) => {
-      submitLoading.value = false;
+      form.setLoading(false);
       form.setErrors(error);
       errorMessage.value = error.message;
       toast.error("Something went wrong!", {
         timeout: 2000,
       });
     });
-};
-
-const forgotPassword = () => {
-  router.push({ name: "forgotPassword" });
-};
-
-const onRegister = () => {
-  router.push({ name: "register" });
 };
 </script>

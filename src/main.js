@@ -28,8 +28,8 @@ const vueLifecycles = singleSpaVue({
       },
     },
     handleInstance: (app) => {
-        app.use(pinia);
         app.use(router);
+        app.use(pinia);
         app.use(floatingVue);
         app.use(Toast, toastOptions);
         axios.defaults.baseURL = import.meta.env.VITE_API_URL;
