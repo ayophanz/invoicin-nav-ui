@@ -18,10 +18,6 @@ export const useAccountStore = defineStore("account", {
       localStorage.removeItem("@me:shared_me_state");
       (window as any).axios.defaults.headers.common.Authorization = "";
     },
-    setRefreshToken(token: string) {
-      useAccountStore().setLogout();
-      useAccountStore().setLogin(token);
-    },
     setOtpRequired() {
       this._otpRequired = true;
     },

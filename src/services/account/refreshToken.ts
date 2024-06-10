@@ -1,10 +1,10 @@
 import axios from "../../plugins/axios";
-import { useAccountStore } from "../../stores/account";
 
 const success = (response: string, resolve: any) => {
-  const accountStore = useAccountStore();
-  accountStore.setRefreshToken(response);
-  window.history.replaceState({}, "", window.location.origin);
+  localStorage.setItem("token", response);
+  (
+    window as any
+  ).axios.defaults.headers.common.Authorization = `Bearer ${response}`;
   return resolve();
 };
 
@@ -16,10 +16,10 @@ export default () => {
   return new Promise((resolve, reject) => {
     axios
       .get("api/refresh")
-      .then((response) => {
+      .then((response: { data: { token: string } }) => {
         success(response.data.token, resolve);
       })
-      .catch((error) => {
+      .catch((error: { response: { data: object } }) => {
         fail(error.response.data, reject);
       });
   });
