@@ -4,33 +4,33 @@ import router from '../router';
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 axios.defaults.headers.common.Accept = 'application/json';
 axios.interceptors.response.use(
-    (response) => {
-        // if (router.currentRoute.value.meta.auth == false)
-        //     return router.replace({ name: 'main' });
-
-        return response;
-    },
+    (response) => (response),
     (error) => {
+        console.log('something went wrong!');
         /**
          * Unauthorized
          */
         if (error.response.status === 401) {
-            const errorCode = error.response.data.error.code;
+            const errorCode = error.response.data.code;
 
             /**
              * Token expired
              */
-            if (errorCode === 40101) {
+            if (errorCode === 40102) {
                 if (router.currentRoute.value.meta.auth == true || Object.keys(router.currentRoute.value.meta).length == 0) {
-                    localStorage.setItem("expired_at", new Date().toString());
-                    return router.replace({ name: 'sessionExpired' });
+                    //router.replace({ name: 'sessionExpired' });
                 }
             }
 
             /**
              * Login required
              */
-            if (errorCode === 40102) return router.replace({ name: 'login' });
+            if (errorCode === 40101) {
+                localStorage.removeItem("token");
+                localStorage.removeItem("@me:shared_me_state");
+                window.axios.defaults.headers.common.Authorization = "";
+                window.location.replace(`${window.location.origin}/login`);
+            }
         }
         
         return Promise.reject(error);
@@ -39,8 +39,8 @@ axios.interceptors.response.use(
 
 axios.interceptors.request.use(
     (config) => {
-        if (localStorage.getItem('id_token')) {
-            config.headers.Authorization = `Bearer ${localStorage.getItem('id_token')}`;
+        if (localStorage.getItem('token')) {
+            config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
         }
         return config;
     },

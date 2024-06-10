@@ -8,16 +8,14 @@ export const useAccountStore = defineStore("account", {
   }),
   actions: {
     setLogin(token: string) {
-      localStorage.removeItem("expired_at");
-      localStorage.setItem("id_token", token);
+      localStorage.setItem("token", token);
       (
         window as any
       ).axios.defaults.headers.common.Authorization = `Bearer ${token}`;
     },
     setLogout() {
-      localStorage.removeItem("expired_at");
-      localStorage.removeItem("id_token");
-      localStorage.removeItem("@me:sharedMeState");
+      localStorage.removeItem("token");
+      localStorage.removeItem("@me:shared_me_state");
       (window as any).axios.defaults.headers.common.Authorization = "";
     },
     setRefreshToken(token: string) {
@@ -34,16 +32,14 @@ export const useAccountStore = defineStore("account", {
       localStorage.removeItem("2fa_token");
     },
     setMe(data: object) {
-      const encryptMe = new EncryptStorage("G!KLH5J4E=A@", {
-        prefix: "@me",
-      });
-      encryptMe.setItem("sharedMeState", data);
+      const encrypt = new EncryptStorage("G!KLH5J4E=A@", { prefix: "@me" });
+      encrypt.setItem("shared_me_state", data);
       this._me = data;
     },
   },
   getters: {
     getIsAuthenticated() {
-      return !!localStorage.getItem("id_token");
+      return !!localStorage.getItem("token");
     },
     getIsOtpRequired() {
       return this._otpRequired;
