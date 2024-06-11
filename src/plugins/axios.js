@@ -2,14 +2,17 @@ import axios from 'axios';
 import router from '../router';
 import { useToast } from "vue-toastification";
 import accountService from "../services/account";
+import { nextTick } from 'vue';
 
 const toast = useToast();
+const maxRetry = 5;
+let counter = 0;
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 axios.defaults.headers.common.Accept = 'application/json';
 axios.interceptors.response.use(
     (response) => (response),
-    async (error) => {
+    (error) => {
         /**
          * Unauthorized
          */
@@ -21,14 +24,29 @@ axios.interceptors.response.use(
              */
             if (errorCode === 40102) {
                 if (router.currentRoute.value.meta.auth == true || Object.keys(router.currentRoute.value.meta).length == 0) {
-                    toast.info("Extending session...", {
-                        timeout: 2000,
+                    counter++;
+                    if (counter >= maxRetry) return Promise.reject(error);
+
+                    return nextTick(async () => {
+                        localStorage.setItem('refreshing_token', true);
+                        toast.info("Extending session...", {
+                            timeout: 2000,
+                        });
+                        await accountService.refreshToken();
+                        toast.success("Session extended!", {
+                            timeout: 2000,
+                        });
+                        localStorage.removeItem('refreshing_token');
+
+                        let config = error.config;
+                        config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
+                        return new Promise(resolve => {
+                            setTimeout(function() {
+                                resolve(axios.request(config));
+                            }, 2000);
+                        });
+
                     });
-                    await accountService.refreshToken();
-                    toast.success("Session extended!", {
-                        timeout: 2000,
-                    });
-                    return axios.request(error.config);
                 }
             }
 
