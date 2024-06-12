@@ -55,7 +55,15 @@
                 <div
                   class="flex-shrink-0 flex items-center px-4 border-b border-gray-200 pb-5"
                 >
-                  <img class="h-8 w-auto" :src="compLogo" alt="Workflow" />
+                  <span v-if="getMe.logo == null">{{
+                    getMe.defaultLogo[0]
+                  }}</span>
+                  <img
+                    v-else
+                    class="h-8 w-auto"
+                    :src="getMe.logo"
+                    alt="Workflow"
+                  />
                 </div>
                 <nav aria-label="Sidebar" class="mt-5">
                   <div
@@ -123,9 +131,11 @@
             <div
               class="py-4 flex items-center justify-center border-b border-gray-200"
             >
+              <span v-if="getMe.logo == null">{{ getMe.defaultLogo[0] }}</span>
               <img
+                v-else
                 class="block mx-auto h-10 w-10 object-cover rounded-full"
-                :src="compLogo"
+                :src="getMe.logo"
                 alt="Workflow"
               />
             </div>
@@ -197,9 +207,11 @@
           class="bg-white py-2 px-4 flex items-center justify-between sm:px-6 lg:px-8 border-b border-gray-200"
         >
           <div>
+            <span v-if="getMe.logo == null">{{ getMe.defaultLogo[0] }}</span>
             <img
+              v-else
               class="block mx-auto h-10 w-10 object-cover rounded-full"
-              :src="compLogo"
+              :src="getMe.logo"
               alt="Workflow"
             />
           </div>
@@ -418,10 +430,6 @@ const navAction = (item: { name: string; to: string }) => {
     selectedService();
   }
 };
-
-const compLogo = computed(() => {
-  return getMe.value.logo ? getMe.value.logo : "";
-});
 
 const selectedService = () => {
   navigation.value.forEach((item: { active: boolean }) => {
