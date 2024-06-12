@@ -55,11 +55,7 @@
                 <div
                   class="flex-shrink-0 flex items-center px-4 border-b border-gray-200 pb-5"
                 >
-                  <img
-                    class="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/workflow-mark.svg?color=black"
-                    alt="Workflow"
-                  />
+                  <img class="h-8 w-auto" :src="compLogo" alt="Workflow" />
                 </div>
                 <nav aria-label="Sidebar" class="mt-5">
                   <div
@@ -128,8 +124,8 @@
               class="py-4 flex items-center justify-center border-b border-gray-200"
             >
               <img
-                class="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/workflow-mark.svg?color=blue"
+                class="block mx-auto h-10 w-10 object-cover rounded-full"
+                :src="compLogo"
                 alt="Workflow"
               />
             </div>
@@ -202,8 +198,8 @@
         >
           <div>
             <img
-              class="h-8 w-auto"
-              src="https://tailwindui.com/img/logos/workflow-mark.svg?color=black"
+              class="block mx-auto h-10 w-10 object-cover rounded-full"
+              :src="compLogo"
               alt="Workflow"
             />
           </div>
@@ -245,7 +241,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, computed } from "vue";
 import {
   Dialog,
   DialogPanel,
@@ -276,6 +272,7 @@ import accountService from "../services/account";
 import { useAccountStore } from "../stores/account";
 import { storeToRefs } from "pinia";
 import pusher from "../pusher";
+import globalEvent from "../globalEvent";
 
 const accountStore = useAccountStore();
 const { getMe } = storeToRefs(accountStore) as any;
@@ -360,23 +357,29 @@ const modalFor = ref("");
 const notice = ref(null);
 
 onMounted(async () => {
-  await accountService.me();
   selectedService();
+  pusherListen();
+  customEventListen();
+  await accountService.me();
   noticeVerification();
+});
 
+const customEventListen = () => {
+  globalEvent.listen.organization.logo();
+};
+
+const pusherListen = () => {
   const channel = pusher.subscribe("confirmation");
   channel.bind("user_confirmed", (data: { verified_at: string }) => {
-    console.log("User confirmed");
     getMe.value.emailVerifiedAt = data.verified_at;
     noticeVerification();
   });
 
   channel.bind("org_confirmed", (data: { verified_at: string }) => {
-    console.log("Org confirmed");
     getMe.value.organizationEmailVerifiedAt = data.verified_at;
     noticeVerification();
   });
-});
+};
 
 const noticeVerification = () => {
   if (getMe.value.emailVerifiedAt === null) {
@@ -416,6 +419,10 @@ const navAction = (item: { name: string; to: string }) => {
   }
 };
 
+const compLogo = computed(() => {
+  return getMe.value.logo ? getMe.value.logo : "";
+});
+
 const selectedService = () => {
   navigation.value.forEach((item: { active: boolean }) => {
     item.active = false;
@@ -437,14 +444,8 @@ const closeModal = () => {
   isOpen.value = false;
 };
 
-const onLogout = () => {
-  accountService
-    .logout()
-    .then((response) => {
-      //
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+const onLogout = async () => {
+  await accountService.logout();
+  window.location.replace(`${window.location.origin}/login`);
 };
 </script>

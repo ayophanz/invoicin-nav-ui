@@ -164,7 +164,7 @@ const on2faEnable = async () => {
   otpForm.setLoading(true);
   const otpFormData = otpForm.getFormData();
   await accountService
-    .enable2fa(getMe.value.id, otpFormData)
+    .enable2fa(otpFormData)
     .then(async () => {
       await accountService.me();
       otpForm.setLoading(false);
@@ -187,7 +187,7 @@ const on2faDisable = async () => {
   otpForm.setLoading(true);
   const otpFormData = otpForm.getFormData();
   await accountService
-    .disable2fa(getMe.value.id, otpFormData)
+    .disable2fa(otpFormData)
     .then(async () => {
       await accountService.me();
       otpForm.setLoading(false);

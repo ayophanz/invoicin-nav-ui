@@ -55,7 +55,7 @@ const onPasswordSave = async () => {
   form.setLoading(true);
   const formData = form.getFormData();
   await accountService
-    .updatePassword(getMe.value.id, formData)
+    .updatePassword(formData)
     .then(async () => {
       form.setLoading(false);
       toast.success("Successfully!", {

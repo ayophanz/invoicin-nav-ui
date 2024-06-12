@@ -151,7 +151,7 @@ const onAddressesSave = (index: number) => async () => {
   let data = addresses[index].form.getFormData();
   data.type = addresses[index].title;
   await accountService
-    .updateAddress(getMe.value.id, data)
+    .updateAddress(data)
     .then(() => {
       addresses[index].form.setLoading(false);
       toast.success("Successfully!", {

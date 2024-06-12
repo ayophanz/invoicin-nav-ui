@@ -1,23 +1,25 @@
-import axios from '../../plugins/axios';
-import passwordTransformer from '../../transformers/passwordTransformer';
+import axios from "../../plugins/axios";
+import passwordTransformer from "../../transformers/passwordTransformer";
 
 const success = (data: object, resolve: any) => {
-    return resolve(data);
+  return resolve(data);
 };
 
 const fail = (data: object, reject: any) => {
-    const transfomer = passwordTransformer.fetch(data);
-    return reject(transfomer);
+  const transfomer = passwordTransformer.fetch(data);
+  return reject(transfomer);
 };
 
-export default (id: number, data: object) => {
-    const transfomer = passwordTransformer.send(data);
-    return new Promise((resolve, reject) => {
-        axios.put(`api/account/password/update/${id}`, transfomer)
-        .then((response) => {
-            success(response.data, resolve);
-        }).catch((error) => {
-            fail(error.response.data.errors, reject);
-        });
-    } );
-}
+export default (data: object) => {
+  const transfomer = passwordTransformer.send(data);
+  return new Promise((resolve, reject) => {
+    axios
+      .put("api/account/password/update", transfomer)
+      .then((response) => {
+        success(response.data, resolve);
+      })
+      .catch((error) => {
+        fail(error.response.data.errors, reject);
+      });
+  });
+};
