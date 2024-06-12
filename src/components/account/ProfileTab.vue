@@ -58,7 +58,7 @@ const onProfileSave = async () => {
   form.setLoading(true);
   const formData = form.getFormData();
   await accountService
-    .updateProfile(getMe.value.id, formData)
+    .updateProfile(formData)
     .then(async () => {
       await accountService.me();
       form.setLoading(false);

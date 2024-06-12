@@ -1,23 +1,16 @@
-import accountService from '../services/account';
-import { useAccountStore } from '../stores/account';
-import { storeToRefs } from 'pinia';
-
 const beforeEach = (to, from, next) => {
-    const accountStore = useAccountStore();
-    const { getOtpUserId } = storeToRefs(accountStore);
+    console.log(to.name);
     
-    accountService.authCheck()
-    .then((res) => {
-        if (res.data.isAuth) {
-            if (to.meta.auth == false)
-                window.history.replaceState({}, '', window.location.origin);
-        } else {
-            if ((getOtpUserId === null && to.name === 'twofa') || to.meta.auth == true)
-                window.history.replaceState({}, '', `${window.location.origin}/login`);
-        }
-    });
-
-    next();
+    if (((localStorage.getItem("2fa_token") == null && to.name == 'twofa') ||
+        (localStorage.getItem("token") == null && to.meta.auth === true)) && to.name != 'login') {
+            localStorage.removeItem("@me:shared_me_state");
+            window.axios.defaults.headers.common.Authorization = "";
+            next({name: 'login'});
+    }
+    else if (localStorage.getItem("token") != null && to.meta.auth === false && to.name != 'main')
+        next({name: 'main'});
+    else 
+        next();
 }
 
 export default {

@@ -1,23 +1,25 @@
-import axios from '../../plugins/axios';
-import addresstransformer from '../../transformers/addressTransformer';
+import axios from "../../plugins/axios";
+import addresstransformer from "../../transformers/addressTransformer";
 
 const success = (data: object, resolve: any) => {
-    return resolve(data);
+  return resolve(data);
 };
 
 const fail = (data: object, reject: any) => {
-    const transformer = addresstransformer.fetch(data);
-    return reject(transformer);
+  const transformer = addresstransformer.fetch(data);
+  return reject(transformer);
 };
 
-export default (id: number, data: object) => {
-    const transformer = addresstransformer.send(data);
-    return new Promise((resolve, reject) => {
-        axios.post(`api/account/address/update/${id}`, transformer)
-        .then((response: { data: object }) => {
-            success(response.data, resolve);
-        }).catch((error: { response: { data: { errors: object }}}) => {
-            fail(error.response.data.errors, reject);
-        });
-    } );
-}
+export default (data: object) => {
+  const transformer = addresstransformer.send(data);
+  return new Promise((resolve, reject) => {
+    axios
+      .post("api/account/address/update", transformer)
+      .then((response: { data: object }) => {
+        success(response.data, resolve);
+      })
+      .catch((error: { response: { data: { errors: object } } }) => {
+        fail(error.response.data.errors, reject);
+      });
+  });
+};

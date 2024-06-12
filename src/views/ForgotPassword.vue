@@ -1,32 +1,38 @@
 <template>
   <ModalComponent :state="true" :showClose="false" :dialogClass="'w-auto'">
     <div v-if="!isSent" class="rounded-md p-4">
-      <h2 class="text-center text-3xl font-semibold">Forgot your password?</h2>
+      <h2 class="text-center text-2xl mb-2 font-semibold">Forgot password?</h2>
+      <p>
+        Remember your password?
+        <RouterLink
+          to="/login"
+          class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+          >Sign In here</RouterLink
+        >
+      </p>
       <div class="flex mt-4 w-full">
         <Form :form="form" class="w-full"></Form>
       </div>
       <div class="flex justify-center items-center gap-4 my-4">
-        <button
+        <Button
           @click="reset"
-          type="button"
-          class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          :disabled="form.getLoading()"
+          :loading="form.getLoading()"
+          moreClass="w-full !text-white !bg-gray-700 "
         >
-          Reset Password
-        </button>
-        <a @click.prevent="backToSignIn" href="#" class="hover:underline"
-          >back to sign in</a
-        >
+          <Spinner v-if="form.getLoading()" class="h-4 w-auto"></Spinner>
+          <span>Reset Password</span>
+        </Button>
       </div>
     </div>
     <div v-else class="flex flex-col gap-y-4">
       <h2 class="text-center text-4xl">
         Check your email to reset your password
       </h2>
-      <a
-        @click.prevent="backToSignIn"
-        href="#"
-        class="hover:underline text-center"
-        >back to sign in</a
+      <RouterLink
+        to="/login"
+        class="font-medium text-indigo-600 hover:text-indigo-500"
+        >Sign In</RouterLink
       >
     </div>
   </ModalComponent>
@@ -36,11 +42,10 @@
 import { ref, reactive } from "vue";
 import accountService from "../services/account";
 import ModalComponent from "../components/Modal.vue";
-import { useRouter } from "vue-router";
 import Form from "../components/form/Form.vue";
 import formUtil from "../utils/form.js";
-
-const router = useRouter();
+import Button from "../components/Button.vue";
+import Spinner from "../components/Spinner.vue";
 
 let isSent = ref(false);
 let form = reactive(
@@ -55,7 +60,7 @@ let form = reactive(
 
 const reset = async () => {
   isSent.value = false;
-  form.setLoading(false);
+  form.setLoading(true);
   form.setErrors({});
   await accountService
     .forgotPassword(form.getFormData())
@@ -67,9 +72,5 @@ const reset = async () => {
       form.setLoading(false);
       form.setErrors(error);
     });
-};
-
-const backToSignIn = () => {
-  router.push({ name: "login" });
 };
 </script>

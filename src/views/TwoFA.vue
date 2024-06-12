@@ -54,8 +54,8 @@ const onVerifyOTP = async () => {
     .verifyOtp(getOtpUserId.value, otpFormData)
     .then((response: any) => {
       if (response.token != "") {
-        accountStore.login(response.token);
-        accountStore.removeOtpUserId();
+        accountStore.setLogin(response.token);
+        accountStore.setRemoveOtpUserId();
         router.push({ name: "main" });
         toast.success("Successfully!", {
           timeout: 2000,
