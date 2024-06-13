@@ -20,7 +20,7 @@ export default class MeTransformer extends Transformer {
       image: item.image,
       type: item.type,
       is2faEnable: item.is2fa_enable,
-      defaultLogo: item.organization.default_logo ?? null,
+      defaultLogo: item.organization.default_logo,
       logo: item.organization.logo ?? null,
       organizationUuid: item.organization.uuid ?? null,
       organizationName: item.organization.name ?? null,

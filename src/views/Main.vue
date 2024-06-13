@@ -55,15 +55,19 @@
                 <div
                   class="flex-shrink-0 flex items-center px-4 border-b border-gray-200 pb-5"
                 >
-                  <span v-if="getMe.logo == null">{{
-                    getMe.defaultLogo[0]
-                  }}</span>
-                  <img
-                    v-else
-                    class="h-8 w-auto"
-                    :src="getMe.logo"
-                    alt="Workflow"
-                  />
+                  <span
+                    v-if="getMe.logo == null"
+                    class="uppercase text-white rounded-full h-10 w-10 font-medium flex justify-center items-center"
+                    :style="
+                      getMe.defaultLogo
+                        ? `background-color:${getMe.defaultLogo.bg_color}`
+                        : ''
+                    "
+                    >{{
+                      getMe.defaultLogo ? getMe.defaultLogo.initial : ""
+                    }}</span
+                  >
+                  <img v-else class="h-8 w-auto" :src="getMe.logo" />
                 </div>
                 <nav aria-label="Sidebar" class="mt-5">
                   <div
@@ -96,10 +100,22 @@
                 <a href="#" class="flex-shrink-0 group block cursor-default">
                   <div class="flex items-center">
                     <div>
+                      <span
+                        v-if="getMe.image == null"
+                        class="uppercase text-white rounded-full h-10 w-10 font-medium flex justify-center items-center"
+                        :style="
+                          getMe.defaultImage
+                            ? `background-color:${getMe.defaultImage.bg_color}`
+                            : ''
+                        "
+                        >{{
+                          getMe.defaultImage ? getMe.defaultImage.initial : ""
+                        }}</span
+                      >
                       <img
+                        v-else
                         class="inline-block h-10 w-10 object-cover rounded-full"
-                        :src="getMe.image ? getMe.image[0] : ''"
-                        alt=""
+                        :src="getMe.image[0]"
                       />
                     </div>
                     <div class="ml-3">
@@ -131,12 +147,20 @@
             <div
               class="py-4 flex items-center justify-center border-b border-gray-200"
             >
-              <span v-if="getMe.logo == null">{{ getMe.defaultLogo[0] }}</span>
+              <span
+                v-if="getMe.logo == null"
+                class="uppercase text-white rounded-full h-10 w-10 font-medium flex justify-center items-center"
+                :style="
+                  getMe.defaultLogo
+                    ? `background-color:${getMe.defaultLogo.bg_color}`
+                    : ''
+                "
+                >{{ getMe.defaultLogo ? getMe.defaultLogo.initial : "" }}</span
+              >
               <img
                 v-else
                 class="block mx-auto h-10 w-10 object-cover rounded-full"
                 :src="getMe.logo"
-                alt="Workflow"
               />
             </div>
             <nav
@@ -182,11 +206,26 @@
                   </div>
                 </TransitionRoot>
               </template>
-              <a href="#" class="flex-shrink-0 w-full cursor-default">
+              <a
+                href="#"
+                class="flex-shrink-0 w-full cursor-default flex justify-center items-center"
+              >
+                <span
+                  v-if="getMe.image == null"
+                  class="uppercase text-white rounded-full h-10 w-10 font-medium flex justify-center items-center"
+                  :style="
+                    getMe.defaultImage
+                      ? `background-color:${getMe.defaultImage.bg_color}`
+                      : ''
+                  "
+                  >{{
+                    getMe.defaultImage ? getMe.defaultImage.initial : ""
+                  }}</span
+                >
                 <img
-                  class="block mx-auto h-10 w-10 object-cover rounded-full"
-                  :src="getMe.image ? getMe.image[0] : ''"
-                  alt=""
+                  v-else
+                  class="inline-block h-10 w-10 object-cover rounded-full"
+                  :src="getMe.image[0]"
                 />
                 <div class="sr-only">
                   <p>
@@ -207,12 +246,20 @@
           class="bg-white py-2 px-4 flex items-center justify-between sm:px-6 lg:px-8 border-b border-gray-200"
         >
           <div>
-            <span v-if="getMe.logo == null">{{ getMe.defaultLogo[0] }}</span>
+            <span
+              v-if="getMe.logo == null"
+              class="uppercase text-white rounded-full h-10 w-10 font-medium flex justify-center items-center"
+              :style="
+                getMe.defaultLogo
+                  ? `background-color:${getMe.defaultLogo.bg_color}`
+                  : ''
+              "
+              >{{ getMe.defaultLogo ? getMe.defaultLogo.initial : "" }}</span
+            >
             <img
               v-else
               class="block mx-auto h-10 w-10 object-cover rounded-full"
               :src="getMe.logo"
-              alt="Workflow"
             />
           </div>
           <div>
