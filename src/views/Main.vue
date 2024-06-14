@@ -100,7 +100,11 @@
                 <a href="#" class="flex-shrink-0 group block cursor-default">
                   <div class="flex items-center">
                     <div>
-                      <span
+                      <ProfileImage
+                        :image="getMe.image ? getMe.image[0] : ''"
+                        :defaultImage="getMe.defaultImage"
+                      ></ProfileImage>
+                      <!-- <span
                         v-if="getMe.image == null"
                         class="uppercase text-white rounded-full h-10 w-10 font-medium flex justify-center items-center"
                         :style="
@@ -116,7 +120,7 @@
                         v-else
                         class="inline-block h-10 w-10 object-cover rounded-full"
                         :src="getMe.image[0]"
-                      />
+                      /> -->
                     </div>
                     <div class="ml-3">
                       <p
@@ -147,7 +151,11 @@
             <div
               class="py-4 flex items-center justify-center border-b border-gray-200"
             >
-              <span
+              <ProfileImage
+                :image="getMe.logo ? getMe.logo[0] : ''"
+                :defaultImage="getMe.defaultLogo"
+              ></ProfileImage>
+              <!-- <span
                 v-if="getMe.logo == null"
                 class="uppercase text-white rounded-full h-10 w-10 font-medium flex justify-center items-center"
                 :style="
@@ -161,7 +169,7 @@
                 v-else
                 class="block mx-auto h-10 w-10 object-cover rounded-full"
                 :src="getMe.logo"
-              />
+              /> -->
             </div>
             <nav
               aria-label="Sidebar"
@@ -210,7 +218,11 @@
                 href="#"
                 class="flex-shrink-0 w-full cursor-default flex justify-center items-center"
               >
-                <span
+                <ProfileImage
+                  :image="getMe.image ? getMe.image[0] : ''"
+                  :defaultImage="getMe.defaultImage"
+                ></ProfileImage>
+                <!-- <span
                   v-if="getMe.image == null"
                   class="uppercase text-white rounded-full h-10 w-10 font-medium flex justify-center items-center"
                   :style="
@@ -226,7 +238,7 @@
                   v-else
                   class="inline-block h-10 w-10 object-cover rounded-full"
                   :src="getMe.image[0]"
-                />
+                /> -->
                 <div class="sr-only">
                   <p>
                     {{ `${getMe.first_name} ${getMe.last_name}` }}
@@ -246,7 +258,11 @@
           class="bg-white py-2 px-4 flex items-center justify-between sm:px-6 lg:px-8 border-b border-gray-200"
         >
           <div>
-            <span
+            <ProfileImage
+              :image="getMe.logo ? getMe.logo[0] : ''"
+              :defaultImage="getMe.defaultLogo"
+            ></ProfileImage>
+            <!-- <span
               v-if="getMe.logo == null"
               class="uppercase text-white rounded-full h-10 w-10 font-medium flex justify-center items-center"
               :style="
@@ -260,7 +276,7 @@
               v-else
               class="block mx-auto h-10 w-10 object-cover rounded-full"
               :src="getMe.logo"
-            />
+            /> -->
           </div>
           <div>
             <button
@@ -300,7 +316,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted } from "vue";
 import {
   Dialog,
   DialogPanel,
@@ -332,6 +348,7 @@ import { useAccountStore } from "../stores/account";
 import { storeToRefs } from "pinia";
 import pusher from "../pusher";
 import globalEvent from "../globalEvent";
+import ProfileImage from "../components/ProfileImage.vue";
 
 const accountStore = useAccountStore();
 const { getMe } = storeToRefs(accountStore) as any;
