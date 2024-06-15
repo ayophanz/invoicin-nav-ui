@@ -3,7 +3,7 @@
     <div class="rounded-md bg-yellow-50 p-4">
       <div class="flex">
         <div class="flex-shrink-0">
-          <ExclamationIcon
+          <ExclamationCircleIcon
             class="h-12 w-12 text-yellow-400"
             aria-hidden="true"
           />
@@ -38,7 +38,7 @@
 <script lang="ts">
 /** Imports */
 import { defineComponent } from "vue";
-import { ExclamationIcon } from "@heroicons/vue/outline";
+import { ExclamationCircleIcon } from "@heroicons/vue/24/outline";
 import ModalComponent from "../components/Modal.vue";
 import accountService from "../services/account";
 
@@ -47,7 +47,7 @@ export default defineComponent({
   name: "sessionExpired",
   components: {
     ModalComponent,
-    ExclamationIcon,
+    ExclamationCircleIcon,
   },
   setup() {
     const logout = () => {
