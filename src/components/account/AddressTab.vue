@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from "vue";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import { MinusIcon, PlusIcon } from "@heroicons/vue/outline";
+import { MinusIcon, PlusIcon } from "@heroicons/vue/24/outline";
 import Form from "../form/Form.vue";
 import sharedService from "../../services/shared";
 import { storeToRefs } from "pinia";

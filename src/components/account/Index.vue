@@ -60,8 +60,8 @@ import {
   KeyIcon,
   UserIcon,
   ShieldCheckIcon,
-  LocationMarkerIcon,
-} from "@heroicons/vue/solid";
+  MapPinIcon,
+} from "@heroicons/vue/24/solid";
 import { storeToRefs } from "pinia";
 import { useAccountStore } from "../../stores/account";
 
@@ -70,7 +70,7 @@ const { getMe } = storeToRefs(accountStore);
 
 const tabs = ref([
   { name: "Profile", href: "#", icon: UserIcon, current: true },
-  { name: "Address", href: "#", icon: LocationMarkerIcon, current: false },
+  { name: "Address", href: "#", icon: MapPinIcon, current: false },
   { name: "Password", href: "#", icon: KeyIcon, current: false },
   {
     name: "Advance security",

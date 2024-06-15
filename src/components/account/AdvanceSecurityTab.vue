@@ -36,17 +36,15 @@
       </div>
     </div>
     <div class="text-center my-5">
-      <div class="mt-3">
-        <button
+      <div class="mt-3 flex justify-center">
+        <Button
           v-if="!getMe.is2faEnable"
           @click="onGenerateSecret"
           :disabled="submitLoading"
-          type="button"
-          class="flex m-auto items-center text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         >
           <Spinner v-if="submitLoading"></Spinner> Generate Secret Key to Enable
           2FA
-        </button>
+        </Button>
         <div v-else class="flex flex-col gap-y-2">
           <div
             v-if="disable2fa"
@@ -108,7 +106,8 @@ import { useAccountStore } from "../../stores/account";
 import { storeToRefs } from "pinia";
 import Spinner from "../Spinner.vue";
 import { useToast } from "vue-toastification";
-import formUtil from "../../utils/form.js";
+import formUtil from "../../utils/form";
+import Button from "../Button.vue";
 
 const api = (import.meta as any).env.VITE_API_URL;
 const toast = useToast();

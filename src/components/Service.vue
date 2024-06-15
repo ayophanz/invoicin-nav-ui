@@ -71,14 +71,15 @@
 /** Imports */
 import { toRef, ref, watch, onMounted } from "vue";
 import { Switch } from "@headlessui/vue";
+
 import {
   UsersIcon,
-  ClipboardCheckIcon,
-  ArchiveIcon,
+  ClipboardDocumentCheckIcon,
+  ArchiveBoxIcon,
   FolderOpenIcon,
   ShoppingCartIcon,
-  DocumentReportIcon,
-} from "@heroicons/vue/outline";
+  PresentationChartLineIcon,
+} from "@heroicons/vue/24/outline";
 
 /** Process */
 const props = defineProps({
@@ -103,7 +104,7 @@ const services = ref([
     href: "#",
     description: "Free",
     bgColor: "bg-purple-600",
-    icon: ArchiveIcon,
+    icon: ArchiveBoxIcon,
     enabled: false,
   },
   {
@@ -119,7 +120,7 @@ const services = ref([
     href: "#",
     description: "Free",
     bgColor: "bg-green-500",
-    icon: ClipboardCheckIcon,
+    icon: ClipboardDocumentCheckIcon,
     enabled: true,
   },
   {
@@ -135,7 +136,7 @@ const services = ref([
     href: "#",
     description: "Upgrade",
     bgColor: "bg-gray-700",
-    icon: DocumentReportIcon,
+    icon: PresentationChartLineIcon,
     enabled: false,
   },
 ]);

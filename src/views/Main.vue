@@ -47,7 +47,7 @@
                     @click="mobileMenuOpen = false"
                   >
                     <span class="sr-only">Close sidebar</span>
-                    <XIcon class="h-6 w-6 text-white" aria-hidden="true" />
+                    <XMarkIcon class="h-6 w-6 text-white" aria-hidden="true" />
                   </button>
                 </div>
               </TransitionChild>
@@ -285,7 +285,7 @@
               @click="mobileMenuOpen = true"
             >
               <span class="sr-only">Open sidebar</span>
-              <MenuIcon class="h-6 w-6" aria-hidden="true" />
+              <Bars3Icon class="h-6 w-6" aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -324,21 +324,21 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import {
-  MenuIcon,
+  Bars3Icon,
   UserIcon,
   UsersIcon,
-  XIcon,
-  ClipboardCheckIcon,
-  AdjustmentsIcon,
+  XMarkIcon,
+  ClipboardDocumentCheckIcon,
+  AdjustmentsVerticalIcon,
   PlusIcon,
-  ArchiveIcon,
+  ArchiveBoxIcon,
   FolderOpenIcon,
   ShoppingCartIcon,
-  DocumentReportIcon,
-  LoginIcon,
-  DesktopComputerIcon,
+  DocumentArrowUpIcon,
+  ArrowLeftStartOnRectangleIcon,
+  ComputerDesktopIcon,
   UserGroupIcon,
-} from "@heroicons/vue/outline";
+} from "@heroicons/vue/24/outline";
 import ServiceComponent from "../components/Service.vue";
 import ModalComponent from "../components/Modal.vue";
 import NoticeComponent from "../components/Notice.vue";
@@ -349,96 +349,75 @@ import { storeToRefs } from "pinia";
 import pusher from "../pusher";
 import globalEvent from "../globalEvent";
 import ProfileImage from "../components/ProfileImage.vue";
+import Modules from "../utils/modules";
 
+const modules = new Modules();
 const accountStore = useAccountStore();
 const { getMe } = storeToRefs(accountStore) as any;
-
-const servicesTemp = [
-  {
-    name: "Dashboard",
-    to: "",
-    icon: DesktopComputerIcon,
-    enabled: true,
-    active: false,
-  },
-  {
-    name: "Organization",
-    to: "organization",
-    icon: UserGroupIcon,
-    enabled: true,
-    active: false,
-  },
-  {
-    name: "Customer",
-    to: "customer",
-    icon: UsersIcon,
-    enabled: true,
-    active: false,
-  },
-  {
-    name: "Product",
-    to: "product",
-    icon: ArchiveIcon,
-    enabled: true,
-    active: false,
-  },
-  {
-    name: "Order",
-    to: "order",
-    icon: ShoppingCartIcon,
-    enabled: true,
-    active: false,
-  },
-  {
-    name: "Invoice",
-    to: "invoice",
-    icon: ClipboardCheckIcon,
-    enabled: true,
-    active: false,
-  },
-  {
-    name: "Inventory",
-    to: "inventory",
-    icon: FolderOpenIcon,
-    enabled: true,
-    active: false,
-  },
-  {
-    name: "Report",
-    to: "report",
-    icon: DocumentReportIcon,
-    enabled: true,
-    active: false,
-  },
-];
 
 const navigationTemp = [
   { name: "More", to: "#", icon: PlusIcon, enabled: true, active: false },
   {
     name: "Setting",
     to: "#",
-    icon: AdjustmentsIcon,
+    icon: AdjustmentsVerticalIcon,
     enabled: true,
     active: false,
   },
   { name: "Account", to: "#", icon: UserIcon, enabled: true, active: false },
-  { name: "Logout", to: "#", icon: LoginIcon, enabled: true, active: false },
+  {
+    name: "Logout",
+    to: "#",
+    icon: ArrowLeftStartOnRectangleIcon,
+    enabled: true,
+    active: false,
+  },
 ];
 
-const navigation = ref([...servicesTemp, ...navigationTemp]) as any;
-const services = ref(servicesTemp);
+const navigation = ref([...navigationTemp]) as any;
+const services = ref([]);
 const mobileMenuOpen = ref(false);
 const isOpen = ref(false);
 const modalFor = ref("");
 const notice = ref(null);
 
 onMounted(async () => {
-  selectedService();
   pusherListen();
   customEventListen();
   await accountService.me();
+  menuPermission();
+  selectedService();
   noticeVerification();
 });
+
+const menuPermission = () => {
+  console.log(getMe.value);
+  if (
+    getMe.value.roles.length > 0 &&
+    (getMe.value.roles[0] == "admin" || getMe.value.roles[0] == "manager")
+  ) {
+    navigation.value.unshift(modules.product());
+    navigation.value.unshift(modules.customer());
+    navigation.value.unshift(modules.organization());
+  }
+
+  if (
+    getMe.value.permissions.length > 0 &&
+    getMe.value.roles.length > 0 &&
+    getMe.value.roles[0] == "member"
+  ) {
+    if (getMe.value.permissions.includes("access_product")) {
+      navigation.value.unshift(modules.product());
+    }
+    if (getMe.value.permissions.includes("access_customer")) {
+      navigation.value.unshift(modules.customer());
+    }
+    if (getMe.value.permissions.includes("access_organization")) {
+      navigation.value.unshift(modules.organization());
+    }
+  }
+  navigation.value.unshift(modules.dashboard());
+};
 
 const customEventListen = () => {
   globalEvent.listen.organization.logo();
@@ -467,7 +446,7 @@ const noticeVerification = () => {
     openModal("notice");
   } else if (
     getMe.value.organizationEmailVerifiedAt === null &&
-    getMe.value.type == "Company"
+    getMe.value.type == "company"
   ) {
     notice.value = {
       type: "info",
