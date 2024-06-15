@@ -84,7 +84,7 @@ import accountService from "../services/account";
 import { useRouter } from "vue-router";
 import { useAccountStore } from "../stores/account";
 import { useToast } from "vue-toastification";
-import formUtil from "../utils/form.ts";
+import formUtil from "../utils/form";
 import Button from "../components/Button.vue";
 
 const toast = useToast();

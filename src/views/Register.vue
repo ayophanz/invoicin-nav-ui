@@ -11,23 +11,16 @@
       </div>
       <Form :form="userForm"></Form>
       <div class="pt-5">
-        <div class="flex justify-end">
-          <button
-            @click="onBack('sign_in')"
-            type="button"
-            class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          >
-            Cancel
-          </button>
-          <button
+        <div class="flex justify-end gap-x-2">
+          <Button @click="onBack('sign_in')" type="button"> Cancel </Button>
+          <Button
             @click="onValidateUser"
             :disabled="submitLoading"
-            type="button"
-            class="gap-x-1 disabled:opacity-75 ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            moreClass="!text-white !bg-gray-700"
           >
             <Spinner v-if="submitLoading"></Spinner>
             <span>Next</span>
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -45,21 +38,9 @@
         </p>
       </div>
       <div class="mb-2">
-        <label for="type" class="block text-sm font-medium text-gray-700"
-          >Type</label
-        >
-        <select
-          @change="onTypeChange()"
-          v-model="type"
-          id="type"
-          name="type"
-          class="mt-1 appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none sm:text-sm"
-        >
-          <option value="Company">Company</option>
-          <option value="Personal">Personal</option>
-        </select>
+        <Form :form="typeForm"></Form>
       </div>
-      <div v-if="type == 'Company'" class="mt-5">
+      <div v-if="type == 'company'" class="mt-5">
         <div class="mb-3">
           <h2 class="text-xl font-medium leading-6 text-gray-900">
             Organization
@@ -76,23 +57,16 @@
         <Form :form="billingAddressForm"></Form>
       </div>
       <div class="pt-5">
-        <div class="flex justify-end">
-          <button
-            @click="onBack('user')"
-            type="button"
-            class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          >
-            Cancel
-          </button>
-          <button
+        <div class="flex justify-end gap-x-2">
+          <Button @click="onBack('user')"> Cancel </Button>
+          <Button
             @click="onValidateOrganization"
             :disabled="submitLoading"
-            type="button"
-            class="gap-x-1 disabled:opacity-75 ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            moreClass="!text-white !bg-gray-700"
           >
             <Spinner v-if="submitLoading"></Spinner>
             <span>Next</span>
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -107,15 +81,14 @@
         </h2>
       </div>
       <div class="flex flex-col justify-center items-center pt-5">
-        <button
+        <Button
           @click="onSaveComplete"
           :disabled="submitLoading"
-          type="button"
-          class="gap-x-1 disabled:opacity-75 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-5 text-md font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          moreClass="!text-white !bg-gray-700"
         >
           <Spinner v-if="submitLoading"></Spinner>
           <span>Save & Login</span>
-        </button>
+        </Button>
         <div class="text-base mt-3">
           <a
             href="#"
@@ -131,7 +104,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, watch } from "vue";
 import Modal from "../components/Modal.vue";
 import Form from "../components/form/Form.vue";
 import Spinner from "../components/Spinner.vue";
@@ -139,13 +112,14 @@ import registerService from "../services/register/index.js";
 import sharedService from "../services/shared/index.js";
 import { useRouter } from "vue-router";
 import formUtil from "../utils/form.js";
+import Button from "../components/Button.vue";
 
 const router = useRouter();
 
 const dialogClass = ref("w-full");
 const submitLoading = ref(false);
 const registrationStep = ref("user");
-const type = ref("Company");
+const type = ref("company");
 let userForm = reactive(
   new formUtil({
     firstname: {
@@ -172,6 +146,19 @@ let userForm = reactive(
       label: "Confirm password*",
       value: "",
       type: "password",
+    },
+  })
+);
+let typeForm = reactive(
+  new formUtil({
+    type: {
+      label: "Type",
+      value: type.value,
+      type: "select",
+      options: [
+        { id: "company", name: "Company" },
+        { id: "personal", name: "Personal" },
+      ],
     },
   })
 );
@@ -261,7 +248,7 @@ const onValidateOrganization = async () => {
   } as any;
 
   formData.form_type = "org";
-  if (type.value == "Personal") {
+  if (type.value == "personal") {
     formData = billingAddressFormData;
     formData.form_type = "address";
   }
@@ -294,7 +281,7 @@ const onSaveComplete = async () => {
     ...billingAddressForm.getFormData(),
   } as any;
 
-  if (type.value == "Personal") {
+  if (type.value == "personal") {
     formData = {
       ...userForm.getFormData(),
       ...billingAddressForm.getFormData(),
@@ -321,7 +308,12 @@ const onBack = (type: string) => {
   if (type === "sign_in") router.push({ name: "login" });
 };
 
-const onTypeChange = () => {
+// const onTypeChange = () => {
+//   billingAddressForm.setErrors({});
+// };
+
+watch(typeForm, (form) => {
+  type.value = form.getFieldValue("type");
   billingAddressForm.setErrors({});
-};
+});
 </script>
