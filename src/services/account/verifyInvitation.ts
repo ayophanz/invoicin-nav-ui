@@ -1,22 +1,22 @@
 import axios from "../../plugins/axios";
 
-const success = (data: object, resolve: any) => {
-  return resolve(data);
+const success = (response: object, resolve: (resolve: object) => void) => {
+  resolve(response);
 };
 
-const failed = (error: object, reject: any) => {
-  return reject(error);
+const fail = (error: object, reject: (reject: object) => void) => {
+  reject(error);
 };
 
 export default (token: string) => {
   return new Promise((resolve, reject) => {
     axios
       .get(`api/account/verify-invitation/${token}`)
-      .then((response: object) => {
+      .then((response) => {
         success(response, resolve);
       })
-      .catch((error: object) => {
-        failed(error, reject);
+      .catch((error) => {
+        fail(error, reject);
       });
   });
 };

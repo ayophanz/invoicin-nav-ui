@@ -1,5 +1,5 @@
 <template>
-  <Modal :state="true" :showClose="false" :dialogClass="dialogClass">
+  <ModalComponent :state="true" :showClose="false" :dialogClass="dialogClass">
     <div v-if="registrationStep === 'user'" class="form w-[90%] mx-auto py-5">
       <div class="mb-5">
         <h1 class="text-2xl font-medium leading-6 text-gray-900">
@@ -9,18 +9,20 @@
           Asterisk(*) is required fields.
         </p>
       </div>
-      <Form :form="userForm"></Form>
+      <FormComponent :form="userForm"></FormComponent>
       <div class="pt-5">
         <div class="flex justify-end gap-x-2">
-          <Button @click="onBack('sign_in')" type="button"> Cancel </Button>
-          <Button
+          <ButtonComponent @click="onBack('sign_in')" type="button">
+            Cancel
+          </ButtonComponent>
+          <ButtonComponent
             @click="onValidateUser"
             :disabled="submitLoading"
             moreClass="!text-white !bg-gray-700"
           >
-            <Spinner v-if="submitLoading"></Spinner>
+            <SpinnerComponent v-if="submitLoading"></SpinnerComponent>
             <span>Next</span>
-          </Button>
+          </ButtonComponent>
         </div>
       </div>
     </div>
@@ -38,7 +40,7 @@
         </p>
       </div>
       <div class="mb-2">
-        <Form :form="typeForm"></Form>
+        <FormComponent :form="typeForm"></FormComponent>
       </div>
       <div v-if="type == 'company'" class="mt-5">
         <div class="mb-3">
@@ -46,7 +48,7 @@
             Organization
           </h2>
         </div>
-        <Form :form="orgForm"></Form>
+        <FormComponent :form="orgForm"></FormComponent>
       </div>
       <div class="mt-5">
         <div class="mb-3">
@@ -54,19 +56,19 @@
             Billing Address
           </h2>
         </div>
-        <Form :form="billingAddressForm"></Form>
+        <FormComponent :form="billingAddressForm"></FormComponent>
       </div>
       <div class="pt-5">
         <div class="flex justify-end gap-x-2">
-          <Button @click="onBack('user')"> Cancel </Button>
-          <Button
+          <ButtonComponent @click="onBack('user')"> Cancel </ButtonComponent>
+          <ButtonComponent
             @click="onValidateOrganization"
             :disabled="submitLoading"
             moreClass="!text-white !bg-gray-700"
           >
-            <Spinner v-if="submitLoading"></Spinner>
+            <SpinnerComponent v-if="submitLoading"></SpinnerComponent>
             <span>Next</span>
-          </Button>
+          </ButtonComponent>
         </div>
       </div>
     </div>
@@ -81,14 +83,14 @@
         </h2>
       </div>
       <div class="flex flex-col justify-center items-center pt-5">
-        <Button
+        <ButtonComponent
           @click="onSaveComplete"
           :disabled="submitLoading"
           moreClass="!text-white !bg-gray-700"
         >
-          <Spinner v-if="submitLoading"></Spinner>
+          <SpinnerComponent v-if="submitLoading"></SpinnerComponent>
           <span>Save & Login</span>
-        </Button>
+        </ButtonComponent>
         <div class="text-base mt-3">
           <a
             href="#"
@@ -100,19 +102,19 @@
         </div>
       </div>
     </div>
-  </Modal>
+  </ModalComponent>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, watch } from "vue";
-import Modal from "../components/Modal.vue";
-import Form from "../components/form/Form.vue";
-import Spinner from "../components/Spinner.vue";
+import ModalComponent from "../components/ModalComponent.vue";
+import FormComponent from "../components/form/FormComponent.vue";
+import SpinnerComponent from "../components/SpinnerComponent.vue";
 import registerService from "../services/register/index.js";
 import sharedService from "../services/shared/index.js";
 import { useRouter } from "vue-router";
 import formUtil from "../utils/form.js";
-import Button from "../components/Button.vue";
+import ButtonComponent from "../components/ButtonComponent.vue";
 
 const router = useRouter();
 
@@ -225,9 +227,9 @@ const onValidateUser = async () => {
   submitLoading.value = true;
   userForm.setErrors({});
   let formData = userForm.getFormData() as any;
-  formData.form_type = "user";
+  // formData.form_type = "user";
   await registerService
-    .validate(formData)
+    .validate("user", formData)
     .then(() => {
       registrationStep.value = "organization";
       submitLoading.value = false;
@@ -259,7 +261,7 @@ const onValidateOrganization = async () => {
 
   formData.type = type.value;
   await registerService
-    .validate(formData)
+    .validate(formData.form_type, formData)
     .then(() => {
       submitLoading.value = false;
       registrationStep.value = "complete";

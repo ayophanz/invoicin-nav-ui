@@ -2,10 +2,10 @@
   <div class="mb-5">
     <p class="mt-5 text-sm text-gray-500">Asterisk(*) is required fields.</p>
   </div>
-  <Form :submit="onProfileSave" :form="form"></Form>
+  <FormComponent :submit="onProfileSave" :form="form"></FormComponent>
 </template>
 <script setup lang="ts">
-import Form from "../form/Form.vue";
+import FormComponent from "../form/FormComponent.vue";
 import { onMounted, reactive } from "vue";
 import { useAccountStore } from "../../stores/account.js";
 import { useToast } from "vue-toastification";

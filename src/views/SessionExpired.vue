@@ -39,7 +39,7 @@
 /** Imports */
 import { defineComponent } from "vue";
 import { ExclamationCircleIcon } from "@heroicons/vue/24/outline";
-import ModalComponent from "../components/Modal.vue";
+import ModalComponent from "../components/ModalComponent.vue";
 import accountService from "../services/account";
 
 /** Process */

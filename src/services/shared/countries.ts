@@ -1,21 +1,23 @@
-import axios from '../../plugins/axios';
+import axios from "../../plugins/axios";
 
-const success = (data: any, resolve: any) => {
-    resolve(data);
+const success = (response: any, resolve: (response: object) => void) => {
+  resolve(response);
 };
 
-const fail = (data: object, reject: any) => {
-    reject(data);
+const fail = (error: object, reject: (error: object) => void) => {
+  reject(error);
 };
 
 export default () => {
-    return new Promise((resolve, reject) => {
-        axios.get('api/account/countries')
-        .then((response) => {
-            success(response.data, resolve);
-        }).catch((error) => {
-            console.log(error);
-            fail(error, reject);
-        });
-    } );
-}
+  return new Promise((resolve, reject) => {
+    axios
+      .get("api/account/countries")
+      .then((response) => {
+        success(response.data, resolve);
+      })
+      .catch((error) => {
+        console.log(error);
+        fail(error, reject);
+      });
+  });
+};
