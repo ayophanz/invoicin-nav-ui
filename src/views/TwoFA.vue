@@ -9,12 +9,12 @@
           <p>Enter the pin code from Google Authenticator app:</p>
         </div>
         <div class="mt-5 flex flex-col gap-x-5 items-center">
-          <Form
+          <FormComponent
             :submit="onVerifyOTP"
             submitText="Verify"
             :form="otpForm"
             class="w-[300px]"
-          ></Form>
+          ></FormComponent>
         </div>
       </div>
     </div>
@@ -23,8 +23,8 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import accountService from "../services/account";
-import ModalComponent from "../components/Modal.vue";
-import Form from "../components/form/Form.vue";
+import ModalComponent from "../components/ModalComponent.vue";
+import FormComponent from "../components/form/FormComponent.vue";
 import { useAccountStore } from "../stores/account";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
@@ -33,7 +33,7 @@ import formUtil from "../utils/form.js";
 
 const toast = useToast();
 const accountStore = useAccountStore();
-const { getOtpUserId } = storeToRefs(accountStore) as any;
+const { getOtpUserId } = storeToRefs(accountStore);
 const router = useRouter();
 
 let otpForm = reactive(
@@ -53,7 +53,8 @@ const onVerifyOTP = async () => {
   await accountService
     .verifyOtp(getOtpUserId.value, otpFormData)
     .then((response: any) => {
-      if (response.token != "") {
+      console.log(response.token);
+      if (response.token) {
         accountStore.setLogin(response.token);
         accountStore.setRemoveOtpUserId();
         router.push({ name: "main" });

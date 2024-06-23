@@ -44,18 +44,20 @@
         </nav>
       </div>
     </div>
-    <ProfileTab v-if="isProfileTab()"></ProfileTab>
-    <PasswordTab v-if="isPasswordTab()"></PasswordTab>
-    <AdvanceSecurityTab v-if="isAdvanceSecurityTab()"></AdvanceSecurityTab>
-    <AddressTab v-if="isAddressTab()"></AddressTab>
+    <ProfileTabComponent v-if="isProfileTab()"></ProfileTabComponent>
+    <PasswordTabComponent v-if="isPasswordTab()"></PasswordTabComponent>
+    <AdvanceSecurityTabComponent
+      v-if="isAdvanceSecurityTab()"
+    ></AdvanceSecurityTabComponent>
+    <AddressTabComponent v-if="isAddressTab()"></AddressTabComponent>
   </div>
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import ProfileTab from "./ProfileTab.vue";
-import PasswordTab from "./PasswordTab.vue";
-import AdvanceSecurityTab from "./AdvanceSecurityTab.vue";
-import AddressTab from "./AddressTab.vue";
+import ProfileTabComponent from "./ProfileTabComponent.vue";
+import PasswordTabComponent from "./PasswordTabComponent.vue";
+import AdvanceSecurityTabComponent from "./AdvanceSecurityTabComponent.vue";
+import AddressTabComponent from "./AddressTabComponent.vue";
 import {
   KeyIcon,
   UserIcon,

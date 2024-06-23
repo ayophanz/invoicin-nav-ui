@@ -1,20 +1,26 @@
 import axios from "../../plugins/axios";
-import otpTransformer from "../../transformers/otpTransformer";
+import OtpTransformer from "../../transformers/otpTransformer";
+import { OtpTransformerFetch } from "../../types/otpTransformerFetch";
+import { OtpTransformerSend } from "../../types/otpTransformerSend";
 
-const success = (data: object, resolve: any) => {
-  return resolve(data);
+const success = (
+  response: OtpTransformerFetch,
+  resolve: (resolve: object) => void
+) => {
+  const transformer = OtpTransformer.fetch(response);
+  resolve(transformer);
 };
 
-const fail = (data: object, reject: any) => {
-  const transfomer = otpTransformer.fetch(data);
-  return reject(transfomer);
+const fail = (error: OtpTransformerFetch, reject: (reject: object) => void) => {
+  const transformer = OtpTransformer.fetch(error);
+  reject(transformer);
 };
 
-export default (data: object) => {
-  const transfomer = otpTransformer.send(data);
+export default (data: OtpTransformerSend) => {
+  const transformer = OtpTransformer.send(data);
   return new Promise((resolve, reject) => {
     axios
-      .post("api/account/disable-2fa", transfomer)
+      .post("api/account/disable-2fa", transformer)
       .then((response) => {
         success(response.data, resolve);
       })

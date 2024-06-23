@@ -1,22 +1,22 @@
 import axios from "../../plugins/axios";
 import { useAccountStore } from "../../stores/account";
 
-const success = (resolve: any) => {
+const success = (response: object, resolve: (resolve: object) => void) => {
   const accountStore = useAccountStore();
   accountStore.setLogout();
-  return resolve();
+  resolve(response);
 };
 
-const fail = (error: object, reject: any) => {
-  return reject(error);
+const fail = (error: object, reject: (reject: object) => void) => {
+  reject(error);
 };
 
 export default () => {
   return new Promise((resolve, reject) => {
     axios
       .post("api/logout")
-      .then(() => {
-        success(resolve);
+      .then((response) => {
+        success(response, resolve);
       })
       .catch((error) => {
         console.log(error);

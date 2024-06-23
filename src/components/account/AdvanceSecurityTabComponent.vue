@@ -1,6 +1,10 @@
 <template>
   <div v-if="step2fa == 1">
-    <Notice v-if="getMe.is2faEnable" :notice="info" class="mt-5"></Notice>
+    <NoticeComponent
+      v-if="getMe.is2faEnable"
+      :notice="info"
+      class="mt-5"
+    ></NoticeComponent>
     <h4 class="text-center my-5 text-2xl">Set up Google Authenticator</h4>
     <div>
       <p class="text-left">
@@ -37,25 +41,25 @@
     </div>
     <div class="text-center my-5">
       <div class="mt-3 flex justify-center">
-        <Button
+        <ButtonComponent
           v-if="!getMe.is2faEnable"
           @click="onGenerateSecret"
           :disabled="submitLoading"
         >
-          <Spinner v-if="submitLoading"></Spinner> Generate Secret Key to Enable
-          2FA
-        </Button>
+          <SpinnerComponent v-if="submitLoading"></SpinnerComponent> Generate
+          Secret Key to Enable 2FA
+        </ButtonComponent>
         <div v-else class="flex flex-col gap-y-2">
           <div
             v-if="disable2fa"
             class="mt-5 flex flex-col gap-x-5 items-center"
           >
-            <Form
+            <FormComponent
               :submit="on2faDisable"
               submitText="Revoke 2FA"
               :form="otpForm"
               class="w-[300px]"
-            ></Form>
+            ></FormComponent>
           </div>
           <a
             href="#"
@@ -85,12 +89,12 @@
     </div>
     <div class="my-5">
       <div class="mt-5 flex flex-col gap-x-5 items-center">
-        <Form
+        <FormComponent
           :submit="on2faEnable"
           submitText="Enable 2FA"
           :form="otpForm"
           class="w-[300px]"
-        ></Form>
+        ></FormComponent>
       </div>
     </div>
   </div>
@@ -100,19 +104,19 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import accountService from "../../services/account";
-import Form from "../form/Form.vue";
-import Notice from "../Notice.vue";
+import FormComponent from "../form/FormComponent.vue";
+import NoticeComponent from "../NoticeComponent.vue";
 import { useAccountStore } from "../../stores/account";
 import { storeToRefs } from "pinia";
-import Spinner from "../Spinner.vue";
+import SpinnerComponent from "../SpinnerComponent.vue";
 import { useToast } from "vue-toastification";
 import formUtil from "../../utils/form";
-import Button from "../Button.vue";
+import ButtonComponent from "../ButtonComponent.vue";
 
 const api = (import.meta as any).env.VITE_API_URL;
 const toast = useToast();
 const accountStore = useAccountStore();
-const { getMe } = storeToRefs(accountStore) as any;
+const { getMe } = storeToRefs(accountStore);
 
 const info = {
   type: "success",
@@ -147,7 +151,7 @@ const onGenerateSecret = async () => {
 const onLoadQRcode = async () => {
   await accountService
     .genTwofaQRcode({ user_id: getMe.value.id })
-    .then((response: { qr_image_url: string; secret: string }) => {
+    .then((response: any) => {
       submitLoading.value = false;
       qrImage.value = response.qr_image_url;
       secret.value = response.secret;
@@ -174,7 +178,7 @@ const on2faEnable = async () => {
     })
     .catch((error) => {
       otpForm.setErrors(error);
-      otpForm.setLoading(true);
+      otpForm.setLoading(false);
       toast.error("Something went wrong!", {
         timeout: 2000,
       });

@@ -6,9 +6,10 @@
  */
 
 import Transformer from "./transformer";
+import { MeTransformerFetch } from "../types/meTransformerFetch";
 
 export default class MeTransformer extends Transformer {
-  static fetch(item: any) {
+  static fetch(item: MeTransformerFetch) {
     return {
       id: item.id,
       firstname: item.first_name,
@@ -27,13 +28,13 @@ export default class MeTransformer extends Transformer {
             initial: "",
             bg_color: "",
           },
-      logo: item.organization ? item.organization.logo : null,
-      organizationUuid: item.organization ? item.organization.uuid : null,
-      organizationName: item.organization ? item.organization.name : null,
-      organizationEmail: item.organization ? item.organization.email : null,
+      logo: item.organization ? item.organization.logo : "",
+      organizationUuid: item.organization ? item.organization.uuid : "",
+      organizationName: item.organization ? item.organization.name : "",
+      organizationEmail: item.organization ? item.organization.email : "",
       organizationEmailVerifiedAt: item.organization
         ? item.organization.email_verified_at
-        : null,
+        : "",
       addresses: item.addresses,
     };
   }

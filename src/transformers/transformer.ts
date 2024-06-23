@@ -11,27 +11,26 @@
  */
 
 export default class Transformer {
-    static fetch: any;
-    static send: any;
+  static fetch: any;
+  static send: any;
 
-    /**
-     * Method used to transform a fetched collection
-     *
-     * @param items The items to be transformed
-     * @returns {Array} The transformed items
-     */
-    static fetchCollection(items: any): Array<any> {
-      return items.map((item: any) => this.fetch(item));
-    }
-  
-    /**
-     * Method used to transform a collection to be send
-     *
-     * @param items The items to be transformed
-     * @returns {Array} The transformed items
-     */
-    static sendCollection(items:any): Array<any> {
-      return items.map((item: any) => this.send(item));
-    }
+  /**
+   * Method used to transform a fetched collection
+   *
+   * @param items The items to be transformed
+   * @returns {Array} The transformed items
+   */
+  static fetchCollection(items: any): Array<any> {
+    return items.map((item: any) => this.fetch(item));
   }
-  
+
+  /**
+   * Method used to transform a collection to be send
+   *
+   * @param items The items to be transformed
+   * @returns {Array} The transformed items
+   */
+  static sendCollection(items: any): Array<any> {
+    return items.map((item: any) => this.send(item));
+  }
+}

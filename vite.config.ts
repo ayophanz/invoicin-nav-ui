@@ -10,7 +10,7 @@ dns.setDefaultResultOrder("verbatim");
 export default defineConfig({
   build: {
     rollupOptions: {
-      input: "src/main.js",
+      input: "src/main.ts",
       preserveEntrySignatures: "exports-only",
       output: {
         format: "system",
@@ -19,7 +19,7 @@ export default defineConfig({
     },
     chunkSizeWarningLimit: 2000,
   },
-  base: "http://localhost/",
+  base: "http://127.0.0.1/",
   server: {
     port: 9001,
   },
