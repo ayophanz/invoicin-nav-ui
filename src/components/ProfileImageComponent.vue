@@ -1,6 +1,6 @@
 <template>
   <span
-    v-if="props.image == ''"
+    v-if="!props.image"
     class="uppercase text-white rounded-full h-10 w-10 font-medium flex justify-center items-center"
     :style="
       props.defaultImage
@@ -24,6 +24,10 @@ const props = defineProps({
   },
   defaultImage: {
     type: Object,
+    default: {
+      initial: "",
+      bg_color: "white",
+    },
     required: true,
   },
 });
