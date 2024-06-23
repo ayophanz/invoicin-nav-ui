@@ -11,18 +11,21 @@
         >
       </p>
       <div class="flex mt-4 w-full">
-        <Form :form="form" class="w-full"></Form>
+        <FormComponent :form="form" class="w-full"></FormComponent>
       </div>
       <div class="flex justify-center items-center gap-4 my-4">
-        <Button
+        <ButtonComponent
           @click="reset"
           :disabled="form.getLoading()"
           :loading="form.getLoading()"
           moreClass="w-full !text-white !bg-gray-700 "
         >
-          <Spinner v-if="form.getLoading()" class="h-4 w-auto"></Spinner>
+          <SpinnerComponent
+            v-if="form.getLoading()"
+            class="h-4 w-auto"
+          ></SpinnerComponent>
           <span>Reset Password</span>
-        </Button>
+        </ButtonComponent>
       </div>
     </div>
     <div v-else class="flex flex-col gap-y-4">
@@ -41,11 +44,11 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import accountService from "../services/account";
-import ModalComponent from "../components/Modal.vue";
-import Form from "../components/form/Form.vue";
+import ModalComponent from "../components/ModalComponent.vue";
+import FormComponent from "../components/form/FormComponent.vue";
 import formUtil from "../utils/form.js";
-import Button from "../components/Button.vue";
-import Spinner from "../components/Spinner.vue";
+import ButtonComponent from "../components/ButtonComponent.vue";
+import SpinnerComponent from "../components/SpinnerComponent.vue";
 
 let isSent = ref(false);
 let form = reactive(

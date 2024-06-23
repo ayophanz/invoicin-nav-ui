@@ -1,6 +1,6 @@
 <template>
   <span
-    v-if="props.image == null || props.image == ''"
+    v-if="props.image == ''"
     class="uppercase text-white rounded-full h-10 w-10 font-medium flex justify-center items-center"
     :style="
       props.defaultImage

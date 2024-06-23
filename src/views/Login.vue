@@ -19,7 +19,7 @@
           <span class="text-red-500">{{ errorMessage }}</span>
         </div>
         <div class="bg-white m:rounded-lg sm:px-10">
-          <Form :form="form"></Form>
+          <FormComponent :form="form"></FormComponent>
           <div class="flex items-center justify-between">
             <!-- <div class="flex items-center">
                         <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
@@ -37,15 +37,18 @@
           </div>
 
           <div class="my-5">
-            <Button
+            <ButtonComponent
               @click.prevent="onLogin"
               :disabled="form.getLoading()"
               :loading="form.getLoading()"
               moreClass="w-full !text-white !bg-gray-700 "
             >
-              <Spinner v-if="form.getLoading()" class="h-4 w-auto"></Spinner>
+              <SpinnerComponent
+                v-if="form.getLoading()"
+                class="h-4 w-auto"
+              ></SpinnerComponent>
               <span>Sign in</span>
-            </Button>
+            </ButtonComponent>
           </div>
 
           <div class="mt-6">
@@ -77,15 +80,15 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import ModalComponent from "../components/Modal.vue";
-import Spinner from "../components/Spinner.vue";
-import Form from "../components/form/Form.vue";
+import ModalComponent from "../components/ModalComponent.vue";
+import SpinnerComponent from "../components/SpinnerComponent.vue";
+import FormComponent from "../components/form/FormComponent.vue";
 import accountService from "../services/account";
 import { useRouter } from "vue-router";
 import { useAccountStore } from "../stores/account";
 import { useToast } from "vue-toastification";
 import formUtil from "../utils/form";
-import Button from "../components/Button.vue";
+import ButtonComponent from "../components/ButtonComponent.vue";
 
 const toast = useToast();
 const router = useRouter();
@@ -119,7 +122,7 @@ const onLogin = async () => {
         router.push({ name: "twofa" });
       } else {
         accountStore.setLogin(response.token);
-        window.history.replaceState({}, "", window.location.origin);
+        router.push({ name: "main" });
         toast.success("Successfully!", {
           timeout: 2000,
         });

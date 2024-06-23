@@ -2,26 +2,26 @@
  * Register Transformer
  * ============
  *
- * The transformer for the OTP.
+ * The transformer for the register.
  */
 
-import Transformer from './transformer';
+import Transformer from "./transformer";
+import { RegisterTransformerFetch } from "../types/registerTransformerFetch";
+import { RegisterTransformerSend } from "../types/registerTransformerSend";
 
 export default class RegisterTransformer extends Transformer {
-
-  static fetch(item: any) {
+  static fetch(item: RegisterTransformerFetch) {
     return {
-      image: item.image,
       firstname: item.firstname,
       lastname: item.lastname,
       email: item.email,
       password: item.password,
       passwordConfirmation: item.password_confirmation,
       logo: item.logo,
-      orgName: item.organization_name, 
+      orgName: item.organization_name,
       orgEmail: item.organization_email,
       country: item.country,
-      stateProvince: item.state_province, 
+      stateProvince: item.state_province,
       city: item.city,
       zipcode: item.zipcode,
       address: item.address,
@@ -29,19 +29,18 @@ export default class RegisterTransformer extends Transformer {
     };
   }
 
-  static send(item: any) {
+  static send(item: RegisterTransformerSend) {
     return {
-      image: item.image,
       firstname: item.firstname,
       lastname: item.lastname,
       email: item.email,
       password: item.password,
       password_confirmation: item.passwordConfirmation,
       logo: item.logo,
-      organization_name: item.orgName, 
+      organization_name: item.orgName,
       organization_email: item.orgEmail,
       country: item.country,
-      state_province: item.stateProvince, 
+      state_province: item.stateProvince,
       city: item.city,
       zipcode: item.zipcode,
       address: item.address,

@@ -100,33 +100,16 @@
                 <a href="#" class="flex-shrink-0 group block cursor-default">
                   <div class="flex items-center">
                     <div>
-                      <ProfileImage
+                      <ProfileImageComponent
                         :image="getMe.image ? getMe.image[0] : ''"
                         :defaultImage="getMe.defaultImage"
-                      ></ProfileImage>
-                      <!-- <span
-                        v-if="getMe.image == null"
-                        class="uppercase text-white rounded-full h-10 w-10 font-medium flex justify-center items-center"
-                        :style="
-                          getMe.defaultImage
-                            ? `background-color:${getMe.defaultImage.bg_color}`
-                            : ''
-                        "
-                        >{{
-                          getMe.defaultImage ? getMe.defaultImage.initial : ""
-                        }}</span
-                      >
-                      <img
-                        v-else
-                        class="inline-block h-10 w-10 object-cover rounded-full"
-                        :src="getMe.image[0]"
-                      /> -->
+                      ></ProfileImageComponent>
                     </div>
                     <div class="ml-3">
                       <p
                         class="text-base font-medium text-gray-700 group-hover:text-gray-900"
                       >
-                        {{ `${getMe.first_name} ${getMe.last_name}` }}
+                        {{ `${getMe.firstname} ${getMe.lastname}` }}
                       </p>
                     </div>
                   </div>
@@ -151,25 +134,10 @@
             <div
               class="py-4 flex items-center justify-center border-b border-gray-200"
             >
-              <ProfileImage
+              <ProfileImageComponent
                 :image="getMe.logo ? getMe.logo[0] : ''"
                 :defaultImage="getMe.defaultLogo"
-              ></ProfileImage>
-              <!-- <span
-                v-if="getMe.logo == null"
-                class="uppercase text-white rounded-full h-10 w-10 font-medium flex justify-center items-center"
-                :style="
-                  getMe.defaultLogo
-                    ? `background-color:${getMe.defaultLogo.bg_color}`
-                    : ''
-                "
-                >{{ getMe.defaultLogo ? getMe.defaultLogo.initial : "" }}</span
-              >
-              <img
-                v-else
-                class="block mx-auto h-10 w-10 object-cover rounded-full"
-                :src="getMe.logo"
-              /> -->
+              ></ProfileImageComponent>
             </div>
             <nav
               aria-label="Sidebar"
@@ -218,30 +186,13 @@
                 href="#"
                 class="flex-shrink-0 w-full cursor-default flex justify-center items-center"
               >
-                <ProfileImage
+                <ProfileImageComponent
                   :image="getMe.image ? getMe.image[0] : ''"
                   :defaultImage="getMe.defaultImage"
-                ></ProfileImage>
-                <!-- <span
-                  v-if="getMe.image == null"
-                  class="uppercase text-white rounded-full h-10 w-10 font-medium flex justify-center items-center"
-                  :style="
-                    getMe.defaultImage
-                      ? `background-color:${getMe.defaultImage.bg_color}`
-                      : ''
-                  "
-                  >{{
-                    getMe.defaultImage ? getMe.defaultImage.initial : ""
-                  }}</span
-                >
-                <img
-                  v-else
-                  class="inline-block h-10 w-10 object-cover rounded-full"
-                  :src="getMe.image[0]"
-                /> -->
+                ></ProfileImageComponent>
                 <div class="sr-only">
                   <p>
-                    {{ `${getMe.first_name} ${getMe.last_name}` }}
+                    {{ `${getMe.firstname} ${getMe.lastname}` }}
                   </p>
                 </div>
               </a>
@@ -258,25 +209,10 @@
           class="bg-white py-2 px-4 flex items-center justify-between sm:px-6 lg:px-8 border-b border-gray-200"
         >
           <div>
-            <ProfileImage
+            <ProfileImageComponent
               :image="getMe.logo ? getMe.logo[0] : ''"
               :defaultImage="getMe.defaultLogo"
-            ></ProfileImage>
-            <!-- <span
-              v-if="getMe.logo == null"
-              class="uppercase text-white rounded-full h-10 w-10 font-medium flex justify-center items-center"
-              :style="
-                getMe.defaultLogo
-                  ? `background-color:${getMe.defaultLogo.bg_color}`
-                  : ''
-              "
-              >{{ getMe.defaultLogo ? getMe.defaultLogo.initial : "" }}</span
-            >
-            <img
-              v-else
-              class="block mx-auto h-10 w-10 object-cover rounded-full"
-              :src="getMe.logo"
-            /> -->
+            ></ProfileImageComponent>
           </div>
           <div>
             <button
@@ -326,34 +262,26 @@ import {
 import {
   Bars3Icon,
   UserIcon,
-  UsersIcon,
   XMarkIcon,
-  ClipboardDocumentCheckIcon,
   AdjustmentsVerticalIcon,
   PlusIcon,
-  ArchiveBoxIcon,
-  FolderOpenIcon,
-  ShoppingCartIcon,
-  DocumentArrowUpIcon,
   ArrowLeftStartOnRectangleIcon,
-  ComputerDesktopIcon,
-  UserGroupIcon,
 } from "@heroicons/vue/24/outline";
-import ServiceComponent from "../components/Service.vue";
-import ModalComponent from "../components/Modal.vue";
-import NoticeComponent from "../components/Notice.vue";
-import AccountComponent from "../components/account/Index.vue";
+import ServiceComponent from "../components/ServiceComponent.vue";
+import ModalComponent from "../components/ModalComponent.vue";
+import NoticeComponent from "../components/NoticeComponent.vue";
+import AccountComponent from "../components/account/AccountComponent.vue";
 import accountService from "../services/account";
 import { useAccountStore } from "../stores/account";
 import { storeToRefs } from "pinia";
 import pusher from "../pusher";
 import globalEvent from "../globalEvent";
-import ProfileImage from "../components/ProfileImage.vue";
+import ProfileImageComponent from "../components/ProfileImageComponent.vue";
 import Modules from "../utils/modules";
 
 const modules = new Modules();
 const accountStore = useAccountStore();
-const { getMe } = storeToRefs(accountStore) as any;
+const { getMe } = storeToRefs(accountStore);
 
 const navigationTemp = [
   { name: "More", to: "#", icon: PlusIcon, enabled: true, active: false },
@@ -374,12 +302,12 @@ const navigationTemp = [
   },
 ];
 
-const navigation = ref([...navigationTemp]) as any;
+const navigation = ref([...navigationTemp]);
 const services = ref([]);
 const mobileMenuOpen = ref(false);
 const isOpen = ref(false);
-const modalFor = ref("");
-const notice = ref(null);
+const modalFor = ref<String>("");
+const notice = ref<Object>({});
 
 onMounted(async () => {
   pusherListen();
@@ -455,7 +383,7 @@ const noticeVerification = () => {
     };
     openModal("notice");
   } else {
-    notice.value = null;
+    notice.value = { type: "", title: "", message: "" };
     modalFor.value = "";
     closeModal();
   }

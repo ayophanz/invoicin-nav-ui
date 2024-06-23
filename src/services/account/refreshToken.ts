@@ -1,25 +1,23 @@
 import axios from "../../plugins/axios";
 
-const success = (response: string, resolve: any) => {
+const success = (response: string, resolve: (resolve: string) => void) => {
   localStorage.setItem("token", response);
-  (
-    window as any
-  ).axios.defaults.headers.common.Authorization = `Bearer ${response}`;
-  return resolve();
+  axios.defaults.headers.common.Authorization = `Bearer ${response}`;
+  resolve(response);
 };
 
-const fail = (error: object, reject: any) => {
-  return reject(error);
+const fail = (error: object, reject: (reject: object) => void) => {
+  reject(error);
 };
 
 export default () => {
   return new Promise((resolve, reject) => {
     axios
       .get("api/refresh")
-      .then((response: { data: { token: string } }) => {
+      .then((response) => {
         success(response.data.token, resolve);
       })
-      .catch((error: { response: { data: object } }) => {
+      .catch((error) => {
         fail(error.response.data, reject);
       });
   });
