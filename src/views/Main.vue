@@ -86,7 +86,7 @@
                       @click="navAction(item)"
                       class="group p-2 rounded-md flex items-center text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                     >
-                      <component
+                      <Component
                         :is="item.icon"
                         class="text-gray-700 hover:bg-gray-700 mr-4 h-6 w-6"
                         aria-hidden="true"
@@ -172,7 +172,7 @@
                       "
                       class="hover:bg-gray-700 flex items-center rounded-full p-2 hover:text-white transition-all"
                     >
-                      <component
+                      <Component
                         :is="item.icon"
                         class="h-6 w-6"
                         aria-hidden="true"
@@ -310,6 +310,7 @@ const modalFor = ref<String>("");
 const notice = ref<Object>({});
 
 onMounted(async () => {
+  switchContainer(location.pathname.split("/")[1]);
   pusherListen();
   customEventListen();
   await accountService.me();
@@ -397,8 +398,23 @@ const navAction = (item: { name: string; to: string }) => {
   } else if (item.name === "Account") {
     openModal("account");
   } else {
+    switchContainer(item.to);
     window.history.replaceState({}, "", `${window.location.origin}/${item.to}`);
+
     selectedService();
+  }
+};
+
+const switchContainer = (to: string) => {
+  const elems = document.querySelectorAll(".active-module-container");
+  elems.forEach.call(elems, function (el) {
+    el.classList.remove("active-module-container");
+  });
+
+  let mainContainer = document.getElementById(`${to}-container`) as HTMLElement;
+
+  if (mainContainer && mainContainer.classList) {
+    mainContainer.classList.add("active-module-container");
   }
 };
 
