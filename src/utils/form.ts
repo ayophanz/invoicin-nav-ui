@@ -1,10 +1,10 @@
 export default class Form {
   form: any;
-  initialData = null as any;
-  constructor(form: object) {
+  initialData: any;
+  constructor(form: any) {
     this.form = form;
 
-    if (this.initialData == null) {
+    if (!this.initialData) {
       this.initialData = structuredClone(form);
     }
   }
@@ -22,10 +22,11 @@ export default class Form {
   }
 
   getFormData() {
-    let data = {} as any;
+    type TData = { [key: string]: string | string[] };
+    let data: TData = {};
     Object.keys(this.form).map((key: string) => {
       if (this.form[key].type === "file") {
-        let files = [] as any;
+        let files: string[] = [];
         if (this.form[key].value) {
           this.form[key].value.forEach((item: any, key2: number) => {
             files[key2] = item.getFileEncodeBase64String();
