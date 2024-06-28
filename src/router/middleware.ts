@@ -1,7 +1,10 @@
 import axios from "../plugins/axios.ts";
+import { RouteLocationNormalized, NavigationGuardNext } from "vue-router";
+
 const beforeEach = (
-  to: { name: string; meta: { auth: boolean } },
-  next: (next: { name: string } | void) => void
+  to: RouteLocationNormalized,
+  // from: RouteLocationNormalized,
+  next: NavigationGuardNext
 ) => {
   console.log(to.name);
 
@@ -12,14 +15,22 @@ const beforeEach = (
   ) {
     localStorage.removeItem("@me:shared_me_state");
     axios.defaults.headers.common.Authorization = "";
-    next({ name: "login" });
+    return () => {
+      next({ name: "login" });
+    };
   } else if (
     localStorage.getItem("token") != null &&
     to.meta.auth === false &&
     to.name != "main"
-  )
-    next({ name: "main" });
-  else true;
+  ) {
+    return () => {
+      next({ name: "main" });
+    };
+  } else {
+    return () => {
+      next();
+    };
+  }
 };
 
 export default {

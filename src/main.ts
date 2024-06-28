@@ -5,9 +5,15 @@ import router from "./router/index.ts";
 import singleSpaVue from "single-spa-vue";
 import floatingVue from "floating-vue";
 import Toast from "vue-toastification";
+import PrimeVue from "primevue/config";
+// import Aura from "@primevue/themes/aura";
 
 const toastOptions = {
   // You can set your default options here
+};
+
+const primeVueOptions = {
+  //
 };
 
 const pinia = createPinia();
@@ -31,6 +37,7 @@ const vueLifecycles = singleSpaVue({
     app.use(pinia);
     app.use(floatingVue);
     app.use(Toast, toastOptions);
+    app.use(PrimeVue, primeVueOptions);
   },
 });
 

@@ -11,6 +11,13 @@
         type="checkbox"
         class="h-4 w-4 rounded cursor-pointer border-gray-300 text-indigo-600 focus:ring-indigo-600"
       />
+      <Checkbox
+        :id="name"
+        :name="name"
+        v-model="checkbox"
+        indeterminate
+        binary
+      />
       <label
         v-if="label !== ''"
         :for="name"
@@ -26,6 +33,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from "vue";
+import Checkbox from "primevue/checkbox";
 
 const emit = defineEmits(["onchangeData"]);
 

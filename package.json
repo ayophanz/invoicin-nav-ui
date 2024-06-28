@@ -13,6 +13,7 @@
   "dependencies": {
     "@headlessui/vue": "^1.7.22",
     "@heroicons/vue": "^2.1.3",
+    "@primevue/themes": "^4.0.0-rc.2",
     "axios": "^1.7.2",
     "encrypt-storage": "^2.13.2",
     "filepond": "^4.31.1",
@@ -22,6 +23,7 @@
     "filepond-plugin-image-preview": "^4.6.12",
     "floating-vue": "^5.2.2",
     "pinia": "^2.1.7",
+    "primevue": "^4.0.0-rc.2",
     "single-spa-vue": "^3.0.0",
     "vue": "^3.4.21",
     "vue-filepond": "^7.0.4",
